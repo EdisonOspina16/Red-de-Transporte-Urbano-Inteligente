@@ -1,0 +1,184 @@
+{
+  "network_info": {
+    "name": "Ciudad Ejemplo",
+    "version": "1.0",
+    "last_updated": "2025-05-10"
+  },
+  "stations": [
+    {
+      "id": "EST001",
+      "name": "Estación Central",
+      "type": "hub",
+      "coordinates": {"lat": 40.4165, "lon": -3.7026},
+      "connections": ["EST002", "EST003", "EST005"],
+      "services": ["ticket_office", "elevator", "bike_parking"],
+      "lines": ["L1", "L3", "L5"]
+    },
+    {
+      "id": "EST002",
+      "name": "Plaza Mayor",
+      "type": "station",
+      "coordinates": {"lat": 40.4154, "lon": -3.7073},
+      "connections": ["EST001", "EST004"],
+      "services": ["elevator"],
+      "lines": ["L1"]
+    },
+    {
+      "id": "EST003",
+      "name": "Parque Norte",
+      "type": "station",
+      "coordinates": {"lat": 40.4231, "lon": -3.7024},
+      "connections": ["EST001", "EST004"],
+      "services": ["bike_parking"],
+      "lines": ["L3"]
+    },
+    {
+      "id": "EST004",
+      "name": "Universidad",
+      "type": "station",
+      "coordinates": {"lat": 40.4201, "lon": -3.7103},
+      "connections": ["EST002", "EST003", "EST006"],
+      "services": ["elevator", "ticket_office"],
+      "lines": ["L2"]
+    },
+    {
+      "id": "EST005",
+      "name": "Hospital",
+      "type": "station",
+      "coordinates": {"lat": 40.4089, "lon": -3.6997},
+      "connections": ["EST001", "EST006"],
+      "services": ["elevator", "medical_point"],
+      "lines": ["L5"]
+    },
+    {
+      "id": "EST006",
+      "name": "Centro Comercial",
+      "type": "hub",
+      "coordinates": {"lat": 40.4137, "lon": -3.7067},
+      "connections": ["EST004", "EST005"],
+      "services": ["ticket_office", "elevator", "shops"],
+      "lines": ["L2", "L5"]
+    }
+  ],
+  "routes": [
+    {
+      "id": "RUT001",
+      "origin": "EST001",
+      "destination": "EST002",
+      "distance": 1.2,
+      "average_time": 4,
+      "line": "L1",
+      "frequency": 5
+    },
+    {
+      "id": "RUT002",
+      "origin": "EST001",
+      "destination": "EST003",
+      "distance": 1.8,
+      "average_time": 6,
+      "line": "L3",
+      "frequency": 7
+    },
+    {
+      "id": "RUT003",
+      "origin": "EST001",
+      "destination": "EST005",
+      "distance": 2.1,
+      "average_time": 8,
+      "line": "L5",
+      "frequency": 10
+    },
+    {
+      "id": "RUT004",
+      "origin": "EST002",
+      "destination": "EST004",
+      "distance": 1.5,
+      "average_time": 5,
+      "line": "L1",
+      "frequency": 5
+    },
+    {
+      "id": "RUT005",
+      "origin": "EST003",
+      "destination": "EST004",
+      "distance": 1.4,
+      "average_time": 5,
+      "line": "L3",
+      "frequency": 7
+    },
+    {
+      "id": "RUT006",
+      "origin": "EST004",
+      "destination": "EST006",
+      "distance": 1.3,
+      "average_time": 4,
+      "line": "L2",
+      "frequency": 6
+    },
+    {
+      "id": "RUT007",
+      "origin": "EST005",
+      "destination": "EST006",
+      "distance": 1.7,
+      "average_time": 6,
+      "line": "L5",
+      "frequency": 10
+    }
+  ],
+  "lines": [
+    {
+      "id": "L1",
+      "name": "Línea 1 - Roja",
+      "color": "#FF0000",
+      "stations": ["EST001", "EST002", "EST004"],
+      "start_time": "05:30",
+      "end_time": "23:30",
+      "peak_frequency": 3,
+      "off_peak_frequency": 8
+    },
+    {
+      "id": "L2",
+      "name": "Línea 2 - Azul",
+      "color": "#0000FF",
+      "stations": ["EST004", "EST006"],
+      "start_time": "06:00",
+      "end_time": "23:00",
+      "peak_frequency": 4,
+      "off_peak_frequency": 10
+    },
+    {
+      "id": "L3",
+      "name": "Línea 3 - Verde",
+      "color": "#00FF00",
+      "stations": ["EST001", "EST003", "EST004"],
+      "start_time": "05:45",
+      "end_time": "23:15",
+      "peak_frequency": 4,
+      "off_peak_frequency": 9
+    },
+    {
+      "id": "L5",
+      "name": "Línea 5 - Naranja",
+      "color": "#FFA500",
+      "stations": ["EST001", "EST005", "EST006"],
+      "start_time": "06:15",
+      "end_time": "22:45",
+      "peak_frequency": 5,
+      "off_peak_frequency": 12
+    }
+  ],
+  "schedules": {
+    "weekday": {
+      "peak_hours": ["07:00-10:00", "17:00-20:00"],
+      "special_services": []
+    },
+    "weekend": {
+      "peak_hours": ["11:00-14:00", "18:00-21:00"],
+      "special_services": ["night_bus"]
+    },
+    "holiday": {
+      "service_reduction": 0.3,
+      "special_schedules": true
+    }
+  }
+}

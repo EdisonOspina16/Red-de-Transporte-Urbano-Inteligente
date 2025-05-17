@@ -1,0 +1,22 @@
+id,name,type,lat,lon,services,lines,connections
+EST001,Estación Central,hub,40.4165,-3.7026,"ticket_office,elevator,bike_parking","L1,L3,L5","EST002,EST003,EST005"
+EST002,Plaza Mayor,station,40.4154,-3.7073,elevator,L1,"EST001,EST004"
+EST003,Parque Norte,station,40.4231,-3.7024,bike_parking,L3,"EST001,EST004"
+EST004,Universidad,station,40.4201,-3.7103,"elevator,ticket_office",L2,"EST002,EST003,EST006"
+EST005,Hospital,station,40.4089,-3.6997,"elevator,medical_point",L5,"EST001,EST006"
+EST006,Centro Comercial,hub,40.4137,-3.7067,"ticket_office,elevator,shops","L2,L5","EST004,EST005"
+
+route_id,origin,destination,distance,average_time,line,frequency
+RUT001,EST001,EST002,1.2,4,L1,5
+RUT002,EST001,EST003,1.8,6,L3,7
+RUT003,EST001,EST005,2.1,8,L5,10
+RUT004,EST002,EST004,1.5,5,L1,5
+RUT005,EST003,EST004,1.4,5,L3,7
+RUT006,EST004,EST006,1.3,4,L2,6
+RUT007,EST005,EST006,1.7,6,L5,10
+
+line_id,name,color,start_time,end_time,peak_frequency,off_peak_frequency
+L1,Línea 1 - Roja,#FF0000,05:30,23:30,3,8
+L2,Línea 2 - Azul,#0000FF,06:00,23:00,4,10
+L3,Línea 3 - Verde,#00FF00,05:45,23:15,4,9
+L5,Línea 5 - Naranja,#FFA500,06:15,22:45,5,12
