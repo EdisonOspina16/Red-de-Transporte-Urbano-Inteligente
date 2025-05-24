@@ -1,88 +1,74 @@
 {
-  "estaciones": {
+  "vertices": {
     "M1_CentroHistorico": {
       "nombre": "Centro Histórico",
       "tipo": "metro",
       "linea": "M1",
-      "conexiones": ["bus", "metro"],
+      "conexiones": ["metro", "bus"],
       "es_transbordo": true
     },
     "M1_ParqueCentral": {
       "nombre": "Parque Central",
       "tipo": "metro",
       "linea": "M1",
-      "conexiones": [],
+      "conexiones": ["metro"],
       "es_transbordo": false
     },
     "M1_Universidad": {
       "nombre": "Universidad",
       "tipo": "metro",
       "linea": "M1",
-      "conexiones": ["bus"],
+      "conexiones": ["metro", "bus"],
       "es_transbordo": true
     },
     "M2_PlazaMayor": {
       "nombre": "Plaza Mayor",
       "tipo": "metro",
       "linea": "M2",
-      "conexiones": ["bus", "tren", "metro"],
+      "conexiones": ["metro", "bus"],
       "es_transbordo": true
     },
     "M2_HospitalGeneral": {
       "nombre": "Hospital General",
       "tipo": "metro",
       "linea": "M2",
-      "conexiones": ["bus"],
-      "es_transbordo": true
+      "conexiones": ["metro"],
+      "es_transbordo": false
     },
     "M2_Deportivo": {
       "nombre": "Deportivo",
       "tipo": "metro",
       "linea": "M2",
-      "conexiones": [],
+      "conexiones": ["metro"],
       "es_transbordo": false
     },
     "B1_MercadoCentral": {
       "nombre": "Mercado Central",
       "tipo": "bus",
       "linea": "B1",
-      "conexiones": ["metro"],
+      "conexiones": ["bus", "metro"],
       "es_transbordo": true
     },
     "B1_Biblioteca": {
       "nombre": "Biblioteca",
       "tipo": "bus",
       "linea": "B1",
-      "conexiones": ["metro"],
+      "conexiones": ["bus", "metro"],
       "es_transbordo": true
     },
     "B2_ParqueIndustrial": {
       "nombre": "Parque Industrial",
       "tipo": "bus",
       "linea": "B2",
-      "conexiones": ["metro"],
+      "conexiones": ["bus", "metro"],
       "es_transbordo": true
     },
     "B2_CentroComercial": {
       "nombre": "Centro Comercial",
       "tipo": "bus",
       "linea": "B2",
-      "conexiones": ["metro"],
-      "es_transbordo": true
-    },
-    "T1_EstacionCentral": {
-      "nombre": "Estación Central",
-      "tipo": "tren",
-      "linea": "T1",
-      "conexiones": ["metro"],
-      "es_transbordo": true
-    },
-    "INT_Intermodal": {
-      "nombre": "Terminal Intermodal",
-      "tipo": "intermodal",
-      "linea": null,
-      "conexiones": ["metro", "bus", "tren"],
-      "es_transbordo": true
+      "conexiones": ["bus"],
+      "es_transbordo": false
     }
   },
   "rutas": [
@@ -242,89 +228,45 @@
     },
     {
       "origen": "B2_CentroComercial",
-      "destino": "M2_HospitalGeneral",
-      "tipo": "transbordo",
+      "destino": "B2_ParqueIndustrial",
+      "tipo": "bus",
       "tiempo": 5,
       "congestion_tipica": {
         "hora_pico_manana": 1.6,
-        "hora_pico_tarde": 1.8,
+        "hora_pico_tarde": 1.4,
         "normal": 1.0
       }
     },
     {
-      "origen": "M2_HospitalGeneral",
+      "origen": "B2_ParqueIndustrial",
+      "destino": "B2_CentroComercial",
+      "tipo": "bus",
+      "tiempo": 5,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.6,
+        "hora_pico_tarde": 1.4,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B2_CentroComercial",
+      "destino": "B1_MercadoCentral",
+      "tipo": "transbordo",
+      "tiempo": 10,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.8,
+        "hora_pico_tarde": 1.6,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B1_MercadoCentral",
       "destino": "B2_CentroComercial",
       "tipo": "transbordo",
-      "tiempo": 5,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.6,
-        "hora_pico_tarde": 1.8,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "T1_EstacionCentral",
-      "destino": "M2_PlazaMayor",
-      "tipo": "transbordo",
-      "tiempo": 7,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.3,
-        "hora_pico_tarde": 1.3,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M2_PlazaMayor",
-      "destino": "T1_EstacionCentral",
-      "tipo": "transbordo",
-      "tiempo": 7,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.3,
-        "hora_pico_tarde": 1.3,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "T1_EstacionCentral",
-      "destino": "INT_Intermodal",
-      "tipo": "tren",
       "tiempo": 10,
       "congestion_tipica": {
-        "hora_pico_manana": 1.2,
-        "hora_pico_tarde": 1.2,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "INT_Intermodal",
-      "destino": "T1_EstacionCentral",
-      "tipo": "tren",
-      "tiempo": 10,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.2,
-        "hora_pico_tarde": 1.2,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M1_CentroHistorico",
-      "destino": "M2_PlazaMayor",
-      "tipo": "transbordo",
-      "tiempo": 5,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.5,
-        "hora_pico_tarde": 1.4,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M2_PlazaMayor",
-      "destino": "M1_CentroHistorico",
-      "tipo": "transbordo",
-      "tiempo": 5,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.5,
-        "hora_pico_tarde": 1.4,
+        "hora_pico_manana": 1.8,
+        "hora_pico_tarde": 1.6,
         "normal": 1.0
       }
     }

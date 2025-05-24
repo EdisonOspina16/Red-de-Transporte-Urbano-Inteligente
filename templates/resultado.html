@@ -75,7 +75,6 @@
                                 <div class="step-marker" style="background-color: 
                                     {% if todas_estaciones[i].tipo == 'metro' %}#3498db
                                     {% elif todas_estaciones[i].tipo == 'bus' %}#2ecc71
-                                    {% elif todas_estaciones[i].tipo == 'tren' %}#e74c3c
                                     {% else %}#95a5a6{% endif %};">
                                 </div>
                                 <div class="step-content">
@@ -92,12 +91,14 @@
                                             <i class="fas fa-bus"></i> Bus 
                                             {% if 'B1' in current_station.id %}Línea B1
                                             {% elif 'B2' in current_station.id %}Línea B2{% endif %}
-                                        {% elif current_station.tipo == 'tren' %}
-                                            <i class="fas fa-train"></i> Tren Línea T1
-                                        {% else %}
-                                            <i class="fas fa-exchange-alt"></i> Transbordo
                                         {% endif %}
                                     </span>
+                                    {% if current_station.tipo != next_station.tipo %}
+                                    <div class="transfer-info">
+                                        <i class="fas fa-exchange-alt"></i>
+                                        <span>Transbordo en {{ camino[i] }} de {{ current_station.tipo }} a {{ next_station.tipo }}</span>
+                                    </div>
+                                    {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
@@ -105,7 +106,6 @@
                             <div class="path-connector" style="background-color: 
                                 {% if todas_estaciones[i].tipo == 'metro' %}#3498db
                                 {% elif todas_estaciones[i].tipo == 'bus' %}#2ecc71
-                                {% elif todas_estaciones[i].tipo == 'tren' %}#e74c3c
                                 {% else %}#95a5a6{% endif %};">
                             </div>
                             {% endif %}
@@ -183,19 +183,6 @@
                         </ul>
                     </div>
                 </div>
-                <div class="legend-item" data-type="train">
-                    <div class="legend-icon">
-                        <i class="fas fa-train"></i>
-                        <span class="legend-color" style="background-color: #e74c3c;"></span>
-                    </div>
-                    <div class="legend-info">
-                        <h4>Tren</h4>
-                        <p>Línea T1</p>
-                        <ul>
-                            <li>T1: Estación Central - Terminal Intermodal</li>
-                        </ul>
-                    </div>
-                </div>
                 <div class="legend-item" data-type="transfer">
                     <div class="legend-icon">
                         <i class="fas fa-exchange-alt"></i>
@@ -223,12 +210,10 @@
                         face: '"Font Awesome 6 Free"',
                         code: {% if estacion.tipo == "metro" %}'"\uf239"'
                         {% elif estacion.tipo == "bus" %}'"\uf207"'
-                        {% elif estacion.tipo == "tren" %}'"\uf238"'
                         {% else %}'"\uf542"'{% endif %},
                         size: 40,
                         color: {% if estacion.tipo == "metro" %}"#3498db"
                         {% elif estacion.tipo == "bus" %}"#2ecc71"
-                        {% elif estacion.tipo == "tren" %}"#e74c3c"
                         {% else %}"#95a5a6"{% endif %}
                     },
                     font: {
@@ -262,13 +247,15 @@
                     to: "{{ ruta.destino }}",
                     arrows: "to",
                     color: {
-                        color: {% if ruta.tipo == "metro" %}"#3498db"
+                        color: {% if (ruta.origen, ruta.destino) in rutas_camino %}"#f1c40f"
+                        {% elif ruta.tipo == "metro" %}"#3498db"
                         {% elif ruta.tipo == "bus" %}"#2ecc71"
                         {% elif ruta.tipo == "tren" %}"#e74c3c"
                         {% else %}"#95a5a6"{% endif %},
-                        highlight: {% if (ruta.origen, ruta.destino) in rutas_camino %}"#f1c40f"{% else %}null{% endif %},
-                        width: {% if (ruta.origen, ruta.destino) in rutas_camino %}2{% else %}1{% endif %}
+                        highlight: "#f1c40f",
+                        width: {% if (ruta.origen, ruta.destino) in rutas_camino %}3{% else %}1{% endif %}
                     },
+                    width: {% if (ruta.origen, ruta.destino) in rutas_camino %}3{% else %}1{% endif %},
                     label: "{{ ruta.tiempo }}min"
                 },
                 {% endfor %}
@@ -366,11 +353,7 @@
                     
                     // Buses B2 (derecha)
                     'B2_ParqueIndustrial': { x: 400, y: -100 },
-                    'B2_CentroComercial': { x: 400, y: 100 },
-                    
-                    // Tren y Terminal (centro)
-                    'T1_EstacionCentral': { x: 0, y: 100 },
-                    'INT_Intermodal': { x: 0, y: 0 }
+                    'B2_CentroComercial': { x: 400, y: 100 }
                 };
 
                 network.setOptions({ physics: false });
@@ -395,7 +378,6 @@
             <ul>
                 <li><span class="legend-color" style="background-color: #3498db;"></span> Metro</li>
                 <li><span class="legend-color" style="background-color: #2ecc71;"></span> Bus</li>
-                <li><span class="legend-color" style="background-color: #e74c3c;"></span> Tren</li>
                 <li><span class="legend-color" style="background-color: #95a5a6;"></span> Transbordo</li>
                 <li><span class="legend-color" style="background-color: #f1c40f;"></span> Ruta actual</li>
             </ul>

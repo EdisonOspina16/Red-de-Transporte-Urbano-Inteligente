@@ -765,3 +765,23 @@ strong {
         grid-template-columns: 1fr;
     }
 }
+
+.transfer-info {
+    margin-top: 8px;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.transfer-info i {
+    color: #95a5a6;
+}
+
+.transfer-info span {
+    font-weight: 500;
+}

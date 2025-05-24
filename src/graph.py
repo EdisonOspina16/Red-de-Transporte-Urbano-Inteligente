@@ -98,7 +98,7 @@ class Grafo:
             datos = json.load(f)
         
         # Cargar estaciones
-        for id, datos_estacion in datos["estaciones"].items():
+        for id, datos_estacion in datos["vertices"].items():
             self.agregar_estacion(id, datos_estacion)
         
         # Cargar rutas
