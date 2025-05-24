@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Transporte Urbano Inteligente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', path='/estilos.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1>Sistema de Transporte Urbano Inteligente</h1>
+            <p class="subtitle">Conectando la ciudad de manera eficiente</p>
+        </header>
+
+        <div class="dashboard">
+            <div class="info-panel">
+                <div class="transport-types">
+                    <h3><i class="fas fa-info-circle"></i> Tipos de Transporte</h3>
+                    <div class="transport-type">
+                        <i class="fas fa-subway"></i> Metro
+                    </div>
+                    <div class="transport-type">
+                        <i class="fas fa-bus"></i> Bus
+                    </div>
+                    <div class="transport-type">
+                        <i class="fas fa-train"></i> Tren
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" action="/ruta" class="route-finder">
+                <h2><i class="fas fa-route"></i> Planificador de Ruta</h2>
+
+                <div class="form-group">
+                    <label for="origen">
+                        <i class="fas fa-map-marker-alt"></i> Estación de origen:
+                    </label>
+                    <select name="origen" id="origen" required>
+                        <option value="">Seleccione origen</option>
+                        {% for est in estaciones %}
+                            <option value="{{ est }}">{{ est }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="destino">
+                        <i class="fas fa-flag-checkered"></i> Estación de destino:
+                    </label>
+                    <select name="destino" id="destino" required>
+                        <option value="">Seleccione destino</option>
+                        {% for est in estaciones %}
+                            <option value="{{ est }}">{{ est }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="preferences">
+                    <h3>Preferencias de viaje</h3>
+                    <div class="preference-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="avoid_congestion" checked>
+                            <span class="checkmark"></span>
+                            Evitar rutas congestionadas
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="prefer_metro">
+                            <span class="checkmark"></span>
+                            Preferir metro cuando sea posible
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="search-button">
+                    <i class="fas fa-search"></i> Buscar mejor ruta
+                </button>
+            </form>
+
+            <div class="status-panel">
+                <h3><i class="fas fa-chart-line"></i> Estado del Sistema</h3>
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <i class="fas fa-clock"></i>
+                        <span class="status-label">Hora pico</span>
+                        <span class="status-value congestion-high">Alta congestión</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-temperature-high"></i>
+                        <span class="status-label">Clima</span>
+                        <span class="status-value">23°C - Despejado</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-bus"></i>
+                        <span class="status-label">Buses en servicio</span>
+                        <span class="status-value">95%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <p>Sistema actualizado en tiempo real | <i class="fas fa-clock"></i> Última actualización: {{ current_time }}</p>
+        </footer>
+    </div>
+</body>
+</html>
