@@ -22,14 +22,14 @@ class Ruta:
     def calcular_tiempo_actual(self, hora=None):
         if hora is None:
             hora = datetime.now().hour
-
+        
         if 7 <= hora < 9:
             factor = self.congestion_tipica["hora_pico_manana"]
         elif 17 <= hora < 19:
             factor = self.congestion_tipica["hora_pico_tarde"]
         else:
             factor = self.congestion_tipica["normal"]
-
+        
         return self.tiempo_base * factor
 
 
@@ -96,15 +96,15 @@ class Grafo:
         print(f"Cargando datos desde: {archivo}")  # Debug log
         with open(archivo, 'r', encoding='utf-8') as f:
             datos = json.load(f)
-
+        
         # Cargar estaciones
         for id, datos_estacion in datos["estaciones"].items():
             self.agregar_estacion(id, datos_estacion)
-
+        
         # Cargar rutas
         for ruta in datos["rutas"]:
             self.agregar_ruta(ruta["origen"], ruta["destino"], ruta)
-
+        
         print(f"Total de estaciones cargadas: {len(self.vertices)}")  # Debug log
         print(f"Total de rutas cargadas: {sum(len(rutas) for rutas in self.rutas.values())}")  # Debug log
 

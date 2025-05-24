@@ -27,21 +27,21 @@ def es_fuertemente_conexo(grafo):
         for vecino in grafo.rutas.get(nodo, {}):
             if vecino not in visitados:
                 dfs(vecino, visitados)
-
+    
     # Verificar conectividad desde cada nodo
     for nodo_inicio in grafo.rutas:
         visitados = set()
         dfs(nodo_inicio, visitados)
         if len(visitados) != len(grafo.rutas):
             return False
-
+        
         # Verificar que existe camino de vuelta
         for nodo_destino in grafo.rutas:
             if nodo_inicio != nodo_destino:
                 camino_vuelta = False
                 for intermedio in grafo.rutas:
                     if nodo_destino in grafo.rutas.get(intermedio, {}) and \
-                            intermedio in visitados:
+                       intermedio in visitados:
                         camino_vuelta = True
                         break
                 if not camino_vuelta:
