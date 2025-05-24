@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado - Sistema de Transporte Urbano Inteligente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', path='/estilos.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1>Resultado de la Ruta</h1>
+            <p class="subtitle">Sistema de Transporte Urbano Inteligente</p>
+        </header>
+
+        <div class="dashboard">
+            <div class="info-panel">
+                <div class="route-summary">
+                    <h3><i class="fas fa-info-circle"></i> Resumen del Viaje</h3>
+                    <div class="summary-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Hora estimada de llegada: {{ hora_llegada }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-walking"></i>
+                        <span>Distancia a pie: 0.3 km</span>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transbordos: {{ (camino|length - 2)|abs if camino else 0 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="route-details">
+                <div class="result-card">
+                    <div class="route-header">
+                        <div class="station-info">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <span class="label">Origen</span>
+                                <span class="value">{{ origen }}</span>
+                            </div>
+                        </div>
+                        <div class="travel-time">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ tiempo }} minutos</span>
+                        </div>
+                        <div class="station-info">
+                            <i class="fas fa-flag-checkered"></i>
+                            <div>
+                                <span class="label">Destino</span>
+                                <span class="value">{{ destino }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if camino %}
+                    <div class="route-path">
+                        <h3><i class="fas fa-route"></i> Ruta Detallada</h3>
+                        <div class="path-steps">
+                            {% for estacion in camino %}
+                            <div class="path-step">
+                                <div class="step-marker"></div>
+                                <div class="step-content">
+                                    <span class="station-name">{{ estacion }}</span>
+                                    {% if not loop.last %}
+                                    <span class="transport-type">
+                                        <i class="fas fa-subway"></i> Metro Línea {{ loop.index }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if not loop.last %}
+                            <div class="path-connector"></div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>No se encontró una ruta entre las estaciones seleccionadas.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="action-buttons">
+                    <a href="/" class="back-button">
+                        <i class="fas fa-arrow-left"></i> Volver al inicio
+                    </a>
+                    <button class="share-button">
+                        <i class="fas fa-share-alt"></i> Compartir ruta
+                    </button>
+                </div>
+            </div>
+
+            <div class="status-panel">
+                <h3><i class="fas fa-chart-line"></i> Estado de la Ruta</h3>
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <i class="fas fa-traffic-light"></i>
+                        <span class="status-label">Congestión</span>
+                        <span class="status-value">Normal</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-clock"></i>
+                        <span class="status-label">Próximo tren</span>
+                        <span class="status-value">3 min</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-wheelchair"></i>
+                        <span class="status-label">Accesibilidad</span>
+                        <span class="status-value success">Disponible</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <p>Sistema actualizado en tiempo real | <i class="fas fa-clock"></i> Última actualización: {{ current_time }}</p>
+        </footer>
+    </div>
+</body>
+</html>
