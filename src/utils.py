@@ -20,6 +20,34 @@ def tiene_ciclos(grafo):
                 return True
     return False
 
+
+def es_fuertemente_conexo(grafo):
+    def dfs(nodo, visitados):
+        visitados.add(nodo)
+        for vecino in grafo.rutas.get(nodo, {}):
+            if vecino not in visitados:
+                dfs(vecino, visitados)
+
+    # Verificar conectividad desde cada nodo
+    for nodo_inicio in grafo.rutas:
+        visitados = set()
+        dfs(nodo_inicio, visitados)
+        if len(visitados) != len(grafo.rutas):
+            return False
+
+        # Verificar que existe camino de vuelta
+        for nodo_destino in grafo.rutas:
+            if nodo_inicio != nodo_destino:
+                camino_vuelta = False
+                for intermedio in grafo.rutas:
+                    if nodo_destino in grafo.rutas.get(intermedio, {}) and \
+                            intermedio in visitados:
+                        camino_vuelta = True
+                        break
+                if not camino_vuelta:
+                    return False
+    return True
+
 def actualizar_peso(grafo, origen, destino, nuevo_peso):
     if nuevo_peso < 0:
         return False
