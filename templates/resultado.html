@@ -7,6 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="{{ url_for('static', path='/estilos.css') }}" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style type="text/css">
+        #network {
+            width: 100%;
+            height: 500px;
+            border: 1px solid lightgray;
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -117,6 +126,250 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="map-container">
+            <div class="transport-legend">
+                <h3><i class="fas fa-map-signs"></i> Medios de Transporte</h3>
+                <div class="legend-item" data-type="metro">
+                    <div class="legend-icon">
+                        <i class="fas fa-subway"></i>
+                        <span class="legend-color" style="background-color: #3498db;"></span>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Metro</h4>
+                        <p>Líneas M1 y M2</p>
+                        <ul>
+                            <li>M1: Centro Histórico - Universidad</li>
+                            <li>M2: Plaza Mayor - Deportivo</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="legend-item" data-type="bus">
+                    <div class="legend-icon">
+                        <i class="fas fa-bus"></i>
+                        <span class="legend-color" style="background-color: #2ecc71;"></span>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Bus</h4>
+                        <p>Líneas B1 y B2</p>
+                        <ul>
+                            <li>B1: Mercado Central - Biblioteca</li>
+                            <li>B2: Parque Industrial - Centro Comercial</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="legend-item" data-type="train">
+                    <div class="legend-icon">
+                        <i class="fas fa-train"></i>
+                        <span class="legend-color" style="background-color: #e74c3c;"></span>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Tren</h4>
+                        <p>Línea T1</p>
+                        <ul>
+                            <li>T1: Estación Central - Terminal Intermodal</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="legend-item" data-type="transfer">
+                    <div class="legend-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span class="legend-color" style="background-color: #95a5a6;"></span>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Transbordos</h4>
+                        <p>Puntos de conexión entre líneas</p>
+                    </div>
+                </div>
+            </div>
+            <div id="network"></div>
+        </div>
+
+        <script type="text/javascript">
+            // Datos de la red
+            var nodes = new vis.DataSet([
+                {% for estacion in todas_estaciones %}
+                {
+                    id: "{{ estacion.id }}",
+                    label: "{{ estacion.nombre }}",
+                    title: "{{ estacion.nombre }} ({{ estacion.tipo }})",
+                    color: {
+                        background: {% if estacion.tipo == "metro" %}"#3498db"
+                        {% elif estacion.tipo == "bus" %}"#2ecc71"
+                        {% elif estacion.tipo == "tren" %}"#e74c3c"
+                        {% else %}"#95a5a6"{% endif %},
+                        highlight: {
+                            background: {% if estacion.tipo == "metro" %}"#2980b9"
+                            {% elif estacion.tipo == "bus" %}"#27ae60"
+                            {% elif estacion.tipo == "tren" %}"#c0392b"
+                            {% else %}"#7f8c8d"{% endif %}
+                        }
+                    },
+                    font: {
+                        color: {% if estacion.id in camino_ids %}"#000000"{% else %}"#666666"{% endif %},
+                        size: {% if estacion.id in camino_ids %}16{% else %}14{% endif %},
+                        bold: {% if estacion.id in camino_ids %}true{% else %}false{% endif %}
+                    },
+                    borderWidth: {% if estacion.id in camino_ids %}3{% else %}1{% endif %}
+                },
+                {% endfor %}
+            ]);
+
+            var edges = new vis.DataSet([
+                {% for ruta in todas_rutas %}
+                {
+                    from: "{{ ruta.origen }}",
+                    to: "{{ ruta.destino }}",
+                    arrows: "to",
+                    color: {
+                        color: {% if ruta.tipo == "metro" %}"#3498db"
+                        {% elif ruta.tipo == "bus" %}"#2ecc71"
+                        {% elif ruta.tipo == "tren" %}"#e74c3c"
+                        {% else %}"#95a5a6"{% endif %},
+                        highlight: {% if (ruta.origen, ruta.destino) in rutas_camino %}"#f1c40f"{% else %}null{% endif %},
+                        width: {% if (ruta.origen, ruta.destino) in rutas_camino %}2{% else %}1{% endif %}
+                    },
+                    label: "{{ ruta.tiempo }}min"
+                },
+                {% endfor %}
+            ]);
+
+            // Crear la red
+            var container = document.getElementById('network');
+            var data = {
+                nodes: nodes,
+                edges: edges
+            };
+            var options = {
+                nodes: {
+                    shape: 'dot',
+                    size: 25,
+                    font: {
+                        face: 'Roboto',
+                        size: 16,
+                        color: '#34495e',
+                        bold: {
+                            color: '#2c3e50',
+                            size: 18
+                        }
+                    },
+                    borderWidth: 2,
+                    shadow: {
+                        enabled: true,
+                        color: 'rgba(0,0,0,0.2)',
+                        size: 10,
+                        x: 5,
+                        y: 5
+                    }
+                },
+                edges: {
+                    width: 2,
+                    color: {
+                        inherit: false,
+                        opacity: 0.8
+                    },
+                    smooth: {
+                        type: 'continuous',
+                        roundness: 0.5
+                    },
+                    font: {
+                        size: 14,
+                        face: 'Roboto',
+                        background: 'white',
+                        strokeWidth: 0,
+                        align: 'horizontal'
+                    },
+                    arrows: {
+                        to: {
+                            enabled: true,
+                            scaleFactor: 0.7
+                        }
+                    }
+                },
+                physics: {
+                    enabled: true,
+                    solver: 'forceAtlas2Based',
+                    forceAtlas2Based: {
+                        gravitationalConstant: -500,
+                        centralGravity: 0.01,
+                        springLength: 200,
+                        springConstant: 0.08,
+                        damping: 0.4,
+                        avoidOverlap: 1
+                    },
+                    stabilization: {
+                        enabled: true,
+                        iterations: 1000,
+                        updateInterval: 25
+                    }
+                },
+                layout: {
+                    randomSeed: 2,
+                    improvedLayout: true
+                },
+                interaction: {
+                    hover: true,
+                    navigationButtons: true,
+                    keyboard: true,
+                    zoomView: true,
+                    dragView: true
+                }
+            };
+            var network = new vis.Network(container, data, options);
+
+            // Posicionar los nodos en forma de mapa de metro
+            network.on("stabilizationIterationsDone", function () {
+                var nodePositions = {
+                    // Línea M1 (horizontal superior)
+                    'M1_CentroHistorico': { x: -300, y: -200 },
+                    'M1_ParqueCentral': { x: -100, y: -200 },
+                    'M1_Universidad': { x: 100, y: -200 },
+                    
+                    // Línea M2 (vertical derecha)
+                    'M2_PlazaMayor': { x: 200, y: 0 },
+                    'M2_HospitalGeneral': { x: 200, y: 100 },
+                    'M2_Deportivo': { x: 200, y: 200 },
+                    
+                    // Buses B1 (izquierda)
+                    'B1_MercadoCentral': { x: -400, y: -100 },
+                    'B1_Biblioteca': { x: -400, y: 0 },
+                    
+                    // Buses B2 (derecha)
+                    'B2_ParqueIndustrial': { x: 400, y: -100 },
+                    'B2_CentroComercial': { x: 400, y: 100 },
+                    
+                    // Tren y Terminal (centro)
+                    'T1_EstacionCentral': { x: 0, y: 100 },
+                    'INT_Intermodal': { x: 0, y: 0 }
+                };
+
+                network.setOptions({ physics: false });
+                Object.keys(nodePositions).forEach(function(nodeId) {
+                    network.moveNode(nodeId, nodePositions[nodeId].x, nodePositions[nodeId].y);
+                });
+            });
+
+            // Ajustar el zoom para mostrar todos los nodos
+            network.once("afterDrawing", function() {
+                network.fit({
+                    animation: {
+                        duration: 1000,
+                        easingFunction: 'easeInOutQuad'
+                    }
+                });
+            });
+        </script>
+
+        <div class="route-legend">
+            <h3>Leyenda:</h3>
+            <ul>
+                <li><span class="legend-color" style="background-color: #3498db;"></span> Metro</li>
+                <li><span class="legend-color" style="background-color: #2ecc71;"></span> Bus</li>
+                <li><span class="legend-color" style="background-color: #e74c3c;"></span> Tren</li>
+                <li><span class="legend-color" style="background-color: #95a5a6;"></span> Transbordo</li>
+                <li><span class="legend-color" style="background-color: #f1c40f;"></span> Ruta actual</li>
+            </ul>
         </div>
 
         <footer class="main-footer">

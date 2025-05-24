@@ -66,7 +66,8 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             )
         
         # Convertir IDs de estaciones en el camino a nombres
-        camino_nombres = [red.obtener_nombre_por_id(estacion_id) for estacion_id in caminos[destino_id]]
+        camino_ids = caminos[destino_id]
+        camino_nombres = [red.obtener_nombre_por_id(estacion_id) for estacion_id in camino_ids]
         
         # Calcular hora actual y estimada de llegada
         now = datetime.now()
@@ -77,15 +78,42 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         hora_llegada = f"{minutos_totales // 60:02d}:{minutos_totales % 60:02d}"
         
         logger.info(f"Ruta encontrada con {len(camino_nombres)} estaciones y tiempo {tiempo}")
+
+        # Preparar datos para la visualización
+        todas_estaciones = []
+        for id, estacion in red.vertices.items():
+            todas_estaciones.append({
+                'id': id,
+                'nombre': estacion.nombre,
+                'tipo': estacion.tipo
+            })
+
+        todas_rutas = []
+        rutas_camino = []
+        for i in range(len(camino_ids) - 1):
+            rutas_camino.append((camino_ids[i], camino_ids[i + 1]))
+
+        for origen_est, rutas_dest in red.rutas.items():
+            for destino_est, ruta in rutas_dest.items():
+                todas_rutas.append({
+                    'origen': origen_est,
+                    'destino': destino_est,
+                    'tipo': ruta.tipo,
+                    'tiempo': ruta.tiempo_base
+                })
         
         return templates.TemplateResponse("resultado.html", {
             "request": request,
             "origen": origen,
             "destino": destino,
             "camino": camino_nombres,
+            "camino_ids": camino_ids,
             "tiempo": tiempo,
             "current_time": current_time,
-            "hora_llegada": hora_llegada
+            "hora_llegada": hora_llegada,
+            "todas_estaciones": todas_estaciones,
+            "todas_rutas": todas_rutas,
+            "rutas_camino": rutas_camino
         })
     except Exception as e:
         logger.error(f"Error al calcular la ruta: {str(e)}")
