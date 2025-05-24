@@ -72,42 +72,18 @@
                         <div class="path-steps">
                             {% for i in range(camino|length) %}
                             <div class="path-step">
-                                <div class="step-marker" style="background-color: 
-                                    {% if todas_estaciones[i].tipo == 'metro' %}#3498db
-                                    {% elif todas_estaciones[i].tipo == 'bus' %}#2ecc71
-                                    {% else %}#95a5a6{% endif %};">
-                                </div>
+                                <div class="step-marker" style="background-color: #3498db;"></div>
                                 <div class="step-content">
                                     <span class="station-name">{{ camino[i] }}</span>
-                                    {% if not loop.last %}
-                                    {% set current_station = todas_estaciones[i] %}
-                                    {% set next_station = todas_estaciones[i + 1] %}
-                                    <span class="transport-type">
-                                        {% if current_station.tipo == 'metro' %}
-                                            <i class="fas fa-subway"></i> Metro 
-                                            {% if 'M1' in current_station.id %}Línea M1
-                                            {% elif 'M2' in current_station.id %}Línea M2{% endif %}
-                                        {% elif current_station.tipo == 'bus' %}
-                                            <i class="fas fa-bus"></i> Bus 
-                                            {% if 'B1' in current_station.id %}Línea B1
-                                            {% elif 'B2' in current_station.id %}Línea B2{% endif %}
-                                        {% endif %}
-                                    </span>
-                                    {% if current_station.tipo != next_station.tipo %}
-                                    <div class="transfer-info">
-                                        <i class="fas fa-exchange-alt"></i>
-                                        <span>Transbordo en {{ camino[i] }} de {{ current_station.tipo }} a {{ next_station.tipo }}</span>
-                                    </div>
-                                    {% endif %}
+                                    {% if i == 0 %}
+                                        <span class="transport-type"><i class="fas fa-play"></i> Inicio del recorrido</span>
+                                    {% elif i == camino|length - 1 %}
+                                        <span class="transport-type"><i class="fas fa-flag-checkered"></i> Destino final</span>
                                     {% endif %}
                                 </div>
                             </div>
                             {% if not loop.last %}
-                            <div class="path-connector" style="background-color: 
-                                {% if todas_estaciones[i].tipo == 'metro' %}#3498db
-                                {% elif todas_estaciones[i].tipo == 'bus' %}#2ecc71
-                                {% else %}#95a5a6{% endif %};">
-                            </div>
+                            <div class="path-connector" style="background-color: #3498db;"></div>
                             {% endif %}
                             {% endfor %}
                         </div>
@@ -181,16 +157,6 @@
                             <li>B1: Mercado Central - Biblioteca</li>
                             <li>B2: Parque Industrial - Centro Comercial</li>
                         </ul>
-                    </div>
-                </div>
-                <div class="legend-item" data-type="transfer">
-                    <div class="legend-icon">
-                        <i class="fas fa-exchange-alt"></i>
-                        <span class="legend-color" style="background-color: #95a5a6;"></span>
-                    </div>
-                    <div class="legend-info">
-                        <h4>Transbordos</h4>
-                        <p>Puntos de conexión entre líneas</p>
                     </div>
                 </div>
             </div>
@@ -378,7 +344,6 @@
             <ul>
                 <li><span class="legend-color" style="background-color: #3498db;"></span> Metro</li>
                 <li><span class="legend-color" style="background-color: #2ecc71;"></span> Bus</li>
-                <li><span class="legend-color" style="background-color: #95a5a6;"></span> Transbordo</li>
                 <li><span class="legend-color" style="background-color: #f1c40f;"></span> Ruta actual</li>
             </ul>
         </div>
