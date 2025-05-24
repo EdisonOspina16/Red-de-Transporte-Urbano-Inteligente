@@ -70,20 +70,44 @@
                     <div class="route-path">
                         <h3><i class="fas fa-route"></i> Ruta Detallada</h3>
                         <div class="path-steps">
-                            {% for estacion in camino %}
+                            {% for i in range(camino|length) %}
                             <div class="path-step">
-                                <div class="step-marker"></div>
+                                <div class="step-marker" style="background-color: 
+                                    {% if todas_estaciones[i].tipo == 'metro' %}#3498db
+                                    {% elif todas_estaciones[i].tipo == 'bus' %}#2ecc71
+                                    {% elif todas_estaciones[i].tipo == 'tren' %}#e74c3c
+                                    {% else %}#95a5a6{% endif %};">
+                                </div>
                                 <div class="step-content">
-                                    <span class="station-name">{{ estacion }}</span>
+                                    <span class="station-name">{{ camino[i] }}</span>
                                     {% if not loop.last %}
+                                    {% set current_station = todas_estaciones[i] %}
+                                    {% set next_station = todas_estaciones[i + 1] %}
                                     <span class="transport-type">
-                                        <i class="fas fa-subway"></i> Metro Línea {{ loop.index }}
+                                        {% if current_station.tipo == 'metro' %}
+                                            <i class="fas fa-subway"></i> Metro 
+                                            {% if 'M1' in current_station.id %}Línea M1
+                                            {% elif 'M2' in current_station.id %}Línea M2{% endif %}
+                                        {% elif current_station.tipo == 'bus' %}
+                                            <i class="fas fa-bus"></i> Bus 
+                                            {% if 'B1' in current_station.id %}Línea B1
+                                            {% elif 'B2' in current_station.id %}Línea B2{% endif %}
+                                        {% elif current_station.tipo == 'tren' %}
+                                            <i class="fas fa-train"></i> Tren Línea T1
+                                        {% else %}
+                                            <i class="fas fa-exchange-alt"></i> Transbordo
+                                        {% endif %}
                                     </span>
                                     {% endif %}
                                 </div>
                             </div>
                             {% if not loop.last %}
-                            <div class="path-connector"></div>
+                            <div class="path-connector" style="background-color: 
+                                {% if todas_estaciones[i].tipo == 'metro' %}#3498db
+                                {% elif todas_estaciones[i].tipo == 'bus' %}#2ecc71
+                                {% elif todas_estaciones[i].tipo == 'tren' %}#e74c3c
+                                {% else %}#95a5a6{% endif %};">
+                            </div>
                             {% endif %}
                             {% endfor %}
                         </div>
@@ -194,24 +218,39 @@
                     id: "{{ estacion.id }}",
                     label: "{{ estacion.nombre }}",
                     title: "{{ estacion.nombre }} ({{ estacion.tipo }})",
-                    color: {
-                        background: {% if estacion.tipo == "metro" %}"#3498db"
+                    shape: 'icon',
+                    icon: {
+                        face: '"Font Awesome 6 Free"',
+                        code: {% if estacion.tipo == "metro" %}'"\uf239"'
+                        {% elif estacion.tipo == "bus" %}'"\uf207"'
+                        {% elif estacion.tipo == "tren" %}'"\uf238"'
+                        {% else %}'"\uf542"'{% endif %},
+                        size: 40,
+                        color: {% if estacion.tipo == "metro" %}"#3498db"
                         {% elif estacion.tipo == "bus" %}"#2ecc71"
                         {% elif estacion.tipo == "tren" %}"#e74c3c"
-                        {% else %}"#95a5a6"{% endif %},
-                        highlight: {
-                            background: {% if estacion.tipo == "metro" %}"#2980b9"
-                            {% elif estacion.tipo == "bus" %}"#27ae60"
-                            {% elif estacion.tipo == "tren" %}"#c0392b"
-                            {% else %}"#7f8c8d"{% endif %}
-                        }
+                        {% else %}"#95a5a6"{% endif %}
                     },
                     font: {
+                        size: 16,
+                        face: 'Roboto',
                         color: {% if estacion.id in camino_ids %}"#000000"{% else %}"#666666"{% endif %},
-                        size: {% if estacion.id in camino_ids %}16{% else %}14{% endif %},
-                        bold: {% if estacion.id in camino_ids %}true{% else %}false{% endif %}
+                        bold: {% if estacion.id in camino_ids %}true{% else %}false{% endif %},
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        strokeWidth: 4,
+                        strokeColor: 'white'
                     },
-                    borderWidth: {% if estacion.id in camino_ids %}3{% else %}1{% endif %}
+                    size: {% if estacion.id in camino_ids %}35{% else %}30{% endif %},
+                    borderWidth: {% if estacion.id in camino_ids %}3{% else %}1{% endif %},
+                    borderWidthSelected: 3,
+                    chosen: {
+                        node: function(values, id, selected, hovering) {
+                            values.shadow = true;
+                            if (hovering) {
+                                values.size += 5;
+                            }
+                        }
+                    }
                 },
                 {% endfor %}
             ]);
@@ -243,25 +282,15 @@
             };
             var options = {
                 nodes: {
-                    shape: 'dot',
-                    size: 25,
-                    font: {
-                        face: 'Roboto',
-                        size: 16,
-                        color: '#34495e',
-                        bold: {
-                            color: '#2c3e50',
-                            size: 18
-                        }
-                    },
-                    borderWidth: 2,
+                    shape: 'icon',
                     shadow: {
                         enabled: true,
                         color: 'rgba(0,0,0,0.2)',
                         size: 10,
                         x: 5,
                         y: 5
-                    }
+                    },
+                    chosen: true
                 },
                 edges: {
                     width: 2,
