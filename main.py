@@ -57,16 +57,16 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         logger.info(f"Ejecutando Dijkstra desde {origen_id}")
         distancias, caminos = dijkstra(red, origen_id)
         
-        if destino_id not in caminos:
+        tiempo = distancias.get(destino_id, float('inf'))
+        if tiempo == float('inf') or destino_id not in caminos:
             logger.error(f"No se encontró ruta entre {origen_id} y {destino_id}")
             raise HTTPException(
                 status_code=404,
-                detail=f"No existe ruta entre {origen} y {destino}"
+                detail=f"No existe una ruta disponible entre {origen} y {destino}"
             )
         
         # Convertir IDs de estaciones en el camino a nombres
         camino_nombres = [red.obtener_nombre_por_id(estacion_id) for estacion_id in caminos[destino_id]]
-        tiempo = distancias.get(destino_id)
         
         # Calcular hora actual y estimada de llegada
         now = datetime.now()
