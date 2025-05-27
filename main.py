@@ -18,6 +18,7 @@ templates = Jinja2Templates(directory="templates")
 # Montar los archivos estáticos
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Inicializar la red de transporte
 red = Grafo()
 try:
     red.cargar_desde_json("src/data/red.json")
@@ -29,8 +30,16 @@ except Exception as e:
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
+    """
+    Ruta principal que muestra la página de inicio.
+    
+    Args:
+        request (Request): Objeto de solicitud de FastAPI
+        
+    Returns:
+        TemplateResponse: Página de inicio con la lista de estaciones
+    """
     estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
-    logger.info(f"Mostrando {len(estaciones)} estaciones en el índice")
     current_time = datetime.now().strftime("%H:%M:%S")
     return templates.TemplateResponse("index.html", {
         "request": request,
@@ -38,20 +47,40 @@ def index(request: Request):
         "current_time": current_time
     })
 
-<<<<<<< HEAD
 @app.get("/simulacion", response_class=HTMLResponse)
 def simulacion(request: Request):
+    """
+    Ruta que muestra la página de simulación.
+    
+    Args:
+        request (Request): Objeto de solicitud de FastAPI
+        
+    Returns:
+        TemplateResponse: Página de simulación con la lista de estaciones
+    """
     estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
     return templates.TemplateResponse("simulacion.html", {
         "request": request,
         "estaciones": estaciones,
         "red_original": red
     })
-=======
->>>>>>> 970da7ff453ca3af322cfad65b0ff6fc73745067
 
 @app.post("/ruta", response_class=HTMLResponse)
 def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form(...)):
+    """
+    Calcula la ruta óptima entre dos estaciones y sus alternativas.
+    
+    Args:
+        request (Request): Objeto de solicitud de FastAPI
+        origen (str): Nombre de la estación de origen
+        destino (str): Nombre de la estación de destino
+        
+    Returns:
+        TemplateResponse: Página de resultados con la ruta calculada
+        
+    Raises:
+        HTTPException: Si no se encuentran las estaciones o no hay ruta disponible
+    """
     logger.info(f"Calculando ruta desde '{origen}' hasta '{destino}'")
     
     # Obtener IDs de las estaciones
@@ -67,7 +96,6 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         raise HTTPException(status_code=400, detail=f"Estación de destino '{destino}' no encontrada")
     
     try:
-        logger.info(f"Ejecutando Dijkstra desde {origen_id}")
         distancias, caminos = dijkstra(red, origen_id)
         
         tiempo = distancias.get(destino_id, float('inf'))
@@ -87,7 +115,6 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         # Calcular ruta alternativa excluyendo estaciones de la ruta principal
         estaciones_intermedias = camino_principal[1:-1]
         for estacion_excluida in estaciones_intermedias:
-            logger.info(f"Intentando encontrar ruta alternativa excluyendo: {estacion_excluida}")
             red_temp = red.copia_sin_estacion(estacion_excluida)
             
             try:
@@ -103,7 +130,6 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
                         camino_alt_nombres[0] == origen and 
                         camino_alt_nombres[-1] == destino):
                         
-                        logger.info(f"Ruta alternativa encontrada: {' -> '.join(camino_alt_nombres)}")
                         rutas_alternativas.append(camino_alt_nombres)
                         tiempos_alternativos.append(tiempo_alt)
                         break  # Solo necesitamos una ruta alternativa
@@ -124,11 +150,6 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         if tiempos_alternativos:
             minutos_alt = now.hour * 60 + now.minute + int(tiempos_alternativos[0])
             hora_llegada_alt = [f"{minutos_alt // 60:02d}:{minutos_alt % 60:02d}"]
-        
-        logger.info(f"Ruta encontrada con {len(camino_principal_nombres)} estaciones y tiempo {tiempo}")
-        logger.info(f"Se encontró {len(rutas_alternativas)} ruta alternativa")
-        if tiempos_alternativos:
-            logger.info(f"Ruta alternativa: {tiempos_alternativos[0]} minutos")
 
         # Preparar datos para la visualización
         todas_estaciones = []
@@ -174,7 +195,6 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         raise HTTPException(
             status_code=500,
             detail=f"Error al calcular la ruta: {str(e)}"
-<<<<<<< HEAD
         )
 
 @app.post("/simular", response_class=HTMLResponse)
@@ -184,6 +204,21 @@ def simular_cambios(
     tipo_cambio: str = Form(...),
     valor: float = Form(...)
 ):
+    """
+    Simula cambios en la red de transporte (congestión o cierre de estación).
+    
+    Args:
+        request (Request): Objeto de solicitud de FastAPI
+        estacion (str): Nombre de la estación a modificar
+        tipo_cambio (str): Tipo de cambio ('congestion' o 'cierre')
+        valor (float): Valor del cambio (porcentaje de congestión)
+        
+    Returns:
+        TemplateResponse: Página de simulación con los resultados
+        
+    Raises:
+        HTTPException: Si hay errores en la simulación
+    """
     try:
         # Hacer una copia de la red original para simular
         red_simulada = red.copiar()
@@ -246,6 +281,3 @@ def simular_cambios(
             status_code=500,
             detail=f"Error en la simulación: {str(e)}"
         )
-=======
-        )
->>>>>>> 970da7ff453ca3af322cfad65b0ff6fc73745067

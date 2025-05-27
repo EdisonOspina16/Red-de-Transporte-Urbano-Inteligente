@@ -1,121 +1,109 @@
 from src.graph import Grafo
-from src.dijkstra import dijkstra
 
-
-def dfs_forward(grafo, nodo, visitados, orden):
-    """DFS forward pass para Kosaraju's algorithm"""
-    visitados.add(nodo)
-    for vecino in grafo.rutas.get(nodo, {}):
-        if vecino not in visitados:
-            dfs_forward(grafo, vecino, visitados, orden)
-    orden.append(nodo)
-
-
-def dfs_reverse(grafo, nodo, visitados, componente):
-    """DFS reverse pass para Kosaraju's algorithm"""
-    visitados.add(nodo)
-    componente.add(nodo)
-    for origen, destinos in grafo.rutas.items():
-        if nodo in destinos and origen not in visitados:
-            dfs_reverse(grafo, origen, visitados, componente)
-
-
-def es_fuertemente_conexo(grafo):
+def dfs_ciclos(grafo, nodo, visitados, stack):
     """
-    Verifica si el grafo es fuertemente conexo usando el algoritmo de Kosaraju.
-    Un grafo es fuertemente conexo si existe un camino entre cualquier par de vértices.
+    Función auxiliar para detectar ciclos en el grafo usando DFS.
     
     Args:
-        grafo: Instancia de la clase Grafo
+        grafo (Grafo): Grafo a analizar
+        nodo (str): Nodo actual en el recorrido
+        visitados (set): Conjunto de nodos ya visitados
+        stack (set): Conjunto de nodos en el camino actual
         
     Returns:
-        bool: True si el grafo es fuertemente conexo, False en caso contrario
+        bool: True si se encuentra un ciclo, False en caso contrario
     """
-    if not grafo.vertices:
-        return True  # Un grafo vacío se considera fuertemente conexo
-        
-    # Primera pasada DFS
-    visitados = set()
-    orden = []
-    inicio = next(iter(grafo.vertices))  # Tomar cualquier vértice inicial
-    dfs_forward(grafo, inicio, visitados, orden)
-    
-    # Verificar si todos los vértices fueron alcanzados en la primera pasada
-    if len(visitados) != len(grafo.vertices):
-        return False
-        
-    # Segunda pasada DFS en orden reverso
-    visitados = set()
-    componente = set()
-    dfs_reverse(grafo, orden[-1], visitados, componente)
-    
-    # El grafo es fuertemente conexo si todos los vértices están en la misma componente
-    return len(componente) == len(grafo.vertices)
-
-
-def detectar_ciclos(grafo):
-    visitados = set()
-    en_recursion = set()
-    
-    def dfs_ciclos(nodo):
-        visitados.add(nodo)
-        en_recursion.add(nodo)
-        
-        for vecino in grafo.rutas.get(nodo, {}):
-            if vecino not in visitados:
-                if dfs_ciclos(vecino):
-                    return True
-            elif vecino in en_recursion:
+    visitados.add(nodo)
+    stack.add(nodo)
+    for vecino in grafo.rutas.get(nodo, {}):
+        if vecino not in visitados:
+            if dfs_ciclos(grafo, vecino, visitados, stack):
                 return True
-                
-        en_recursion.remove(nodo)
-        return False
+        elif vecino in stack:
+            return True
+    stack.remove(nodo)
+    return False
+
+def tiene_ciclos(grafo):
+    """
+    Verifica si el grafo contiene ciclos.
     
-    for nodo in grafo.vertices:
+    Args:
+        grafo (Grafo): Grafo a analizar
+        
+    Returns:
+        bool: True si el grafo contiene ciclos, False en caso contrario
+    """
+    visitados = set()
+    for nodo in grafo.rutas:
         if nodo not in visitados:
-            if dfs_ciclos(nodo):
+            if dfs_ciclos(grafo, nodo, visitados, set()):
                 return True
     return False
 
 
-def sugerir_nuevas_conexiones(grafo, presupuesto_tiempo):
+def es_fuertemente_conexo(grafo):
     """
-    Sugiere nuevas conexiones que reduzcan el tiempo promedio entre estaciones,
-    respetando un presupuesto de tiempo máximo.
+    Verifica si el grafo es fuertemente conexo.
+    Un grafo es fuertemente conexo si desde cualquier vértice se puede llegar a cualquier otro.
     
     Args:
-        grafo: Instancia de la clase Grafo
-        presupuesto_tiempo: Tiempo máximo permitido para la nueva conexión
+        grafo (Grafo): Grafo a analizar
         
     Returns:
-        list: Lista de tuplas (origen, destino, tiempo_estimado) con las sugerencias
+        bool: True si el grafo es fuertemente conexo, False en caso contrario
     """
-    # Calcular tiempos actuales entre todas las estaciones
-    tiempos_actuales = {}
-    for origen in grafo.vertices:
-        distancias, _ = dijkstra(grafo, origen)
-        for destino, tiempo in distancias.items():
-            if tiempo != float('inf'):
-                tiempos_actuales[(origen, destino)] = tiempo
-    
-    # Encontrar pares de estaciones sin conexión directa
-    sugerencias = []
-    for origen in grafo.vertices:
-        for destino in grafo.vertices:
-            if origen != destino:
-                # Verificar si no hay conexión directa
-                if destino not in grafo.rutas.get(origen, {}):
-                    # Calcular tiempo actual entre estas estaciones
-                    tiempo_actual = tiempos_actuales.get((origen, destino), float('inf'))
-                    
-                    # Estimar tiempo para nueva conexión (usando tiempo base + factor de congestión promedio)
-                    tiempo_estimado = presupuesto_tiempo * 0.8  # 80% del presupuesto como estimación
-                    
-                    # Si la nueva conexión mejoraría el tiempo actual
-                    if tiempo_estimado < tiempo_actual:
-                        sugerencias.append((origen, destino, tiempo_estimado))
-    
-    # Ordenar sugerencias por mejora potencial (diferencia entre tiempo actual y estimado)
-    sugerencias.sort(key=lambda x: tiempos_actuales.get((x[0], x[1]), float('inf')) - x[2], reverse=True)
-    
-    return sugerencias[:5]  # Retornar las 5 mejores sugerencias
+    vertices = list(grafo.vertices.keys())
+    if not vertices:
+        return True
+
+    def dfs(vertice, visitados):
+        """
+        Función auxiliar para realizar DFS desde un vértice.
+        
+        Args:
+            vertice (str): Vértice inicial
+            visitados (set): Conjunto de vértices visitados
+        """
+        visitados.add(vertice)
+        for destino in grafo.rutas.get(vertice, {}):
+            if destino not in visitados:
+                dfs(destino, visitados)
+
+    # Verificar desde cada vértice
+    for vertice in vertices:
+        visitados = set()
+        dfs(vertice, visitados)
+        if len(visitados) != len(vertices):
+            return False
+    return True
+
+def actualizar_peso(grafo, origen, destino, nuevo_peso):
+    if nuevo_peso < 0:
+        return False
+    if origen not in grafo.rutas or destino not in grafo.rutas[origen]:
+        return False
+    grafo.rutas[origen][destino].tiempo_base = nuevo_peso
+    return True
+
+def calcular_metrica_impacto(grafo, estacion_id):
+    """
+    Calcula métricas de impacto para una estación específica.
+    """
+    # Obtener todas las rutas que pasan por la estación
+    rutas_afectadas = []
+    for origen, destinos in grafo.rutas.items():
+        for destino, ruta in destinos.items():
+            if origen == estacion_id or destino == estacion_id:
+                rutas_afectadas.append((origen, destino, ruta))
+
+    # Calcular métricas
+    total_rutas = len(rutas_afectadas)
+    tiempo_total = sum(ruta.tiempo_base for _, _, ruta in rutas_afectadas)
+    pasajeros_estimados = sum(ruta.tiempo_base * 10 for _, _, ruta in rutas_afectadas)  # Estimación simple
+
+    return {
+        "total_rutas": total_rutas,
+        "tiempo_total": tiempo_total,
+        "pasajeros_estimados": pasajeros_estimados
+    }

@@ -3,6 +3,17 @@ from datetime import datetime
 
 
 class Estacion:
+    """
+    Representa una estación en la red de transporte.
+    
+    Attributes:
+        id (str): Identificador único de la estación
+        nombre (str): Nombre de la estación
+        tipo (str): Tipo de estación ('metro' o 'bus')
+        linea (str): Línea a la que pertenece (ej: 'M1', 'M2', 'B1', 'B2')
+        conexiones (list): Lista de conexiones con otras estaciones
+        es_intercambiador (bool): Indica si la estación es un punto de intercambio entre líneas
+    """
     def __init__(self, id, nombre, tipo, linea, conexiones):
         self.id = id
         self.nombre = nombre
@@ -13,6 +24,16 @@ class Estacion:
 
 
 class Ruta:
+    """
+    Representa una ruta entre dos estaciones.
+    
+    Attributes:
+        origen (str): ID de la estación de origen
+        destino (str): ID de la estación de destino
+        tipo (str): Tipo de ruta
+        tiempo_base (float): Tiempo base de recorrido en minutos
+        congestion_tipica (dict): Factores de congestión para diferentes horarios
+    """
     def __init__(self, origen, destino, tipo, tiempo, congestion_tipica):
         self.origen = origen
         self.destino = destino
@@ -21,6 +42,15 @@ class Ruta:
         self.congestion_tipica = congestion_tipica
 
     def calcular_tiempo_actual(self, hora=None):
+        """
+        Calcula el tiempo actual de recorrido considerando la congestión.
+        
+        Args:
+            hora (int, optional): Hora del día (0-23). Si es None, usa la hora actual.
+            
+        Returns:
+            float: Tiempo de recorrido ajustado por la congestión
+        """
         if hora is None:
             hora = datetime.now().hour
         
@@ -35,13 +65,33 @@ class Ruta:
 
 
 class Grafo:
+    """
+    Representa la red de transporte como un grafo dirigido.
+    
+    Attributes:
+        vertices (dict): Diccionario de estaciones (id -> Estacion)
+        rutas (dict): Diccionario de rutas (origen -> {destino -> Ruta})
+        nombres_a_ids (dict): Mapeo de nombres de estaciones a sus IDs
+    """
     def __init__(self):
         self.vertices = {}  # id -> Estacion
         self.rutas = {}  # origen -> {destino -> Ruta}
         self.nombres_a_ids = {}  # nombre -> id
 
     def agregar_estacion(self, id, datos):
-        print(f"Agregando estación: {id} - {datos['nombre']}")  # Debug log
+        """
+        Agrega una nueva estación al grafo.
+        
+        Args:
+            id (str): Identificador único de la estación
+            datos (dict): Diccionario con los datos de la estación
+                {
+                    "nombre": str,
+                    "tipo": str,
+                    "linea": str,
+                    "conexiones": list
+                }
+        """
         estacion = Estacion(
             id=id,
             nombre=datos["nombre"],
@@ -55,8 +105,19 @@ class Grafo:
             self.rutas[id] = {}
 
     def agregar_ruta(self, origen, destino, datos):
-        print(f"Agregando ruta: {origen} -> {destino}")  # Debug log
-        # Crear ruta de ida
+        """
+        Agrega una nueva ruta entre dos estaciones.
+        
+        Args:
+            origen (str): ID de la estación de origen
+            destino (str): ID de la estación de destino
+            datos (dict): Diccionario con los datos de la ruta
+                {
+                    "tipo": str,
+                    "tiempo": float,
+                    "congestion_tipica": dict
+                }
+        """
         ruta_ida = Ruta(
             origen=origen,
             destino=destino,
@@ -69,33 +130,67 @@ class Grafo:
         self.rutas[origen][destino] = ruta_ida
 
     def obtener_tiempo(self, origen, destino):
+        """
+        Obtiene el tiempo de recorrido entre dos estaciones.
+        
+        Args:
+            origen (str): ID de la estación de origen
+            destino (str): ID de la estación de destino
+            
+        Returns:
+            float: Tiempo de recorrido o float('inf') si no hay ruta
+        """
         if origen in self.rutas and destino in self.rutas[origen]:
             return self.rutas[origen][destino].calcular_tiempo_actual()
         return float('inf')
 
     def obtener_adyacentes(self, estacion):
-        print(f"Obteniendo adyacentes para: {estacion}")  # Debug log
+        """
+        Obtiene las estaciones adyacentes y sus tiempos de recorrido.
+        
+        Args:
+            estacion (str): ID de la estación
+            
+        Returns:
+            dict: Diccionario {destino: tiempo} para cada estación adyacente
+        """
         if estacion not in self.rutas:
-            print(f"No se encontraron rutas para: {estacion}")  # Debug log
             return {}
-        adyacentes = {destino: ruta.calcular_tiempo_actual() for destino, ruta in self.rutas[estacion].items()}
-        print(f"Adyacentes encontrados: {adyacentes}")  # Debug log
-        return adyacentes
+        return {destino: ruta.calcular_tiempo_actual() for destino, ruta in self.rutas[estacion].items()}
 
     def obtener_id_por_nombre(self, nombre):
-        print(f"Buscando ID para nombre: {nombre}")  # Debug log
-        id_encontrado = self.nombres_a_ids.get(nombre)
-        print(f"ID encontrado: {id_encontrado}")  # Debug log
-        return id_encontrado
+        """
+        Obtiene el ID de una estación por su nombre.
+        
+        Args:
+            nombre (str): Nombre de la estación
+            
+        Returns:
+            str: ID de la estación o None si no se encuentra
+        """
+        return self.nombres_a_ids.get(nombre)
 
     def obtener_nombre_por_id(self, id):
+        """
+        Obtiene el nombre de una estación por su ID.
+        
+        Args:
+            id (str): ID de la estación
+            
+        Returns:
+            str: Nombre de la estación o None si no se encuentra
+        """
         if id in self.vertices:
             return self.vertices[id].nombre
-        print(f"WARNING: No se encontró nombre para el ID: {id}. IDs disponibles: {list(self.vertices.keys())}")
         return None
 
     def cargar_desde_json(self, archivo):
-        print(f"Cargando datos desde: {archivo}")  # Debug log
+        """
+        Carga la red de transporte desde un archivo JSON.
+        
+        Args:
+            archivo (str): Ruta al archivo JSON con los datos de la red
+        """
         with open(archivo, 'r', encoding='utf-8') as f:
             datos = json.load(f)
         
@@ -106,16 +201,13 @@ class Grafo:
         # Cargar rutas
         for ruta in datos["rutas"]:
             self.agregar_ruta(ruta["origen"], ruta["destino"], ruta)
-        
-        print(f"Total de estaciones cargadas: {len(self.vertices)}")  # Debug log
-        print(f"Total de rutas cargadas: {sum(len(rutas) for rutas in self.rutas.values())}")  # Debug log
 
     def copia_sin_estacion(self, estacion_id):
         """
         Crea una copia del grafo excluyendo una estación específica y sus rutas.
         
         Args:
-            estacion_id: ID de la estación a excluir
+            estacion_id (str): ID de la estación a excluir
             
         Returns:
             Grafo: Nueva instancia de Grafo sin la estación especificada
@@ -146,70 +238,4 @@ class Grafo:
                         }
                         nuevo_grafo.agregar_ruta(origen, destino, datos_ruta)
         
-        print(f"Grafo copiado. Estaciones: {len(nuevo_grafo.vertices)}, Rutas: {sum(len(rutas) for rutas in nuevo_grafo.rutas.values())}")
         return nuevo_grafo
-
-class Red:
-    def __init__(self):
-        self.vertices = {}
-        self.rutas = {}
-
-    def agregar_estacion(self, id, nombre, tipo, linea, conexiones=None, es_transbordo=False):
-        self.vertices[id] = Estacion(id, nombre, tipo, linea, conexiones)
-
-    def agregar_ruta(self, origen, destino, tipo, tiempo, congestion_tipica):
-        if origen not in self.rutas:
-            self.rutas[origen] = {}
-        self.rutas[origen][destino] = Ruta(origen, destino, tipo, tiempo, congestion_tipica)
-
-    def obtener_tiempo(self, origen, destino, hora=None):
-        if origen in self.rutas and destino in self.rutas[origen]:
-            return self.rutas[origen][destino].calcular_tiempo_actual(hora)
-        return float('inf')
-
-    def obtener_nombre_por_id(self, id):
-        return self.vertices[id].nombre if id in self.vertices else None
-
-    def obtener_id_por_nombre(self, nombre):
-        for id, estacion in self.vertices.items():
-            if estacion.nombre == nombre:
-                return id
-        return None
-
-    def copia_sin_estacion(self, estacion_id):
-        """
-        Crea una copia de la red excluyendo una estación específica y sus rutas.
-        
-        Args:
-            estacion_id: ID de la estación a excluir
-            
-        Returns:
-            Red: Nueva instancia de Red sin la estación especificada
-        """
-        nueva_red = Red()
-        
-        # Copiar todas las estaciones excepto la excluida
-        for id, estacion in self.vertices.items():
-            if id != estacion_id:
-                nueva_red.agregar_estacion(
-                    id,
-                    estacion.nombre,
-                    estacion.tipo,
-                    estacion.linea,
-                    estacion.conexiones
-                )
-        
-        # Copiar todas las rutas que no involucren la estación excluida
-        for origen, destinos in self.rutas.items():
-            if origen != estacion_id:
-                for destino, ruta in destinos.items():
-                    if destino != estacion_id:
-                        nueva_red.agregar_ruta(
-                            origen,
-                            destino,
-                            ruta.tipo,
-                            ruta.tiempo_base,
-                            ruta.congestion_tipica
-                        )
-        
-        return nueva_red
