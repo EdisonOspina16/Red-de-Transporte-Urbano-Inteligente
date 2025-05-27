@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from src.graph import Grafo
 from src.dijkstra import dijkstra
-from src.utils import es_fuertemente_conexo
+from src.utils import es_fuertemente_conexo, calcular_metrica_impacto
 import logging
 from datetime import datetime
 

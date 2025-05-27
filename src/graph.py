@@ -6,8 +6,8 @@ class Estacion:
     def __init__(self, id, nombre, tipo, linea, conexiones):
         self.id = id
         self.nombre = nombre
-        self.tipo = tipo
-        self.linea = linea
+        self.tipo = tipo  # 'metro' o 'bus'
+        self.linea = linea  # 'M1', 'M2', 'B1', 'B2', etc.
         self.conexiones = conexiones
 
 
