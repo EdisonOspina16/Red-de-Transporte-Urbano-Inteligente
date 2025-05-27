@@ -110,17 +110,6 @@ class Grafo:
         print(f"Total de estaciones cargadas: {len(self.vertices)}")  # Debug log
         print(f"Total de rutas cargadas: {sum(len(rutas) for rutas in self.rutas.values())}")  # Debug log
 
-    def obtener_info_estacion(self, id):
-        if id in self.vertices:
-            estacion = self.vertices[id]
-            return {
-                "nombre": estacion.nombre,
-                "tipo": estacion.tipo,
-                "linea": estacion.linea,
-                "conexiones": estacion.conexiones
-            }
-        return None
-
     def copia_sin_estacion(self, estacion_id):
         """
         Crea una copia del grafo excluyendo una estación específica y sus rutas.
@@ -159,3 +148,68 @@ class Grafo:
         
         print(f"Grafo copiado. Estaciones: {len(nuevo_grafo.vertices)}, Rutas: {sum(len(rutas) for rutas in nuevo_grafo.rutas.values())}")
         return nuevo_grafo
+
+class Red:
+    def __init__(self):
+        self.vertices = {}
+        self.rutas = {}
+
+    def agregar_estacion(self, id, nombre, tipo, linea, conexiones=None, es_transbordo=False):
+        self.vertices[id] = Estacion(id, nombre, tipo, linea, conexiones)
+
+    def agregar_ruta(self, origen, destino, tipo, tiempo, congestion_tipica):
+        if origen not in self.rutas:
+            self.rutas[origen] = {}
+        self.rutas[origen][destino] = Ruta(origen, destino, tipo, tiempo, congestion_tipica)
+
+    def obtener_tiempo(self, origen, destino, hora=None):
+        if origen in self.rutas and destino in self.rutas[origen]:
+            return self.rutas[origen][destino].calcular_tiempo_actual(hora)
+        return float('inf')
+
+    def obtener_nombre_por_id(self, id):
+        return self.vertices[id].nombre if id in self.vertices else None
+
+    def obtener_id_por_nombre(self, nombre):
+        for id, estacion in self.vertices.items():
+            if estacion.nombre == nombre:
+                return id
+        return None
+
+    def copia_sin_estacion(self, estacion_id):
+        """
+        Crea una copia de la red excluyendo una estación específica y sus rutas.
+        
+        Args:
+            estacion_id: ID de la estación a excluir
+            
+        Returns:
+            Red: Nueva instancia de Red sin la estación especificada
+        """
+        nueva_red = Red()
+        
+        # Copiar todas las estaciones excepto la excluida
+        for id, estacion in self.vertices.items():
+            if id != estacion_id:
+                nueva_red.agregar_estacion(
+                    id,
+                    estacion.nombre,
+                    estacion.tipo,
+                    estacion.linea,
+                    estacion.conexiones
+                )
+        
+        # Copiar todas las rutas que no involucren la estación excluida
+        for origen, destinos in self.rutas.items():
+            if origen != estacion_id:
+                for destino, ruta in destinos.items():
+                    if destino != estacion_id:
+                        nueva_red.agregar_ruta(
+                            origen,
+                            destino,
+                            ruta.tipo,
+                            ruta.tiempo_base,
+                            ruta.congestion_tipica
+                        )
+        
+        return nueva_red

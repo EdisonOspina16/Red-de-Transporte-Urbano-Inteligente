@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from src.graph import Grafo
 from src.dijkstra import dijkstra
-from src.utils import es_fuertemente_conexo, calcular_metrica_impacto
+from src.utils import es_fuertemente_conexo
 import logging
 from datetime import datetime
 
@@ -26,6 +26,7 @@ except Exception as e:
     logger.error(f"Error al cargar la red de transporte: {str(e)}")
     raise
 
+
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
@@ -37,6 +38,7 @@ def index(request: Request):
         "current_time": current_time
     })
 
+<<<<<<< HEAD
 @app.get("/simulacion", response_class=HTMLResponse)
 def simulacion(request: Request):
     estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
@@ -45,6 +47,8 @@ def simulacion(request: Request):
         "estaciones": estaciones,
         "red_original": red
     })
+=======
+>>>>>>> 970da7ff453ca3af322cfad65b0ff6fc73745067
 
 @app.post("/ruta", response_class=HTMLResponse)
 def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form(...)):
@@ -170,6 +174,7 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         raise HTTPException(
             status_code=500,
             detail=f"Error al calcular la ruta: {str(e)}"
+<<<<<<< HEAD
         )
 
 @app.post("/simular", response_class=HTMLResponse)
@@ -241,3 +246,6 @@ def simular_cambios(
             status_code=500,
             detail=f"Error en la simulación: {str(e)}"
         )
+=======
+        )
+>>>>>>> 970da7ff453ca3af322cfad65b0ff6fc73745067
