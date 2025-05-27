@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Congestión - Sistema de Transporte Urbano Inteligente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', path='/estilos.css') }}" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style type="text/css">
+        #network {
+            width: 100%;
+            height: 500px;
+            border: 1px solid lightgray;
+            background-color: #f8f9fa;
+        }
+        .simulation-controls {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn-simulate {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-simulate:hover {
+            background-color: #0056b3;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .alert-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1>Simulación de Congestión</h1>
+            <p class="subtitle">Sistema de Transporte Urbano Inteligente</p>
+        </header>
+
+        {% if mensaje %}
+        <div class="alert {% if 'Advertencia' in mensaje %}alert-warning{% else %}alert-success{% endif %}">
+            {{ mensaje }}
+        </div>
+        {% endif %}
+
+        <div class="simulation-controls">
+            <form action="/simular" method="post">
+                <div class="form-group">
+                    <label for="estacion">Estación:</label>
+                    <select name="estacion" id="estacion" required>
+                        {% for estacion in estaciones %}
+                        <option value="{{ estacion }}">{{ estacion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tipo_cambio">Tipo de Cambio:</label>
+                    <select name="tipo_cambio" id="tipo_cambio" required>
+                        <option value="congestion">Congestión</option>
+                        <option value="cierre">Cierre Temporal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="valor">Nivel de Congestión (%):</label>
+                    <input type="number" name="valor" id="valor" min="0" max="200" value="50" required>
+                </div>
+                <button type="submit" class="btn-simulate">
+                    <i class="fas fa-play"></i> Simular Cambios
+                </button>
+            </form>
+        </div>
+
+        <div id="network"></div>
+
+        <script type="text/javascript">
+            // Datos del grafo
+            const estaciones = [
+                {% for estacion in red_original.vertices.values() %}
+                {
+                    id: "{{ estacion.id }}",
+                    nombre: "{{ estacion.nombre }}",
+                    tipo: "{{ estacion.tipo }}"
+                },
+                {% endfor %}
+            ];
+
+            const rutas = [
+                {% for origen, rutas in red_original.rutas.items() %}
+                    {% for destino, ruta in rutas.items() %}
+                    {
+                        origen: "{{ origen }}",
+                        destino: "{{ destino }}",
+                        tipo: "{{ ruta.tipo }}",
+                        tiempo: {{ ruta.tiempo_base }}
+                    },
+                    {% endfor %}
+                {% endfor %}
+            ];
+
+            // Función para obtener el color según el tipo
+            function getColorByType(tipo) {
+                switch(tipo) {
+                    case 'metro': return '#3498db';
+                    case 'bus': return '#2ecc71';
+                    case 'tren': return '#e74c3c';
+                    default: return '#95a5a6';
+                }
+            }
+
+            // Crear nodos para el grafo
+            const nodes = new vis.DataSet(
+                estaciones.map(estacion => ({
+                    id: estacion.id,
+                    label: estacion.nombre,
+                    color: getColorByType(estacion.tipo)
+                }))
+            );
+
+            // Crear aristas para el grafo
+            const edges = new vis.DataSet(
+                rutas.map(ruta => ({
+                    from: ruta.origen,
+                    to: ruta.destino,
+                    arrows: 'to',
+                    color: {
+                        color: getColorByType(ruta.tipo),
+                        highlight: '#f1c40f'
+                    },
+                    label: ruta.tiempo + 'min'
+                }))
+            );
+
+            // Configuración del grafo
+            const container = document.getElementById('network');
+            const data = {
+                nodes: nodes,
+                edges: edges
+            };
+            const options = {
+                nodes: {
+                    shape: 'dot',
+                    size: 16
+                },
+                physics: {
+                    stabilization: false,
+                    barnesHut: {
+                        gravitationalConstant: -80000,
+                        springConstant: 0.001,
+                        springLength: 200
+                    }
+                }
+            };
+
+            // Crear el grafo
+            const network = new vis.Network(container, data, options);
+        </script>
+    </div>
+</body>
+</html> 

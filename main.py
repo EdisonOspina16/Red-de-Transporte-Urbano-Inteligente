@@ -37,6 +37,15 @@ def index(request: Request):
         "current_time": current_time
     })
 
+@app.get("/simulacion", response_class=HTMLResponse)
+def simulacion(request: Request):
+    estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
+    return templates.TemplateResponse("simulacion.html", {
+        "request": request,
+        "estaciones": estaciones,
+        "red_original": red
+    })
+
 @app.post("/ruta", response_class=HTMLResponse)
 def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form(...)):
     logger.info(f"Calculando ruta desde '{origen}' hasta '{destino}'")
@@ -170,78 +179,65 @@ def simular_cambios(
     tipo_cambio: str = Form(...),
     valor: float = Form(...)
 ):
-    # Hacer una copia de la red original para simular
-    red_simulada = red.copiar()
-    
-    mensaje = ""
-    if tipo_cambio == "congestion":
-        # Aumentar tiempo en todas las conexiones desde/hacia la estación
-        red_simulada.ajustar_tiempos(estacion, valor)
-        mensaje = f"Simulando congestión del {valor}% en {estacion}"
-    elif tipo_cambio == "cierre":
-        # Remover temporalmente la estación
-        red_simulada.remover_estacion(estacion)
-        mensaje = f"Simulando cierre de la estación {estacion}"
-    
-    # Verificar que la red sigue siendo conexa
-    if not es_fuertemente_conexo(red_simulada):
+    try:
+        # Hacer una copia de la red original para simular
+        red_simulada = red.copiar()
+        
+        mensaje = ""
+        if tipo_cambio == "congestion":
+            # Aumentar tiempo en todas las conexiones desde/hacia la estación
+            estacion_id = red.obtener_id_por_nombre(estacion)
+            if estacion_id is None:
+                raise HTTPException(status_code=400, detail=f"Estación '{estacion}' no encontrada")
+            
+            # Ajustar los tiempos de las rutas
+            for origen, rutas in red_simulada.rutas.items():
+                for destino, ruta in rutas.items():
+                    if origen == estacion_id or destino == estacion_id:
+                        # Aumentar el tiempo base según el porcentaje de congestión
+                        factor = 1 + (valor / 100)
+                        ruta.tiempo_base *= factor
+            
+            mensaje = f"Simulando congestión del {valor}% en {estacion}"
+            
+        elif tipo_cambio == "cierre":
+            # Remover temporalmente la estación
+            estacion_id = red.obtener_id_por_nombre(estacion)
+            if estacion_id is None:
+                raise HTTPException(status_code=400, detail=f"Estación '{estacion}' no encontrada")
+            
+            # Remover la estación y sus conexiones
+            if estacion_id in red_simulada.vertices:
+                del red_simulada.vertices[estacion_id]
+            if estacion_id in red_simulada.rutas:
+                del red_simulada.rutas[estacion_id]
+            for origen in red_simulada.rutas:
+                if estacion_id in red_simulada.rutas[origen]:
+                    del red_simulada.rutas[origen][estacion_id]
+            
+            mensaje = f"Simulando cierre de la estación {estacion}"
+        
+        # Verificar que la red sigue siendo conexa
+        if not es_fuertemente_conexo(red_simulada):
+            return templates.TemplateResponse("simulacion.html", {
+                "request": request,
+                "mensaje": "¡Advertencia! El cambio desconectaría partes de la red",
+                "estaciones": sorted([estacion.nombre for estacion in red.vertices.values()]),
+                "red_original": red,
+                "red_simulada": None
+            })
+        
         return templates.TemplateResponse("simulacion.html", {
             "request": request,
-            "mensaje": "¡Advertencia! El cambio desconectaría partes de la red",
-            "estaciones": list(red.vertices.keys()),
-            "red_original": red,
-            "red_simulada": None
+            "mensaje": mensaje,
+            "estaciones": sorted([estacion.nombre for estacion in red.vertices.values()]),
+            "red_original": red_simulada if tipo_cambio == "congestion" else red,
+            "red_simulada": red_simulada
         })
         
-    return templates.TemplateResponse("simulacion.html", {
-        "request": request,
-        "mensaje": mensaje,
-        "estaciones": list(red.vertices.keys()),
-        "red_original": red,
-        "red_simulada": red_simulada
-    })
-
-@app.post("/sugerencias", response_class=HTMLResponse) 
-def obtener_sugerencias(
-    request: Request,
-    presupuesto: float = Form(...),
-    origen: str = Form(...),
-    destino: str = Form(...)
-):
-    # Analizar rutas actuales
-    distancias_original, _ = dijkstra(red, origen)
-    tiempo_actual = distancias_original.get(destino, float('inf'))
-    
-    sugerencias = []
-    
-    # Identificar cuellos de botella
-    cuellos_botella = red.identificar_cuellos_botella()
-    
-    for estacion, metricas in cuellos_botella.items():
-        costo_mejora = metricas['costo_estimado']
-        if costo_mejora <= presupuesto:
-            # Simular mejora
-            red_mejorada = red.copiar()
-            red_mejorada.mejorar_estacion(estacion)
-            distancias_mejorada, _ = dijkstra(red_mejorada, origen)
-            tiempo_mejorado = distancias_mejorada.get(destino, float('inf'))
-            
-            if tiempo_mejorado < tiempo_actual:
-                mejora_porcentual = ((tiempo_actual - tiempo_mejorado) / tiempo_actual) * 100
-                sugerencias.append({
-                    'estacion': estacion,
-                    'costo': costo_mejora,
-                    'mejora_tiempo': mejora_porcentual,
-                    'justificacion': metricas['justificacion']
-                })
-    
-    # Ordenar sugerencias por mejor relación costo-beneficio
-    sugerencias.sort(key=lambda x: x['mejora_tiempo'] / x['costo'], reverse=True)
-    
-    return templates.TemplateResponse("sugerencias.html", {
-        "request": request,
-        "presupuesto": presupuesto,
-        "sugerencias": sugerencias,
-        "origen": origen,
-        "destino": destino
-    })
+    except Exception as e:
+        logger.error(f"Error en la simulación: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error en la simulación: {str(e)}"
+        )
