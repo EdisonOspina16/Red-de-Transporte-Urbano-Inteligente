@@ -9,6 +9,7 @@ class Estacion:
         self.tipo = tipo  # 'metro' o 'bus'
         self.linea = linea  # 'M1', 'M2', 'B1', 'B2', etc.
         self.conexiones = conexiones
+        self.es_intercambiador = '-' in linea  # Si la línea contiene un guión, es un intercambiador (ej: M1-M2)
 
 
 class Ruta:
@@ -90,6 +91,7 @@ class Grafo:
     def obtener_nombre_por_id(self, id):
         if id in self.vertices:
             return self.vertices[id].nombre
+        print(f"WARNING: No se encontró nombre para el ID: {id}. IDs disponibles: {list(self.vertices.keys())}")
         return None
 
     def cargar_desde_json(self, archivo):
@@ -118,3 +120,107 @@ class Grafo:
                 "conexiones": estacion.conexiones
             }
         return None
+
+    def copia_sin_estacion(self, estacion_id):
+        """
+        Crea una copia del grafo excluyendo una estación específica y sus rutas.
+        
+        Args:
+            estacion_id: ID de la estación a excluir
+            
+        Returns:
+            Grafo: Nueva instancia de Grafo sin la estación especificada
+        """
+        nuevo_grafo = Grafo()
+        
+        # Copiar todas las estaciones excepto la excluida
+        for id, estacion in self.vertices.items():
+            if id != estacion_id:
+                datos_estacion = {
+                    "nombre": estacion.nombre,
+                    "tipo": estacion.tipo,
+                    "linea": estacion.linea,
+                    "conexiones": estacion.conexiones.copy() if estacion.conexiones else []
+                }
+                nuevo_grafo.agregar_estacion(id, datos_estacion)
+                nuevo_grafo.nombres_a_ids[estacion.nombre] = id
+        
+        # Copiar todas las rutas que no involucren la estación excluida
+        for origen, destinos in self.rutas.items():
+            if origen != estacion_id:
+                for destino, ruta in destinos.items():
+                    if destino != estacion_id:
+                        datos_ruta = {
+                            "tipo": ruta.tipo,
+                            "tiempo": ruta.tiempo_base,
+                            "congestion_tipica": ruta.congestion_tipica.copy()
+                        }
+                        nuevo_grafo.agregar_ruta(origen, destino, datos_ruta)
+        
+        print(f"Grafo copiado. Estaciones: {len(nuevo_grafo.vertices)}, Rutas: {sum(len(rutas) for rutas in nuevo_grafo.rutas.values())}")
+        return nuevo_grafo
+
+class Red:
+    def __init__(self):
+        self.vertices = {}
+        self.rutas = {}
+
+    def agregar_estacion(self, id, nombre, tipo, linea, conexiones=None, es_transbordo=False):
+        self.vertices[id] = Estacion(id, nombre, tipo, linea, conexiones)
+
+    def agregar_ruta(self, origen, destino, tipo, tiempo, congestion_tipica):
+        if origen not in self.rutas:
+            self.rutas[origen] = {}
+        self.rutas[origen][destino] = Ruta(origen, destino, tipo, tiempo, congestion_tipica)
+
+    def obtener_tiempo(self, origen, destino, hora=None):
+        if origen in self.rutas and destino in self.rutas[origen]:
+            return self.rutas[origen][destino].calcular_tiempo_actual(hora)
+        return float('inf')
+
+    def obtener_nombre_por_id(self, id):
+        return self.vertices[id].nombre if id in self.vertices else None
+
+    def obtener_id_por_nombre(self, nombre):
+        for id, estacion in self.vertices.items():
+            if estacion.nombre == nombre:
+                return id
+        return None
+
+    def copia_sin_estacion(self, estacion_id):
+        """
+        Crea una copia de la red excluyendo una estación específica y sus rutas.
+        
+        Args:
+            estacion_id: ID de la estación a excluir
+            
+        Returns:
+            Red: Nueva instancia de Red sin la estación especificada
+        """
+        nueva_red = Red()
+        
+        # Copiar todas las estaciones excepto la excluida
+        for id, estacion in self.vertices.items():
+            if id != estacion_id:
+                nueva_red.agregar_estacion(
+                    id,
+                    estacion.nombre,
+                    estacion.tipo,
+                    estacion.linea,
+                    estacion.conexiones
+                )
+        
+        # Copiar todas las rutas que no involucren la estación excluida
+        for origen, destinos in self.rutas.items():
+            if origen != estacion_id:
+                for destino, ruta in destinos.items():
+                    if destino != estacion_id:
+                        nueva_red.agregar_ruta(
+                            origen,
+                            destino,
+                            ruta.tipo,
+                            ruta.tiempo_base,
+                            ruta.congestion_tipica
+                        )
+        
+        return nueva_red

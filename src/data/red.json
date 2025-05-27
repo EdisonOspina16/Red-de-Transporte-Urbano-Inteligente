@@ -21,12 +21,13 @@
       "conexiones": ["metro", "bus"],
       "es_transbordo": true
     },
-    "M1_Intercambiador": {
+    "Intercambiador": {
       "nombre": "San Antonio",
       "tipo": "metro",
-      "linea": "M1",
+      "linea": "M1-M2",
       "conexiones": ["metro"],
-      "es_transbordo": true
+      "es_transbordo": true,
+      "es_intercambiador": true
     },
     "M2_PlazaMayor": {
       "nombre": "Plaza Mayor",
@@ -48,13 +49,6 @@
       "linea": "M2",
       "conexiones": ["metro"],
       "es_transbordo": false
-    },
-    "M2_Intercambiador": {
-      "nombre": "San Antonio",
-      "tipo": "metro",
-      "linea": "M2",
-      "conexiones": ["metro"],
-      "es_transbordo": true
     },
     "B1_MercadoCentral": {
       "nombre": "Mercado Central",
@@ -110,7 +104,7 @@
     },
     {
       "origen": "M1_Universidad",
-      "destino": "M1_Intercambiador",
+      "destino": "Intercambiador",
       "tipo": "metro",
       "tiempo": 4,
       "congestion_tipica": {
@@ -120,7 +114,7 @@
       }
     },
     {
-      "origen": "M1_Intercambiador",
+      "origen": "Intercambiador",
       "destino": "M1_Universidad",
       "tipo": "metro",
       "tiempo": 4,
@@ -143,7 +137,7 @@
     },
     {
       "origen": "M2_PlazaMayor",
-      "destino": "M2_Intercambiador",
+      "destino": "Intercambiador",
       "tipo": "metro",
       "tiempo": 3,
       "congestion_tipica": {
@@ -153,7 +147,7 @@
       }
     },
     {
-      "origen": "M2_Intercambiador",
+      "origen": "Intercambiador",
       "destino": "M2_PlazaMayor",
       "tipo": "metro",
       "tiempo": 3,
@@ -257,8 +251,8 @@
       "tipo": "transbordo",
       "tiempo": 8,
       "congestion_tipica": {
-        "hora_pico_manana": 1.9,
-        "hora_pico_tarde": 1.7,
+        "hora_pico_manana": 1.6,
+        "hora_pico_tarde": 1.4,
         "normal": 1.0
       }
     },
@@ -268,8 +262,8 @@
       "tipo": "transbordo",
       "tiempo": 8,
       "congestion_tipica": {
-        "hora_pico_manana": 1.9,
-        "hora_pico_tarde": 1.7,
+        "hora_pico_manana": 1.6,
+        "hora_pico_tarde": 1.4,
         "normal": 1.0
       }
     },
@@ -279,8 +273,8 @@
       "tipo": "bus",
       "tiempo": 5,
       "congestion_tipica": {
-        "hora_pico_manana": 1.6,
-        "hora_pico_tarde": 1.4,
+        "hora_pico_manana": 2.0,
+        "hora_pico_tarde": 1.8,
         "normal": 1.0
       }
     },
@@ -290,52 +284,30 @@
       "tipo": "bus",
       "tiempo": 5,
       "congestion_tipica": {
-        "hora_pico_manana": 1.6,
-        "hora_pico_tarde": 1.4,
+        "hora_pico_manana": 2.0,
+        "hora_pico_tarde": 1.8,
         "normal": 1.0
       }
     },
     {
       "origen": "B2_CentroComercial",
       "destino": "B1_MercadoCentral",
-      "tipo": "transbordo",
+      "tipo": "bus",
       "tiempo": 10,
       "congestion_tipica": {
-        "hora_pico_manana": 1.8,
-        "hora_pico_tarde": 1.6,
+        "hora_pico_manana": 2.0,
+        "hora_pico_tarde": 1.8,
         "normal": 1.0
       }
     },
     {
       "origen": "B1_MercadoCentral",
       "destino": "B2_CentroComercial",
-      "tipo": "transbordo",
+      "tipo": "bus",
       "tiempo": 10,
       "congestion_tipica": {
-        "hora_pico_manana": 1.8,
-        "hora_pico_tarde": 1.6,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M1_Intercambiador",
-      "destino": "M2_Intercambiador",
-      "tipo": "transbordo",
-      "tiempo": 2,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.2,
-        "hora_pico_tarde": 1.1,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M2_Intercambiador",
-      "destino": "M1_Intercambiador",
-      "tipo": "transbordo",
-      "tiempo": 2,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.2,
-        "hora_pico_tarde": 1.1,
+        "hora_pico_manana": 2.0,
+        "hora_pico_tarde": 1.8,
         "normal": 1.0
       }
     },
@@ -345,8 +317,8 @@
       "tipo": "bus",
       "tiempo": 6,
       "congestion_tipica": {
-        "hora_pico_manana": 1.6,
-        "hora_pico_tarde": 1.4,
+        "hora_pico_manana": 1.8,
+        "hora_pico_tarde": 1.6,
         "normal": 1.0
       }
     },
@@ -356,8 +328,8 @@
       "tipo": "bus",
       "tiempo": 6,
       "congestion_tipica": {
-        "hora_pico_manana": 1.6,
-        "hora_pico_tarde": 1.4,
+        "hora_pico_manana": 1.8,
+        "hora_pico_tarde": 1.6,
         "normal": 1.0
       }
     },
@@ -367,8 +339,8 @@
       "tipo": "bus",
       "tiempo": 12,
       "congestion_tipica": {
-        "hora_pico_manana": 1.7,
-        "hora_pico_tarde": 1.5,
+        "hora_pico_manana": 1.9,
+        "hora_pico_tarde": 1.7,
         "normal": 1.0
       }
     },
@@ -378,8 +350,8 @@
       "tipo": "bus",
       "tiempo": 12,
       "congestion_tipica": {
-        "hora_pico_manana": 1.7,
-        "hora_pico_tarde": 1.5,
+        "hora_pico_manana": 1.9,
+        "hora_pico_tarde": 1.7,
         "normal": 1.0
       }
     }

@@ -808,3 +808,83 @@ strong {
         grid-template-columns: 1fr;
     }
 }
+
+.route-header-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.route-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.route-btn {
+    padding: 8px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    background-color: white;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.route-btn i {
+    font-size: 14px;
+}
+
+.route-btn:hover {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.route-btn.active {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.no-route-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    color: #666;
+}
+
+.no-route-message i {
+    font-size: 24px;
+    color: #ffc107;
+}
+
+.route-time-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.route-time-info i {
+    color: #3498db;
+    font-size: 16px;
+}
+
+.route-time-info span {
+    font-size: 14px;
+}
+
+.route-time-info span:last-child {
+    color: #888;
+    margin-left: auto;
+}

@@ -65,19 +65,57 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
                 detail=f"No existe una ruta disponible entre {origen} y {destino}"
             )
         
-        # Convertir IDs de estaciones en el camino a nombres
-        camino_ids = caminos[destino_id]
-        camino_nombres = [red.obtener_nombre_por_id(estacion_id) for estacion_id in camino_ids]
+        # Obtener la ruta principal y alternativas
+        rutas_alternativas = []
+        tiempos_alternativos = []
+        camino_principal = caminos[destino_id]
+        camino_principal_nombres = [red.obtener_nombre_por_id(estacion_id) for estacion_id in camino_principal]
+        
+        # Calcular rutas alternativas excluyendo algunas estaciones de la ruta principal
+        estaciones_intermedias = camino_principal[1:-1]  # Excluimos origen y destino
+        for estacion_excluida in estaciones_intermedias:
+            logger.info(f"Intentando encontrar ruta alternativa excluyendo: {estacion_excluida}")
+            red_temp = red.copia_sin_estacion(estacion_excluida)
+            try:
+                distancias_alt, caminos_alt = dijkstra(red_temp, origen_id)
+                if destino_id in caminos_alt and distancias_alt[destino_id] < float('inf'):
+                    camino_alt = caminos_alt[destino_id]
+                    camino_alt_nombres = [red.obtener_nombre_por_id(estacion_id) for estacion_id in camino_alt]
+                    tiempo_alt = distancias_alt[destino_id]
+                    
+                    # Verificar que la ruta alternativa es diferente y válida
+                    if (camino_alt_nombres != camino_principal_nombres and 
+                        len(camino_alt_nombres) > 0 and 
+                        camino_alt_nombres[0] == origen and 
+                        camino_alt_nombres[-1] == destino):
+                        logger.info(f"Ruta alternativa encontrada: {' -> '.join(camino_alt_nombres)}")
+                        rutas_alternativas.append(camino_alt_nombres)
+                        tiempos_alternativos.append(tiempo_alt)
+                        if len(rutas_alternativas) >= 2:
+                            break
+            except Exception as e:
+                logger.warning(f"Error al calcular ruta alternativa excluyendo {estacion_excluida}: {str(e)}")
+                continue
         
         # Calcular hora actual y estimada de llegada
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
         
-        # Calcular hora estimada de llegada
+        # Calcular hora estimada de llegada para la ruta principal
         minutos_totales = now.hour * 60 + now.minute + int(tiempo)
         hora_llegada = f"{minutos_totales // 60:02d}:{minutos_totales % 60:02d}"
         
-        logger.info(f"Ruta encontrada con {len(camino_nombres)} estaciones y tiempo {tiempo}")
+        # Calcular horas estimadas de llegada para rutas alternativas
+        horas_llegada_alt = []
+        for tiempo_alt in tiempos_alternativos:
+            minutos_alt = now.hour * 60 + now.minute + int(tiempo_alt)
+            hora_llegada_alt = f"{minutos_alt // 60:02d}:{minutos_alt % 60:02d}"
+            horas_llegada_alt.append(hora_llegada_alt)
+        
+        logger.info(f"Ruta encontrada con {len(camino_principal_nombres)} estaciones y tiempo {tiempo}")
+        logger.info(f"Se encontraron {len(rutas_alternativas)} rutas alternativas")
+        for i, tiempo_alt in enumerate(tiempos_alternativos):
+            logger.info(f"Ruta alternativa {i+1}: {tiempo_alt} minutos")
 
         # Preparar datos para la visualización
         todas_estaciones = []
@@ -90,8 +128,8 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
 
         todas_rutas = []
         rutas_camino = []
-        for i in range(len(camino_ids) - 1):
-            rutas_camino.append((camino_ids[i], camino_ids[i + 1]))
+        for i in range(len(camino_principal) - 1):
+            rutas_camino.append((camino_principal[i], camino_principal[i + 1]))
 
         for origen_est, rutas_dest in red.rutas.items():
             for destino_est, ruta in rutas_dest.items():
@@ -106,14 +144,17 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             "request": request,
             "origen": origen,
             "destino": destino,
-            "camino": camino_nombres,
-            "camino_ids": camino_ids,
+            "camino": camino_principal_nombres,
+            "camino_ids": camino_principal,
             "tiempo": tiempo,
             "current_time": current_time,
             "hora_llegada": hora_llegada,
             "todas_estaciones": todas_estaciones,
             "todas_rutas": todas_rutas,
-            "rutas_camino": rutas_camino
+            "rutas_camino": rutas_camino,
+            "rutas_alternativas": rutas_alternativas,
+            "tiempos_alternativos": tiempos_alternativos,
+            "horas_llegada_alt": horas_llegada_alt
         })
     except Exception as e:
         logger.error(f"Error al calcular la ruta: {str(e)}")
