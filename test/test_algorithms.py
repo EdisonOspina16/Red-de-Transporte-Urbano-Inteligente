@@ -136,7 +136,7 @@ def test_sugerir_conexiones():
 
     # Test 1: Verificar número de sugerencias
     sugerencias = sugerir_conexiones(grafo, presupuesto=6)
-    assert len(sugerencias) <= 5  # No debe exceder 5 sugerencias
+    assert len(sugerencias) <= 3  # No debe exceder 3 sugerencias
 
     # Test 2: Verificar que no se sugieren conexiones existentes
     for origen, destino, peso in sugerencias:
