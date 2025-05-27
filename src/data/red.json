@@ -354,6 +354,28 @@
         "hora_pico_tarde": 1.7,
         "normal": 1.0
       }
+    },
+    {
+      "origen": "M1_Universidad",
+      "destino": "M1_ParqueCentral",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "M1_ParqueCentral",
+      "destino": "M1_Universidad",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
     }
   ],
   "horarios": {
