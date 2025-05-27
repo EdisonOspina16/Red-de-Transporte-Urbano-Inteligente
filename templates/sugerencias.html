@@ -203,7 +203,6 @@
                         {% if sugerencia.metricas.rutas_alternativas %}
                             var rutaPrincipal = {{ sugerencia.metricas.rutas_alternativas[0].camino|tojson|safe }};
                             var rutaAlternativa1 = {{ sugerencia.metricas.rutas_alternativas[1].camino|tojson|safe if sugerencia.metricas.rutas_alternativas|length > 1 else []|tojson|safe }};
-                            var rutaAlternativa2 = {{ sugerencia.metricas.rutas_alternativas[2].camino|tojson|safe if sugerencia.metricas.rutas_alternativas|length > 2 else []|tojson|safe }};
 
                             // Colorear las rutas
                             network.on("afterDrawing", function(ctx) {
@@ -212,10 +211,6 @@
                                 // Dibujar primera alternativa
                                 if (rutaAlternativa1.length > 0) {
                                     drawPath(ctx, network, rutaAlternativa1, "#28a745", 2);
-                                }
-                                // Dibujar segunda alternativa
-                                if (rutaAlternativa2.length > 0) {
-                                    drawPath(ctx, network, rutaAlternativa2, "#ffc107", 2);
                                 }
                             });
                         {% endif %}

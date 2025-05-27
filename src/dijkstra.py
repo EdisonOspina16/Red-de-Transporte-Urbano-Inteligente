@@ -19,4 +19,3 @@ def dijkstra(grafo, inicio):
                 camino[vecino] = camino[actual_vert] + [vecino]
                 heapq.heappush(cola, (nueva_dist, vecino))
     return distancias, camino
-

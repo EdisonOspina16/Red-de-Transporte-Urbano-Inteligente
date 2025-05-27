@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from src.graph import Grafo
 from src.dijkstra import dijkstra
-from src.utils import es_fuertemente_conexo, calcular_metrica_impacto
+from src.utils import es_fuertemente_conexo
 import logging
 from datetime import datetime
 
@@ -26,6 +26,7 @@ except Exception as e:
     logger.error(f"Error al cargar la red de transporte: {str(e)}")
     raise
 
+
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
@@ -36,6 +37,7 @@ def index(request: Request):
         "estaciones": estaciones,
         "current_time": current_time
     })
+
 
 @app.post("/ruta", response_class=HTMLResponse)
 def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form(...)):
@@ -162,86 +164,3 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             status_code=500,
             detail=f"Error al calcular la ruta: {str(e)}"
         )
-
-@app.post("/simular", response_class=HTMLResponse)
-def simular_cambios(
-    request: Request,
-    estacion: str = Form(...),
-    tipo_cambio: str = Form(...),
-    valor: float = Form(...)
-):
-    # Hacer una copia de la red original para simular
-    red_simulada = red.copiar()
-    
-    mensaje = ""
-    if tipo_cambio == "congestion":
-        # Aumentar tiempo en todas las conexiones desde/hacia la estación
-        red_simulada.ajustar_tiempos(estacion, valor)
-        mensaje = f"Simulando congestión del {valor}% en {estacion}"
-    elif tipo_cambio == "cierre":
-        # Remover temporalmente la estación
-        red_simulada.remover_estacion(estacion)
-        mensaje = f"Simulando cierre de la estación {estacion}"
-    
-    # Verificar que la red sigue siendo conexa
-    if not es_fuertemente_conexo(red_simulada):
-        return templates.TemplateResponse("simulacion.html", {
-            "request": request,
-            "mensaje": "¡Advertencia! El cambio desconectaría partes de la red",
-            "estaciones": list(red.vertices.keys()),
-            "red_original": red,
-            "red_simulada": None
-        })
-        
-    return templates.TemplateResponse("simulacion.html", {
-        "request": request,
-        "mensaje": mensaje,
-        "estaciones": list(red.vertices.keys()),
-        "red_original": red,
-        "red_simulada": red_simulada
-    })
-
-@app.post("/sugerencias", response_class=HTMLResponse) 
-def obtener_sugerencias(
-    request: Request,
-    presupuesto: float = Form(...),
-    origen: str = Form(...),
-    destino: str = Form(...)
-):
-    # Analizar rutas actuales
-    distancias_original, _ = dijkstra(red, origen)
-    tiempo_actual = distancias_original.get(destino, float('inf'))
-    
-    sugerencias = []
-    
-    # Identificar cuellos de botella
-    cuellos_botella = red.identificar_cuellos_botella()
-    
-    for estacion, metricas in cuellos_botella.items():
-        costo_mejora = metricas['costo_estimado']
-        if costo_mejora <= presupuesto:
-            # Simular mejora
-            red_mejorada = red.copiar()
-            red_mejorada.mejorar_estacion(estacion)
-            distancias_mejorada, _ = dijkstra(red_mejorada, origen)
-            tiempo_mejorado = distancias_mejorada.get(destino, float('inf'))
-            
-            if tiempo_mejorado < tiempo_actual:
-                mejora_porcentual = ((tiempo_actual - tiempo_mejorado) / tiempo_actual) * 100
-                sugerencias.append({
-                    'estacion': estacion,
-                    'costo': costo_mejora,
-                    'mejora_tiempo': mejora_porcentual,
-                    'justificacion': metricas['justificacion']
-                })
-    
-    # Ordenar sugerencias por mejor relación costo-beneficio
-    sugerencias.sort(key=lambda x: x['mejora_tiempo'] / x['costo'], reverse=True)
-    
-    return templates.TemplateResponse("sugerencias.html", {
-        "request": request,
-        "presupuesto": presupuesto,
-        "sugerencias": sugerencias,
-        "origen": origen,
-        "destino": destino
-    })
