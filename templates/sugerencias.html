@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugerencias de Nuevas Conexiones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .suggestion-card {
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+        .metric-badge {
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+        .roi-high {
+            color: #28a745;
+        }
+        .roi-medium {
+            color: #ffc107;
+        }
+        .roi-low {
+            color: #dc3545;
+        }
+        .route-card {
+            border-left: 4px solid #28a745;
+            margin-top: 10px;
+        }
+        .route-time {
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .route-path {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="mb-4">Sugerencias de Nuevas Conexiones</h2>
+        <div class="alert alert-info">
+            <strong>Presupuesto disponible:</strong> {{ presupuesto }} unidades
+        </div>
+
+        {% if sugerencias %}
+            {% for sugerencia in sugerencias %}
+                <div class="card suggestion-card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ sugerencia.origen }} → {{ sugerencia.destino }}
+                            <span class="float-end 
+                                {% if sugerencia.roi > 1.5 %}roi-high
+                                {% elif sugerencia.roi > 0.8 %}roi-medium
+                                {% else %}roi-low{% endif %}">
+                                ROI: {{ "%.2f"|format(sugerencia.roi) }}
+                            </span>
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <span class="badge bg-primary metric-badge">
+                                Costo: {{ "%.0f"|format(sugerencia.costo) }}
+                            </span>
+                            <span class="badge bg-success metric-badge">
+                                Beneficio: {{ "%.2f"|format(sugerencia.beneficio) }}
+                            </span>
+                        </div>
+
+                        <h6 class="card-subtitle mb-2 text-muted">Justificación:</h6>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item">
+                                <i class="bi bi-link"></i> {{ sugerencia.justificacion.mejora_conectividad }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-clock"></i> {{ sugerencia.justificacion.ahorro_tiempo }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-graph-up"></i> {{ sugerencia.justificacion.tiempo_promedio }}
+                            </li>
+                        </ul>
+
+                        <div class="card-text">
+                            <h6>Métricas detalladas:</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small>
+                                        <ul>
+                                            <li>Impacto en conectividad: {{ "%.2f"|format(sugerencia.metricas.impacto_conectividad) }}</li>
+                                            <li>Impacto en tiempo: {{ "%.2f"|format(sugerencia.metricas.impacto_tiempo) }} min</li>
+                                        </ul>
+                                    </small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small>
+                                        <ul>
+                                            <li>Rutas mejoradas: {{ sugerencia.metricas.rutas_mejoradas }}</li>
+                                            <li>Nuevas conexiones: {{ sugerencia.metricas.nuevas_conexiones }}</li>
+                                        </ul>
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Rutas Alternativas -->
+                            <div class="mt-4">
+                                <h6>Rutas Alternativas:</h6>
+                                {% if sugerencia.metricas.rutas_alternativas %}
+                                    {% for ruta in sugerencia.metricas.rutas_alternativas %}
+                                        <div class="card route-card">
+                                            <div class="card-body">
+                                                <div class="route-time">
+                                                    Tiempo estimado: {{ "%.1f"|format(ruta.tiempo) }} minutos
+                                                </div>
+                                                <div class="route-path">
+                                                    Ruta: {{ " → ".join(ruta.camino) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        No se encontraron rutas alternativas disponibles.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-warning">
+                No se encontraron sugerencias de conexiones dentro del presupuesto disponible.
+            </div>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="/" class="btn btn-primary">Volver al inicio</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
