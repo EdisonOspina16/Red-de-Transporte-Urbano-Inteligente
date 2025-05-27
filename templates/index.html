@@ -66,24 +66,7 @@
                     <div class="status-item">
                         <i class="fas fa-clock"></i>
                         <span class="status-label">Hora pico</span>
-                        <span class="status-value congestion-high">Alta congestión</span>
-                    </div>
-                    <div class="status-item">
-                        <i class="fas fa-temperature-high"></i>
-                        <span class="status-label">Clima</span>
-                        <span class="status-value">23°C - Despejado</span>
-                    </div>
-                    <div class="status-item">
-                        <i class="fas fa-bus"></i>
-                        <span class="status-label">Buses en servicio</span>
-                        <span class="status-value">95%</span>
-                    </div>
-                    <div class="status-item">
-                        <a href="/simulacion" class="simulation-link">
-                            <i class="fas fa-traffic-light"></i>
-                            <span class="status-label">Simular Congestión</span>
-                            <span class="status-value">Nueva simulación</span>
-                        </a>
+                        <span class="status-value {{ clase_congestion }}">{{ estado_congestion }}</span>
                     </div>
                 </div>
             </div>

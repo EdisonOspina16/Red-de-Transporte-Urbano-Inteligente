@@ -216,7 +216,7 @@
       "origen": "M1_CentroHistorico",
       "destino": "B1_MercadoCentral",
       "tipo": "transbordo",
-      "tiempo": 6,
+      "tiempo": 7,
       "congestion_tipica": {
         "hora_pico_manana": 1.8,
         "hora_pico_tarde": 1.6,
@@ -260,7 +260,7 @@
       "origen": "M2_PlazaMayor",
       "destino": "B2_ParqueIndustrial",
       "tipo": "transbordo",
-      "tiempo": 8,
+      "tiempo": 9,
       "congestion_tipica": {
         "hora_pico_manana": 1.6,
         "hora_pico_tarde": 1.4,
@@ -271,7 +271,7 @@
       "origen": "B2_CentroComercial",
       "destino": "B2_ParqueIndustrial",
       "tipo": "bus",
-      "tiempo": 5,
+      "tiempo": 7,
       "congestion_tipica": {
         "hora_pico_manana": 2.0,
         "hora_pico_tarde": 1.8,
@@ -293,7 +293,7 @@
       "origen": "B2_CentroComercial",
       "destino": "B1_MercadoCentral",
       "tipo": "bus",
-      "tiempo": 10,
+      "tiempo": 12,
       "congestion_tipica": {
         "hora_pico_manana": 2.0,
         "hora_pico_tarde": 1.8,
@@ -326,7 +326,7 @@
       "origen": "B1_MercadoCentral",
       "destino": "B1_Biblioteca",
       "tipo": "bus",
-      "tiempo": 6,
+      "tiempo": 9,
       "congestion_tipica": {
         "hora_pico_manana": 1.8,
         "hora_pico_tarde": 1.6,
@@ -348,7 +348,7 @@
       "origen": "B2_CentroComercial",
       "destino": "B1_Biblioteca",
       "tipo": "bus",
-      "tiempo": 12,
+      "tiempo": 13,
       "congestion_tipica": {
         "hora_pico_manana": 1.9,
         "hora_pico_tarde": 1.7,

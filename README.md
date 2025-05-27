@@ -1,6 +1,9 @@
 # Red de Transporte Urbano Inteligente
 
 Este proyecto modela y analiza una red de transporte urbano inteligente, conectando estaciones de metro, paradas de buses y puntos de integración multimodal mediante un grafo dirigido y ponderado. Se permite calcular rutas más cortas, detectar ciclos, verificar conectividad, simular congestión y visualizar resultados por medio de una interfaz web sencilla.
+---
+Si la hora actual está entre 7:00-9:00, mostrará "Alta congestión (Hora pico mañana)" en rojo.
+Si la hora está entre 17:00-19:00, mostrará "Alta congestión (Hora pico tarde)" en rojo.
 
 ---
 

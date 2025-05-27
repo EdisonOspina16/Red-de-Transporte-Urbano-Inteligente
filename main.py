@@ -40,29 +40,27 @@ def index(request: Request):
         TemplateResponse: Página de inicio con la lista de estaciones
     """
     estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
-    current_time = datetime.now().strftime("%H:%M:%S")
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    hora = now.hour
+
+    # Determinar el estado de congestión
+    if 7 <= hora < 9:
+        estado_congestion = "Alta congestión (Hora pico mañana)"
+        clase_congestion = "congestion-high"
+    elif 17 <= hora < 19:
+        estado_congestion = "Alta congestión (Hora pico tarde)"
+        clase_congestion = "congestion-high"
+    else:
+        estado_congestion = "Tráfico fluido"
+        clase_congestion = "congestion-low"
+
     return templates.TemplateResponse("index.html", {
         "request": request,
         "estaciones": estaciones,
-        "current_time": current_time
-    })
-
-@app.get("/simulacion", response_class=HTMLResponse)
-def simulacion(request: Request):
-    """
-    Ruta que muestra la página de simulación.
-    
-    Args:
-        request (Request): Objeto de solicitud de FastAPI
-        
-    Returns:
-        TemplateResponse: Página de simulación con la lista de estaciones
-    """
-    estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
-    return templates.TemplateResponse("simulacion.html", {
-        "request": request,
-        "estaciones": estaciones,
-        "red_original": red
+        "current_time": current_time,
+        "estado_congestion": estado_congestion,
+        "clase_congestion": clase_congestion
     })
 
 @app.post("/ruta", response_class=HTMLResponse)
@@ -140,6 +138,18 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         # Calcular hora actual y estimada de llegada
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
+        hora = now.hour
+
+        # Determinar el estado de congestión (igual que en index)
+        if 7 <= hora < 9:
+            estado_congestion = "Alta congestión (Hora pico mañana)"
+            clase_congestion = "congestion-high"
+        elif 17 <= hora < 19:
+            estado_congestion = "Alta congestión (Hora pico tarde)"
+            clase_congestion = "congestion-high"
+        else:
+            estado_congestion = "Tráfico fluido"
+            clase_congestion = "congestion-low"
         
         # Calcular hora estimada de llegada para la ruta principal
         minutos_totales = now.hour * 60 + now.minute + int(tiempo)
@@ -188,96 +198,13 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             "rutas_camino": rutas_camino,
             "rutas_alternativas": rutas_alternativas,
             "tiempos_alternativos": tiempos_alternativos,
-            "horas_llegada_alt": hora_llegada_alt
+            "horas_llegada_alt": hora_llegada_alt,
+            "estado_congestion": estado_congestion,
+            "clase_congestion": clase_congestion
         })
     except Exception as e:
         logger.error(f"Error al calcular la ruta: {str(e)}")
         raise HTTPException(
             status_code=500,
             detail=f"Error al calcular la ruta: {str(e)}"
-        )
-
-@app.post("/simular", response_class=HTMLResponse)
-def simular_cambios(
-    request: Request,
-    estacion: str = Form(...),
-    tipo_cambio: str = Form(...),
-    valor: float = Form(...)
-):
-    """
-    Simula cambios en la red de transporte (congestión o cierre de estación).
-    
-    Args:
-        request (Request): Objeto de solicitud de FastAPI
-        estacion (str): Nombre de la estación a modificar
-        tipo_cambio (str): Tipo de cambio ('congestion' o 'cierre')
-        valor (float): Valor del cambio (porcentaje de congestión)
-        
-    Returns:
-        TemplateResponse: Página de simulación con los resultados
-        
-    Raises:
-        HTTPException: Si hay errores en la simulación
-    """
-    try:
-        # Hacer una copia de la red original para simular
-        red_simulada = red.copiar()
-        
-        mensaje = ""
-        if tipo_cambio == "congestion":
-            # Aumentar tiempo en todas las conexiones desde/hacia la estación
-            estacion_id = red.obtener_id_por_nombre(estacion)
-            if estacion_id is None:
-                raise HTTPException(status_code=400, detail=f"Estación '{estacion}' no encontrada")
-            
-            # Ajustar los tiempos de las rutas
-            for origen, rutas in red_simulada.rutas.items():
-                for destino, ruta in rutas.items():
-                    if origen == estacion_id or destino == estacion_id:
-                        # Aumentar el tiempo base según el porcentaje de congestión
-                        factor = 1 + (valor / 100)
-                        ruta.tiempo_base *= factor
-            
-            mensaje = f"Simulando congestión del {valor}% en {estacion}"
-            
-        elif tipo_cambio == "cierre":
-            # Remover temporalmente la estación
-            estacion_id = red.obtener_id_por_nombre(estacion)
-            if estacion_id is None:
-                raise HTTPException(status_code=400, detail=f"Estación '{estacion}' no encontrada")
-            
-            # Remover la estación y sus conexiones
-            if estacion_id in red_simulada.vertices:
-                del red_simulada.vertices[estacion_id]
-            if estacion_id in red_simulada.rutas:
-                del red_simulada.rutas[estacion_id]
-            for origen in red_simulada.rutas:
-                if estacion_id in red_simulada.rutas[origen]:
-                    del red_simulada.rutas[origen][estacion_id]
-            
-            mensaje = f"Simulando cierre de la estación {estacion}"
-        
-        # Verificar que la red sigue siendo conexa
-        if not es_fuertemente_conexo(red_simulada):
-            return templates.TemplateResponse("simulacion.html", {
-                "request": request,
-                "mensaje": "¡Advertencia! El cambio desconectaría partes de la red",
-                "estaciones": sorted([estacion.nombre for estacion in red.vertices.values()]),
-                "red_original": red,
-                "red_simulada": None
-            })
-        
-        return templates.TemplateResponse("simulacion.html", {
-            "request": request,
-            "mensaje": mensaje,
-            "estaciones": sorted([estacion.nombre for estacion in red.vertices.values()]),
-            "red_original": red_simulada if tipo_cambio == "congestion" else red,
-            "red_simulada": red_simulada
-        })
-        
-    except Exception as e:
-        logger.error(f"Error en la simulación: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error en la simulación: {str(e)}"
         )
