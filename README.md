@@ -87,14 +87,12 @@ http://localhost:8000
 - **Backend:**
   - Python 3.12+
   - FastAPI (Framework web)
-  - NetworkX (Análisis de grafos)
   - Uvicorn (Servidor ASGI)
 
 - **Frontend:**
   - HTML5
   - CSS3
   - Jinja2 (Templating)
-  - JavaScript
 
 ## Características Técnicas
 
