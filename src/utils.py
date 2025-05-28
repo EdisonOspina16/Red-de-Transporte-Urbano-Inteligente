@@ -77,4 +77,3 @@ def es_fuertemente_conexo(grafo):
         if len(visitados) != len(vertices):
             return False
     return True
-

@@ -17,11 +17,10 @@ class Estacion:
     def __init__(self, id, nombre, tipo, linea, conexiones):
         self.id = id
         self.nombre = nombre
-        self.tipo = tipo  # 'metro' o 'bus'
-        self.linea = linea  # 'M1', 'M2', 'B1', 'B2', etc.
+        self.tipo = tipo  
+        self.linea = linea  
         self.conexiones = conexiones
-        self.es_intercambiador = '-' in linea  # Si la línea contiene un guión, es un intercambiador (ej: M1-M2)
-
+        self.es_intercambiador = '-' in linea  
 
 class Ruta:
     """
@@ -240,5 +239,3 @@ class Grafo:
                         nuevo_grafo.agregar_ruta(origen, destino, datos_ruta)
         
         return nuevo_grafo
-
-
