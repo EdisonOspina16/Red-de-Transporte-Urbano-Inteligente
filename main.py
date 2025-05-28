@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from src.graph import Grafo
 from src.dijkstra import dijkstra
-from src.utils import es_fuertemente_conexo
+from src.utils import es_fuertemente_conexo, tiene_ciclos
 import logging
 from datetime import datetime
 
@@ -23,6 +23,18 @@ red = Grafo()
 try:
     red.cargar_desde_json("src/data/red.json")
     logger.info("Red de transporte cargada exitosamente")
+    
+    # Verificar conectividad fuerte
+    if es_fuertemente_conexo(red):
+        logger.info("La red es fuertemente conexa")
+    else:
+        logger.warning("La red NO es fuertemente conexa - algunas rutas pueden no ser posibles")
+    
+    # Verificar ciclos
+    if tiene_ciclos(red):
+        logger.info("La red contiene ciclos - existen rutas circulares")
+    else:
+        logger.info("La red no contiene ciclos - todas las rutas son lineales")
 except Exception as e:
     logger.error(f"Error al cargar la red de transporte: {str(e)}")
     raise
@@ -92,6 +104,10 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
     if destino_id is None:
         logger.error(f"Estación de destino no encontrada: {destino}")
         raise HTTPException(status_code=400, detail=f"Estación de destino '{destino}' no encontrada")
+    
+    # Verificar conectividad fuerte y ciclos antes de calcular la ruta
+    es_conexa = es_fuertemente_conexo(red)
+    tiene_ciclos_red = tiene_ciclos(red)
     
     try:
         distancias, caminos = dijkstra(red, origen_id)
@@ -200,7 +216,9 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             "tiempos_alternativos": tiempos_alternativos,
             "horas_llegada_alt": hora_llegada_alt,
             "estado_congestion": estado_congestion,
-            "clase_congestion": clase_congestion
+            "clase_congestion": clase_congestion,
+            "es_conexa": es_conexa,
+            "tiene_ciclos": tiene_ciclos_red
         })
     except Exception as e:
         logger.error(f"Error al calcular la ruta: {str(e)}")

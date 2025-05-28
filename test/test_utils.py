@@ -1,74 +1,93 @@
 import unittest
+from src.utils import dfs_ciclos, tiene_ciclos, es_fuertemente_conexo, actualizar_peso
 from src.graph import Grafo
-from src.utils import sugerir_nuevas_conexiones
 
-class TestSugerirNuevasConexiones(unittest.TestCase):
+class TestUtils(unittest.TestCase):
     def setUp(self):
+        # Crear un grafo de prueba
         self.grafo = Grafo()
+        # Agregar algunas estaciones
+        self.grafo.agregar_estacion("A", {"nombre": "Estacion A", "tipo": "metro", "linea": "M1", "conexiones": []})
+        self.grafo.agregar_estacion("B", {"nombre": "Estacion B", "tipo": "metro", "linea": "M1", "conexiones": []})
+        self.grafo.agregar_estacion("C", {"nombre": "Estacion C", "tipo": "metro", "linea": "M1", "conexiones": []})
         
-        # Crear una red simple de 4 estaciones
-        self.grafo.agregar_estacion("A", {
-            "nombre": "Estación A",
-            "tipo": "metro",
-            "linea": "L1",
-            "conexiones": []
-        })
-        self.grafo.agregar_estacion("B", {
-            "nombre": "Estación B",
-            "tipo": "metro",
-            "linea": "L1",
-            "conexiones": []
-        })
-        self.grafo.agregar_estacion("C", {
-            "nombre": "Estación C",
-            "tipo": "metro",
-            "linea": "L2",
-            "conexiones": []
-        })
-        self.grafo.agregar_estacion("D", {
-            "nombre": "Estación D",
-            "tipo": "metro",
-            "linea": "L2",
-            "conexiones": []
-        })
-        
-        # Agregar algunas rutas existentes
+        # Agregar algunas rutas
         self.grafo.agregar_ruta("A", "B", {
             "tipo": "metro",
-            "tiempo": 10,
+            "tiempo": 5,
             "congestion_tipica": {
-                "normal": 1.0,
                 "hora_pico_manana": 1.5,
-                "hora_pico_tarde": 1.3
+                "hora_pico_tarde": 1.5,
+                "normal": 1.0
             }
         })
-        self.grafo.agregar_ruta("C", "D", {
+        self.grafo.agregar_ruta("B", "C", {
             "tipo": "metro",
-            "tiempo": 10,
+            "tiempo": 5,
             "congestion_tipica": {
-                "normal": 1.0,
                 "hora_pico_manana": 1.5,
-                "hora_pico_tarde": 1.3
+                "hora_pico_tarde": 1.5,
+                "normal": 1.0
             }
         })
+
+    def test_dfs_ciclos(self):
+        # Grafo sin ciclos
+        self.assertFalse(dfs_ciclos(self.grafo, "A", set(), set()))
         
-    def test_sugerir_nuevas_conexiones(self):
-        # Probar con un presupuesto de tiempo de 15 minutos
-        sugerencias = sugerir_nuevas_conexiones(self.grafo, 15)
+        # Agregar un ciclo
+        self.grafo.agregar_ruta("C", "A", {
+            "tipo": "metro",
+            "tiempo": 5,
+            "congestion_tipica": {
+                "hora_pico_manana": 1.5,
+                "hora_pico_tarde": 1.5,
+                "normal": 1.0
+            }
+        })
+        self.assertTrue(dfs_ciclos(self.grafo, "A", set(), set()))
+
+    def test_tiene_ciclos(self):
+        # Grafo sin ciclos
+        self.assertFalse(tiene_ciclos(self.grafo))
         
-        # Verificar que hay sugerencias
-        self.assertTrue(len(sugerencias) > 0)
+        # Agregar un ciclo
+        self.grafo.agregar_ruta("C", "A", {
+            "tipo": "metro",
+            "tiempo": 5,
+            "congestion_tipica": {
+                "hora_pico_manana": 1.5,
+                "hora_pico_tarde": 1.5,
+                "normal": 1.0
+            }
+        })
+        self.assertTrue(tiene_ciclos(self.grafo))
+
+    def test_es_fuertemente_conexo(self):
+        # Grafo no fuertemente conexo
+        self.assertFalse(es_fuertemente_conexo(self.grafo))
         
-        # Verificar que cada sugerencia es una tupla de 3 elementos
-        for sugerencia in sugerencias:
-            self.assertEqual(len(sugerencia), 3)
-            origen, destino, tiempo = sugerencia
-            
-            # Verificar que los tiempos estimados son menores al presupuesto
-            self.assertLessEqual(tiempo, 15)
-            
-            # Verificar que no hay conexión directa entre origen y destino
-            self.assertNotIn(destino, self.grafo.rutas.get(origen, {}))
-            
-        # Verificar que hay máximo 5 sugerencias
-        self.assertLessEqual(len(sugerencias), 5) 
+        # Hacer el grafo fuertemente conexo
+        self.grafo.agregar_ruta("C", "A", {
+            "tipo": "metro",
+            "tiempo": 5,
+            "congestion_tipica": {
+                "hora_pico_manana": 1.5,
+                "hora_pico_tarde": 1.5,
+                "normal": 1.0
+            }
+        })
+        self.grafo.agregar_ruta("B", "A", {
+            "tipo": "metro",
+            "tiempo": 5,
+            "congestion_tipica": {
+                "hora_pico_manana": 1.5,
+                "hora_pico_tarde": 1.5,
+                "normal": 1.0
+            }
+        })
+        self.assertTrue(es_fuertemente_conexo(self.grafo))
+
+
+if __name__ == '__main__':
+    unittest.main() 

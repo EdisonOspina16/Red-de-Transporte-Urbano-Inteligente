@@ -241,6 +241,22 @@ select:focus {
     color: var(--error-red);
 }
 
+.conexa-ok {
+    color: var(--success-green);
+}
+
+.conexa-warning {
+    color: var(--warning-orange);
+}
+
+.ciclos-ok {
+    color: var(--success-green);
+}
+
+.ciclos-warning {
+    color: var(--warning-orange);
+}
+
 .main-footer {
     text-align: center;
     padding: 20px;

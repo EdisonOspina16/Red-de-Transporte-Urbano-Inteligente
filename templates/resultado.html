@@ -145,6 +145,28 @@
                         <span class="status-label">Congestión</span>
                         <span class="status-value {{ clase_congestion }}">{{ estado_congestion }}</span>
                     </div>
+                    <div class="status-item">
+                        <i class="fas fa-network-wired"></i>
+                        <span class="status-label">Conectividad</span>
+                        <span class="status-value {% if es_conexa %}conexa-ok{% else %}conexa-warning{% endif %}">
+                            {% if es_conexa %}
+                                Red fuertemente conexa
+                            {% else %}
+                                Red no completamente conexa
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-sync-alt"></i>
+                        <span class="status-label">Ciclos</span>
+                        <span class="status-value {% if tiene_ciclos %}ciclos-ok{% else %}ciclos-warning{% endif %}">
+                            {% if tiene_ciclos %}
+                                Red con rutas circulares
+                            {% else %}
+                                Red sin rutas circulares
+                            {% endif %}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

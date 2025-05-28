@@ -184,6 +184,7 @@ class Grafo:
             return self.vertices[id].nombre
         return None
 
+
     def cargar_desde_json(self, archivo):
         """
         Carga la red de transporte desde un archivo JSON.
@@ -239,3 +240,5 @@ class Grafo:
                         nuevo_grafo.agregar_ruta(origen, destino, datos_ruta)
         
         return nuevo_grafo
+
+

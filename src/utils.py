@@ -78,32 +78,3 @@ def es_fuertemente_conexo(grafo):
             return False
     return True
 
-def actualizar_peso(grafo, origen, destino, nuevo_peso):
-    if nuevo_peso < 0:
-        return False
-    if origen not in grafo.rutas or destino not in grafo.rutas[origen]:
-        return False
-    grafo.rutas[origen][destino].tiempo_base = nuevo_peso
-    return True
-
-def calcular_metrica_impacto(grafo, estacion_id):
-    """
-    Calcula métricas de impacto para una estación específica.
-    """
-    # Obtener todas las rutas que pasan por la estación
-    rutas_afectadas = []
-    for origen, destinos in grafo.rutas.items():
-        for destino, ruta in destinos.items():
-            if origen == estacion_id or destino == estacion_id:
-                rutas_afectadas.append((origen, destino, ruta))
-
-    # Calcular métricas
-    total_rutas = len(rutas_afectadas)
-    tiempo_total = sum(ruta.tiempo_base for _, _, ruta in rutas_afectadas)
-    pasajeros_estimados = sum(ruta.tiempo_base * 10 for _, _, ruta in rutas_afectadas)  # Estimación simple
-
-    return {
-        "total_rutas": total_rutas,
-        "tiempo_total": tiempo_total,
-        "pasajeros_estimados": pasajeros_estimados
-    }
