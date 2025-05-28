@@ -1,5 +1,5 @@
 import unittest
-from src.utils import dfs_ciclos, tiene_ciclos, es_fuertemente_conexo, actualizar_peso
+from src.utils import dfs_ciclos, tiene_ciclos, es_fuertemente_conexo
 from src.graph import Grafo
 
 class TestUtils(unittest.TestCase):
