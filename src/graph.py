@@ -13,14 +13,16 @@ class Estacion:
         linea (str): Línea a la que pertenece (ej: 'M1', 'M2', 'B1', 'B2')
         conexiones (list): Lista de conexiones con otras estaciones
         es_intercambiador (bool): Indica si la estación es un punto de intercambio entre líneas
+        coordenadas (tuple, optional): Coordenadas geográficas de la estación
     """
-    def __init__(self, id, nombre, tipo, linea, conexiones):
+    def __init__(self, id, nombre, tipo, linea, conexiones, coordenadas=None):
         self.id = id
         self.nombre = nombre
         self.tipo = tipo  
         self.linea = linea  
         self.conexiones = conexiones
         self.es_intercambiador = '-' in linea  
+        self.coordenadas = coordenadas
 
 class Ruta:
     """
@@ -96,7 +98,8 @@ class Grafo:
             nombre=datos["nombre"],
             tipo=datos["tipo"],
             linea=datos["linea"],
-            conexiones=datos["conexiones"]
+            conexiones=datos["conexiones"],
+            coordenadas=datos.get("coordenadas")
         )
         self.vertices[id] = estacion
         self.nombres_a_ids[datos["nombre"]] = id
@@ -221,7 +224,8 @@ class Grafo:
                     "nombre": estacion.nombre,
                     "tipo": estacion.tipo,
                     "linea": estacion.linea,
-                    "conexiones": estacion.conexiones.copy() if estacion.conexiones else []
+                    "conexiones": estacion.conexiones.copy() if estacion.conexiones else [],
+                    "coordenadas": estacion.coordenadas
                 }
                 nuevo_grafo.agregar_estacion(id, datos_estacion)
                 nuevo_grafo.nombres_a_ids[estacion.nombre] = id

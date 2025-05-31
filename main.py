@@ -7,6 +7,8 @@ from src.dijkstra import dijkstra
 from src.utils import es_fuertemente_conexo, tiene_ciclos
 import logging
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -39,6 +41,9 @@ except Exception as e:
     logger.error(f"Error al cargar la red de transporte: {str(e)}")
     raise
 
+load_dotenv()
+ORS_API_KEY = os.getenv("ORS_API_KEY")
+
 def agrupar_estaciones_por_tipo_y_linea(red):
     grupos = {}
     for est in red.vertices.values():
@@ -67,6 +72,18 @@ def index(request: Request):
         TemplateResponse: Página de inicio con la lista de estaciones
     """
     estaciones_agrupadas = agrupar_estaciones_por_tipo_y_linea(red)
+    estaciones_mapa = [
+        {
+            "id": est.id,
+            "nombre": est.nombre,
+            "linea": est.linea,
+            "tipo": est.tipo,
+            "coordenadas": est.coordenadas
+        }
+        for est in red.vertices.values()
+        if hasattr(est, "coordenadas") and est.coordenadas
+    ]
+    print("Estaciones para el mapa:", estaciones_mapa)  # DEPURACIÓN
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     hora = now.hour
@@ -85,6 +102,8 @@ def index(request: Request):
     return templates.TemplateResponse("index.html", {
         "request": request,
         "estaciones_agrupadas": estaciones_agrupadas,
+        "estaciones_mapa": estaciones_mapa,
+        "ors_api_key": ORS_API_KEY,
         "current_time": current_time,
         "estado_congestion": estado_congestion,
         "clase_congestion": clase_congestion

@@ -170,5 +170,17 @@ class TestGrafo(unittest.TestCase):
         self.assertNotIn("B", copia.rutas.get("A", {}))
         self.assertNotIn("B", copia.rutas.get("C", {}))
 
+    def test_agregar_estacion_con_coordenadas(self):
+        datos_estacion = {
+            "nombre": "Estacion Coordenada",
+            "tipo": "metro",
+            "linea": "M1",
+            "conexiones": [],
+            "coordenadas": [-75.5, 6.2]
+        }
+        self.grafo.agregar_estacion("COORD1", datos_estacion)
+        self.assertIn("COORD1", self.grafo.vertices)
+        self.assertEqual(self.grafo.vertices["COORD1"].coordenadas, [-75.5, 6.2])
+
 if __name__ == '__main__':
     unittest.main() 

@@ -919,6 +919,314 @@
         "hora_pico_tarde": 1.1,
         "normal": 1.0
       }
+    },
+    {
+      "origen": "A_SanAntonio",
+      "destino": "B_SanAntonio",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_SanAntonio",
+      "destino": "A_SanAntonio",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_SanAntonio",
+      "destino": "T_SanAntonio",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_SanAntonio",
+      "destino": "A_SanAntonio",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_SanAntonio",
+      "destino": "T_SanAntonio",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_SanAntonio",
+      "destino": "B_SanAntonio",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Acevedo",
+      "destino": "K_Acevedo",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "K_Acevedo",
+      "destino": "A_Acevedo",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Acevedo",
+      "destino": "P_Acevedo",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "P_Acevedo",
+      "destino": "A_Acevedo",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "K_Acevedo",
+      "destino": "P_Acevedo",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "P_Acevedo",
+      "destino": "K_Acevedo",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_SanJavier",
+      "destino": "J_SanJavier",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "J_SanJavier",
+      "destino": "B_SanJavier",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "K_SantoDomingo",
+      "destino": "L_SantoDomingo",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "L_SantoDomingo",
+      "destino": "K_SantoDomingo",
+      "tipo": "transbordo",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.2,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Miraflores",
+      "destino": "M_Miraflores",
+      "tipo": "transbordo",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.0,
+        "hora_pico_tarde": 1.0,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "M_Miraflores",
+      "destino": "T_Miraflores",
+      "tipo": "transbordo",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.0,
+        "hora_pico_tarde": 1.0,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Oriente",
+      "destino": "H_Oriente",
+      "tipo": "transbordo",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.0,
+        "hora_pico_tarde": 1.0,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "H_Oriente",
+      "destino": "T_Oriente",
+      "tipo": "transbordo",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.0,
+        "hora_pico_tarde": 1.0,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_SanJavier",
+      "destino": "J_SanJavier",
+      "tipo": "transbordo",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.0,
+        "hora_pico_tarde": 1.0,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "J_SanJavier",
+      "destino": "B_SanJavier",
+      "tipo": "transbordo",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.0,
+        "hora_pico_tarde": 1.0,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Acevedo",
+      "destino": "P_Acevedo",
+      "tipo": "transbordo",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.0,
+        "hora_pico_tarde": 1.0,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "P_Acevedo",
+      "destino": "A_Acevedo",
+      "tipo": "transbordo",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.0,
+        "hora_pico_tarde": 1.0,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "P_Acevedo",
+      "destino": "P_SenaPedregal",
+      "tipo": "cable",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "P_SenaPedregal",
+      "destino": "P_DoceOctubre",
+      "tipo": "cable",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "P_SenaPedregal",
+      "destino": "P_Acevedo",
+      "tipo": "cable",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "P_DoceOctubre",
+      "destino": "P_SenaPedregal",
+      "tipo": "cable",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
     }
   ],
   "horarios": {
