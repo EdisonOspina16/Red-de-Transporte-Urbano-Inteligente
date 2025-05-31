@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="{{ url_for('static', path='/estilos.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style type="text/css">
         #network {
@@ -14,6 +16,66 @@
             height: 500px;
             border: 1px solid lightgray;
             background-color: #f8f9fa;
+        }
+        #map {
+            width: 100%;
+            height: 500px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .estacion-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+        .marker-metro {
+            background: linear-gradient(135deg, #3498db 80%, #2980b9 100%);
+            width: 38px; height: 38px; font-size: 1.2em;
+            border: 3px solid #fff;
+        }
+        .marker-cable {
+            background: linear-gradient(135deg, #2ecc71 80%, #27ae60 100%);
+            width: 38px; height: 38px; font-size: 1.2em;
+            border: 3px solid #fff;
+        }
+        .marker-tranvia {
+            background: linear-gradient(135deg, #e74c3c 80%, #c0392b 100%);
+            width: 38px; height: 38px; font-size: 1.2em;
+            border: 3px solid #fff;
+        }
+        .marker-origen {
+            background: linear-gradient(135deg, #f1c40f 80%, #f39c12 100%);
+            width: 38px; height: 38px; font-size: 1.2em;
+            border: 3px solid #fff;
+        }
+        .marker-destino {
+            background: linear-gradient(135deg, #9b59b6 80%, #8e44ad 100%);
+            width: 38px; height: 38px; font-size: 1.2em;
+            border: 3px solid #fff;
+        }
+        .linea-label {
+            font-size: 1.1em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .popup-estacion {
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 1em;
+            color: #222;
+        }
+        .popup-linea {
+            color: #3498db;
+            font-weight: 500;
+        }
+        .popup-tipo {
+            color: #888;
+            font-size: 0.95em;
         }
     </style>
 </head>
@@ -204,8 +266,11 @@
                 </div>
             </div>
             <div id="network"></div>
+            <div id="map"></div>
         </div>
 
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
         <script type="text/javascript">
             // Datos de la red
             var nodes = new vis.DataSet([
@@ -363,6 +428,81 @@
                     }
                 });
             });
+
+            // Inicializar el mapa
+            var map = L.map('map', {
+                zoomControl: true,
+                attributionControl: false
+            }).setView([6.2442, -75.5812], 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Estaciones desde el backend
+            var estaciones = {{ estaciones_mapa | tojson | safe }};
+            var camino = {{ camino | tojson | safe }};
+            var rutas_camino = {{ rutas_camino | tojson | safe }};
+
+            // Crear marcadores para todas las estaciones
+            var marcadores = {};
+            estaciones.forEach(function(est) {
+                if (!est.coordenadas || est.coordenadas.length !== 2) return;
+                var lng = Number(est.coordenadas[0]);
+                var lat = Number(est.coordenadas[1]);
+                if (isNaN(lat) || isNaN(lng)) return;
+
+                var icono = L.divIcon({
+                    className: 'estacion-marker',
+                    html: `<div class="marker-${est.tipo}"><span class="linea-label">${est.linea}</span></div>`,
+                    iconSize: [38, 38],
+                    iconAnchor: [19, 19],
+                    popupAnchor: [0, -15]
+                });
+
+                var marker = L.marker([lat, lng], {icon: icono})
+                    .addTo(map)
+                    .bindPopup(`
+                        <div class='popup-estacion'>
+                            <strong>${est.nombre}</strong><br>
+                            <span class='popup-linea'>Línea: ${est.linea}</span><br>
+                            <span class='popup-tipo'>Tipo: ${est.tipo.charAt(0).toUpperCase() + est.tipo.slice(1)}</span>
+                        </div>
+                    `);
+
+                marcadores[est.id] = marker;
+            });
+
+            // Dibujar la ruta en el mapa
+            if (camino && camino.length > 0) {
+                var coordenadas = [];
+                camino.forEach(function(estacionId) {
+                    var estacion = estaciones.find(e => e.id === estacionId);
+                    if (estacion && estacion.coordenadas) {
+                        coordenadas.push([estacion.coordenadas[1], estacion.coordenadas[0]]);
+                    }
+                });
+
+                // Crear la ruta
+                var ruta = L.polyline(coordenadas, {
+                    color: '#3498db',
+                    weight: 4,
+                    opacity: 0.7,
+                    dashArray: '10, 10'
+                }).addTo(map);
+
+                // Ajustar el mapa para mostrar toda la ruta
+                map.fitBounds(ruta.getBounds(), {
+                    padding: [50, 50]
+                });
+
+                // Resaltar estaciones del camino
+                camino.forEach(function(estacionId) {
+                    if (marcadores[estacionId]) {
+                        marcadores[estacionId].setZIndexOffset(1000);
+                    }
+                });
+            }
         </script>
 
         <div class="route-legend">

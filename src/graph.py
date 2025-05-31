@@ -245,3 +245,29 @@ class Grafo:
                         nuevo_grafo.agregar_ruta(origen, destino, datos_ruta)
         
         return nuevo_grafo
+
+    def eliminar_estacion(self, estacion_id):
+        """
+        Elimina una estación y todas sus rutas asociadas del grafo.
+        
+        Args:
+            estacion_id (str): ID de la estación a eliminar
+        """
+        # Eliminar la estación de los vértices
+        if estacion_id in self.vertices:
+            del self.vertices[estacion_id]
+        
+        # Eliminar la estación del mapeo de nombres a IDs
+        for nombre, id in list(self.nombres_a_ids.items()):
+            if id == estacion_id:
+                del self.nombres_a_ids[nombre]
+        
+        # Eliminar todas las rutas que involucren la estación
+        if estacion_id in self.rutas:
+            del self.rutas[estacion_id]
+        
+        for origen in list(self.rutas.keys()):
+            if estacion_id in self.rutas[origen]:
+                del self.rutas[origen][estacion_id]
+            if not self.rutas[origen]:
+                del self.rutas[origen]

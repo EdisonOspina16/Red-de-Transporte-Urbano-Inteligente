@@ -37,32 +37,42 @@
                     <label for="origen">
                         <i class="fas fa-map-marker-alt"></i> Estación de origen:
                     </label>
-                    <select name="origen" id="origen" required>
-                        <option value="">Seleccione origen</option>
-                        {% for grupo, estaciones in estaciones_agrupadas.items() %}
-                            <optgroup label="{{ grupo }}">
-                                {% for id, nombre in estaciones %}
-                                    <option value="{{ id }}">{{ nombre }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {% endfor %}
-                    </select>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <select name="origen" id="origen" required style="flex:1;">
+                            <option value="">Seleccione origen</option>
+                            {% for grupo, estaciones in estaciones_agrupadas.items() %}
+                                <optgroup label="{{ grupo }}">
+                                    {% for id, nombre in estaciones %}
+                                        <option value="{{ id }}">{{ nombre }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                        <button type="button" id="map-origen-btn" class="map-select-btn" title="Seleccionar en el mapa">
+                            <i class="fas fa-location-crosshairs"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="destino">
                         <i class="fas fa-flag-checkered"></i> Estación de destino:
                     </label>
-                    <select name="destino" id="destino" required>
-                        <option value="">Seleccione destino</option>
-                        {% for grupo, estaciones in estaciones_agrupadas.items() %}
-                            <optgroup label="{{ grupo }}">
-                                {% for id, nombre in estaciones %}
-                                    <option value="{{ id }}">{{ nombre }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {% endfor %}
-                    </select>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <select name="destino" id="destino" required style="flex:1;">
+                            <option value="">Seleccione destino</option>
+                            {% for grupo, estaciones in estaciones_agrupadas.items() %}
+                                <optgroup label="{{ grupo }}">
+                                    {% for id, nombre in estaciones %}
+                                        <option value="{{ id }}">{{ nombre }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                        <button type="button" id="map-destino-btn" class="map-select-btn" title="Seleccionar en el mapa">
+                            <i class="fas fa-location-crosshairs"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" class="search-button">
@@ -111,6 +121,31 @@
 
       var origen = null, destino = null, routingControl = null;
       var marcadoresCreados = 0;
+      var modoSeleccion = null; // null, 'origen', 'destino'
+      var marcadorOrigen = null;
+      var marcadorDestino = null;
+
+      // Event listeners para los botones de selección en el mapa
+      document.getElementById('map-origen-btn').addEventListener('click', function() {
+        modoSeleccion = 'origen';
+        this.classList.add('active');
+        document.getElementById('map-destino-btn').classList.remove('active');
+      });
+      document.getElementById('map-destino-btn').addEventListener('click', function() {
+        modoSeleccion = 'destino';
+        this.classList.add('active');
+        document.getElementById('map-origen-btn').classList.remove('active');
+      });
+
+      // Cuando el usuario cambia el select manualmente, limpiar el modo seleccion
+      document.getElementById('origen').addEventListener('change', function() {
+        modoSeleccion = null;
+        document.getElementById('map-origen-btn').classList.remove('active');
+      });
+      document.getElementById('destino').addEventListener('change', function() {
+        modoSeleccion = null;
+        document.getElementById('map-destino-btn').classList.remove('active');
+      });
 
       estaciones.forEach(function(est) {
         if (!est.coordenadas || est.coordenadas.length !== 2) return;
@@ -136,6 +171,42 @@
               <span class='popup-tipo'>Tipo: ${est.tipo.charAt(0).toUpperCase() + est.tipo.slice(1)}</span>
             </div>
           `);
+
+        // Agregar evento de clic al marcador
+        marker.on('click', function() {
+          if (modoSeleccion === 'origen') {
+            if (marcadorOrigen) {
+              map.removeLayer(marcadorOrigen);
+            }
+            var iconoOrigen = L.divIcon({
+              className: 'estacion-marker origen',
+              html: `<div class="marker-origen"><i class="fas fa-map-marker-alt"></i></div>`,
+              iconSize: [38, 38],
+              iconAnchor: [19, 19]
+            });
+            marcadorOrigen = L.marker([lat, lng], {icon: iconoOrigen}).addTo(map);
+            origen = est.id;
+            document.getElementById('origen').value = est.id;
+            modoSeleccion = null;
+            document.getElementById('map-origen-btn').classList.remove('active');
+          } else if (modoSeleccion === 'destino') {
+            if (marcadorDestino) {
+              map.removeLayer(marcadorDestino);
+            }
+            var iconoDestino = L.divIcon({
+              className: 'estacion-marker destino',
+              html: `<div class="marker-destino"><i class="fas fa-flag-checkered"></i></div>`,
+              iconSize: [38, 38],
+              iconAnchor: [19, 19]
+            });
+            marcadorDestino = L.marker([lat, lng], {icon: iconoDestino}).addTo(map);
+            destino = est.id;
+            document.getElementById('destino').value = est.id;
+            modoSeleccion = null;
+            document.getElementById('map-destino-btn').classList.remove('active');
+          }
+        });
+
         marcadoresCreados++;
       });
 
@@ -172,6 +243,16 @@
           width: 38px; height: 38px; font-size: 1.2em;
           border: 3px solid #fff;
         }
+        .marker-origen {
+          background: linear-gradient(135deg, #f1c40f 80%, #f39c12 100%);
+          width: 38px; height: 38px; font-size: 1.2em;
+          border: 3px solid #fff;
+        }
+        .marker-destino {
+          background: linear-gradient(135deg, #9b59b6 80%, #8e44ad 100%);
+          width: 38px; height: 38px; font-size: 1.2em;
+          border: 3px solid #fff;
+        }
         .linea-label {
           font-size: 1.1em;
           font-weight: bold;
@@ -189,6 +270,26 @@
         .popup-tipo {
           color: #888;
           font-size: 0.95em;
+        }
+      `;
+      style.textContent += `
+        .map-select-btn {
+          background: #f0f0f0;
+          border: none;
+          border-radius: 6px;
+          padding: 7px 10px;
+          color: #3498db;
+          font-size: 1.1em;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .map-select-btn.active {
+          background: #3498db;
+          color: #fff;
+        }
+        .map-select-btn:hover {
+          background: #2980b9;
+          color: #fff;
         }
       `;
       document.head.appendChild(style);

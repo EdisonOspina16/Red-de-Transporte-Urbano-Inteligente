@@ -9,6 +9,7 @@ import logging
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+import copy
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -76,7 +77,6 @@ async def home(request: Request):
         for est in red.vertices.values()
         if hasattr(est, "coordenadas") and est.coordenadas
     ]
-    print("Estaciones para el mapa:", estaciones_mapa)  # DEPURACIÓN
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     hora = now.hour
@@ -149,44 +149,25 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         
         # Calcular ruta alternativa excluyendo estaciones de la ruta principal
         estaciones_intermedias = camino_principal[1:-1]
-        for estacion_excluida in estaciones_intermedias:
-            red_temp = red.copia_sin_estacion(estacion_excluida)
-            
+        for estacion in estaciones_intermedias:
+            # Crear una copia temporal de la red
+            red_temp = copy.deepcopy(red)
+            # Eliminar la estación de la red temporal
+            red_temp.eliminar_estacion(estacion)
             try:
-                distancias_alt, caminos_alt = dijkstra(red_temp, origen_id)
-                if destino_id in caminos_alt and distancias_alt[destino_id] < float('inf'):
-                    camino_alt = caminos_alt[destino_id]
-                    camino_alt_nombres = [red.obtener_nombre_por_id(estacion_id) for estacion_id in camino_alt]
-                    tiempo_alt = distancias_alt[destino_id]
-                    
-                    # Verificar que la ruta alternativa es diferente y válida
-                    if (camino_alt_nombres != camino_principal_nombres and 
-                        len(camino_alt_nombres) > 0 and 
-                        camino_alt_nombres[0] == origen and 
-                        camino_alt_nombres[-1] == destino):
-                        
-                        rutas_alternativas.append(camino_alt_nombres)
+                dist_alt, caminos_alt = dijkstra(red_temp, origen_id)
+                if destino_id in caminos_alt and caminos_alt[destino_id] != camino_principal:
+                    ruta_alt = caminos_alt[destino_id]
+                    tiempo_alt = dist_alt[destino_id]
+                    if tiempo_alt < tiempo * 1.5:  # Solo incluir si no es más del 50% más larga
+                        rutas_alternativas.append([red.obtener_nombre_por_id(est_id) for est_id in ruta_alt])
                         tiempos_alternativos.append(tiempo_alt)
-                        break  # Solo necesitamos una ruta alternativa
             except Exception as e:
-                logger.warning(f"Error al calcular ruta alternativa: {str(e)}")
+                logger.warning(f"No se pudo calcular ruta alternativa excluyendo {estacion}: {str(e)}")
                 continue
-        
-        # Calcular hora actual y estimada de llegada
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        hora = now.hour
 
-        # Determinar el estado de congestión (igual que en index)
-        if 7 <= hora < 9:
-            estado_congestion = "Alta congestión (Hora pico mañana)"
-            clase_congestion = "congestion-high"
-        elif 17 <= hora < 19:
-            estado_congestion = "Alta congestión (Hora pico tarde)"
-            clase_congestion = "congestion-high"
-        else:
-            estado_congestion = "Tráfico fluido"
-            clase_congestion = "congestion-low"
+        # Obtener la hora actual
+        now = datetime.now()
         
         # Calcular hora estimada de llegada para la ruta principal
         minutos_totales = now.hour * 60 + now.minute + int(tiempo)
@@ -204,7 +185,9 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             todas_estaciones.append({
                 'id': id,
                 'nombre': estacion.nombre,
-                'tipo': estacion.tipo
+                'tipo': estacion.tipo,
+                'linea': estacion.linea,
+                'coordenadas': estacion.coordenadas
             })
 
         todas_rutas = []
@@ -220,27 +203,42 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
                     'tipo': ruta.tipo,
                     'tiempo': ruta.tiempo_base
                 })
-        
-        return templates.TemplateResponse("resultado.html", {
-            "request": request,
-            "origen": origen,
-            "destino": destino,
-            "camino": camino_principal_nombres,
-            "camino_ids": camino_principal,
-            "tiempo": tiempo,
-            "current_time": current_time,
-            "hora_llegada": hora_llegada,
-            "todas_estaciones": todas_estaciones,
-            "todas_rutas": todas_rutas,
-            "rutas_camino": rutas_camino,
-            "rutas_alternativas": rutas_alternativas,
-            "tiempos_alternativos": tiempos_alternativos,
-            "horas_llegada_alt": hora_llegada_alt,
-            "estado_congestion": estado_congestion,
-            "clase_congestion": clase_congestion,
-            "es_conexa": es_conexa,
-            "tiene_ciclos": tiene_ciclos_red
-        })
+
+        # Preparar datos para el mapa
+        estaciones_mapa = []
+        for id, estacion in red.vertices.items():
+            if estacion.coordenadas:
+                estaciones_mapa.append({
+                    'id': id,
+                    'nombre': estacion.nombre,
+                    'tipo': estacion.tipo,
+                    'linea': estacion.linea,
+                    'coordenadas': estacion.coordenadas
+                })
+
+        return templates.TemplateResponse(
+            "resultado.html",
+            {
+                "request": request,
+                "origen": red.obtener_nombre_por_id(origen_id),
+                "destino": red.obtener_nombre_por_id(destino_id),
+                "tiempo": int(tiempo),
+                "camino": camino_principal_nombres,
+                "camino_ids": camino_principal,
+                "rutas_alternativas": rutas_alternativas,
+                "tiempos_alternativos": tiempos_alternativos,
+                "hora_llegada": hora_llegada,
+                "horas_llegada_alt": hora_llegada_alt,
+                "es_conexa": es_conexa,
+                "tiene_ciclos": tiene_ciclos_red,
+                "estado_congestion": "Hora pico" if (7 <= now.hour < 9) or (17 <= now.hour < 19) else "Normal",
+                "clase_congestion": "congestion-warning" if (7 <= now.hour < 9) or (17 <= now.hour < 19) else "congestion-ok",
+                "todas_estaciones": todas_estaciones,
+                "todas_rutas": todas_rutas,
+                "rutas_camino": rutas_camino,
+                "estaciones_mapa": estaciones_mapa
+            }
+        )
     except Exception as e:
         logger.error(f"Error al calcular la ruta: {str(e)}")
         raise HTTPException(
