@@ -57,7 +57,7 @@
       "coordenadas": [-75.565827995763826, 6.26943275514449]
     },
     "A_Hospital": {
-      "nombre": "Hospital",
+      "nombre": "A_Hospital",
       "tipo": "metro",
       "linea": "A",
       "conexiones": ["metro"],
@@ -455,6 +455,190 @@
       "conexiones": ["cable"],
       "es_transbordo": false,
       "coordenadas": [-75.582333587249266, 6.305999020335661]
+    },
+    "RI1_UdeM": {
+      "nombre": "U. de M.",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus", "metro"],
+      "es_transbordo": true,
+      "coordenadas": [-75.579, 6.231]
+    },
+    "RI1_LosAlpes": {
+      "nombre": "Los Alpes",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.582, 6.229]
+    },
+    "RI1_LaPalma": {
+      "nombre": "La Palma",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.584, 6.227]
+    },
+    "RI1_ParqueBelen": {
+      "nombre": "Parque Belén",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.586, 6.225]
+    },
+    "RI1_Rosales": {
+      "nombre": "Rosales",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.588, 6.223]
+    },
+    "RI1_Fatima": {
+      "nombre": "Fátima",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.590, 6.221]
+    },
+    "RI1_Nutibara": {
+      "nombre": "Nutibara",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.592, 6.219]
+    },
+    "RI1_PlazaMayor": {
+      "nombre": "Plaza Mayor",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.574, 6.245]
+    },
+    "RI1_Minorista": {
+      "nombre": "Minorista",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.573, 6.252]
+    },
+    "RI1_Chagualo": {
+      "nombre": "Chagualo",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.571, 6.255]
+    },
+    "RI1_RutaNUdeA": {
+      "nombre": "Ruta N - UdeA",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.569, 6.258]
+    },
+    "RI1_PalosVerdes": {
+      "nombre": "Palos Verdes",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.567, 6.261]
+    },
+    "RI1_Gardel": {
+      "nombre": "Gardel",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.565, 6.264]
+    },
+    "RI1_Manrique": {
+      "nombre": "Manrique",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.563, 6.267]
+    },
+    "RI1_LasEsmeraldas": {
+      "nombre": "Las Esmeraldas",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.561, 6.270]
+    },
+    "RI1_Berlin": {
+      "nombre": "Berlín",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.559, 6.273]
+    },
+    "RI2_BarrioColombia": {
+      "nombre": "Barrio Colombia",
+      "tipo": "alimentadora",
+      "linea": "2",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.573, 6.233]
+    },
+    "RI2_SanDiego": {
+      "nombre": "San Diego",
+      "tipo": "alimentadora",
+      "linea": "2",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.570, 6.236]
+    },
+    "RI2_BarrioColon": {
+      "nombre": "Barrio Colón",
+      "tipo": "alimentadora",
+      "linea": "2",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.567, 6.239]
+    },
+    "RI2_SanJose": {
+      "nombre": "San José",
+      "tipo": "alimentadora",
+      "linea": "2",
+      "conexiones": ["bus", "tranvia"],
+      "es_transbordo": true,
+      "coordenadas": [-75.565, 6.247]
+    },
+    "RI2_LaPlaya": {
+      "nombre": "La Playa",
+      "tipo": "alimentadora",
+      "linea": "2",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.563, 6.250]
+    },
+    "RI2_CatedralMetropolitana": {
+      "nombre": "Catedral Metropolitana",
+      "tipo": "alimentadora",
+      "linea": "2",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.561, 6.253]
+    },
+    "RI1_ParqueAranjuez": {
+      "nombre": "Parque de Aranjuez",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.549, 6.271]
     }
   },
   "rutas": [
@@ -1953,7 +2137,602 @@
         "hora_pico_tarde": 1.1,
         "normal": 1.0
       }
-    }
+    },
+    {
+      "origen": "RI1_UdeM",
+      "destino": "RI1_LosAlpes",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      } 
+    },
+    {
+      "origen": "RI1_LosAlpes",
+      "destino": "RI1_UdeM",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_LosAlpes",
+      "destino": "RI1_LaPalma",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_LaPalma",
+      "destino": "RI1_LosAlpes",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_LaPalma",
+      "destino": "RI1_ParqueBelen",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_ParqueBelen",
+      "destino": "RI1_LaPalma",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_ParqueBelen",
+      "destino": "RI1_Rosales",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Rosales",
+      "destino": "RI1_ParqueBelen",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Rosales",
+      "destino": "RI1_Fatima",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Fatima",
+      "destino": "RI1_Rosales",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Fatima",
+      "destino": "RI1_Nutibara",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Nutibara",
+      "destino": "RI1_Fatima",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Nutibara",
+      "destino": "A_Industriales",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Industriales",
+      "destino": "RI1_Nutibara",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_PlazaMayor",
+      "destino": "B_Cisneros",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_Cisneros",
+      "destino": "RI1_PlazaMayor",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Minorista",
+      "destino": "RI1_Chagualo",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Chagualo",
+      "destino": "RI1_RutaNUdeA",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_RutaNUdeA",
+      "destino": "A_Hospital",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Hospital",
+      "destino": "RI1_RutaNUdeA",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Hospital",
+      "destino": "RI1_PalosVerdes",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_PalosVerdes",
+      "destino": "A_Hospital",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+
+    {
+      "origen": "RI1_PalosVerdes",
+      "destino": "RI1_Gardel",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Gardel",
+      "destino": "RI1_Manrique",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Manrique",
+      "destino": "RI1_LasEsmeraldas",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_LasEsmeraldas",
+      "destino": "RI1_Berlin",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Berlin",
+      "destino": "RI1_LasEsmeraldas",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_LasEsmeraldas",
+      "destino": "RI1_Manrique",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Manrique",
+      "destino": "RI1_Gardel",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Gardel",
+      "destino": "RI1_PalosVerdes",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_RutaNUdeA",
+      "destino": "RI1_Chagualo",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Chagualo",
+      "destino": "RI1_Minorista",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Minorista",
+      "destino": "B_Cisneros",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_Cisneros",
+      "destino": "RI1_Minorista",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Industriales",
+      "destino": "RI2_BarrioColombia",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_BarrioColombia",
+      "destino": "RI2_SanDiego",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_SanDiego",
+      "destino": "RI2_BarrioColon",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_BarrioColon",
+      "destino": "RI2_SanJose",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_SanJose",
+      "destino": "RI2_LaPlaya",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_LaPlaya",
+      "destino": "RI2_SanJose",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_LaPlaya",
+      "destino": "RI2_CatedralMetropolitana",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_CatedralMetropolitana",
+      "destino": "RI1_PalosVerdes",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_CatedralMetropolitana",
+      "destino": "RI2_LaPlaya",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_PalosVerdes",
+      "destino": "RI2_CatedralMetropolitana",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_SanJose",
+      "destino": "RI2_BarrioColon",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_BarrioColon",
+      "destino": "RI2_SanDiego",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_SanDiego",
+      "destino": "RI2_BarrioColombia",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI2_BarrioColombia",
+      "destino": "A_Industriales",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Industriales",
+      "destino": "RI1_PlazaMayor",
+      "tipo": "alimentadora",
+      "tiempo": 1,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_PlazaMayor",
+      "destino": "A_Industriales",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Berlin",
+      "destino": "RI1_ParqueAranjuez",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_ParqueAranjuez",
+      "destino": "RI1_Berlin",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_Nutibara",
+      "destino": "RI1_Fatima",
+      "tipo": "alimentadora",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "RI1_PlazaMayor",
+      "destino": "B_Cisneros",
+      "tipo": "alimentadora",
+      "tiempo": 4,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    } 
   ],
   "horarios": {
     "hora_pico_manana": {
