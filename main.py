@@ -39,6 +39,21 @@ except Exception as e:
     logger.error(f"Error al cargar la red de transporte: {str(e)}")
     raise
 
+def agrupar_estaciones_por_tipo_y_linea(red):
+    grupos = {}
+    for est in red.vertices.values():
+        if est.tipo == "metro":
+            grupo = f"Metro Línea {est.linea}"
+        elif est.tipo == "cable":
+            grupo = f"Cable Línea {est.linea}"
+        elif est.tipo == "tranvia":
+            grupo = "Tranvía"
+        else:
+            grupo = est.tipo.capitalize()
+        if grupo not in grupos:
+            grupos[grupo] = []
+        grupos[grupo].append((est.id, f"{est.nombre} ({est.linea})"))
+    return grupos
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
@@ -51,7 +66,7 @@ def index(request: Request):
     Returns:
         TemplateResponse: Página de inicio con la lista de estaciones
     """
-    estaciones = sorted([estacion.nombre for estacion in red.vertices.values()])
+    estaciones_agrupadas = agrupar_estaciones_por_tipo_y_linea(red)
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     hora = now.hour
@@ -69,7 +84,7 @@ def index(request: Request):
 
     return templates.TemplateResponse("index.html", {
         "request": request,
-        "estaciones": estaciones,
+        "estaciones_agrupadas": estaciones_agrupadas,
         "current_time": current_time,
         "estado_congestion": estado_congestion,
         "clase_congestion": clase_congestion
@@ -92,18 +107,17 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         HTTPException: Si no se encuentran las estaciones o no hay ruta disponible
     """
     logger.info(f"Calculando ruta desde '{origen}' hasta '{destino}'")
-    
-    # Obtener IDs de las estaciones
-    origen_id = red.obtener_id_por_nombre(origen)
-    destino_id = red.obtener_id_por_nombre(destino)
-    
-    if origen_id is None:
-        logger.error(f"Estación de origen no encontrada: {origen}")
-        raise HTTPException(status_code=400, detail=f"Estación de origen '{origen}' no encontrada")
-    
-    if destino_id is None:
-        logger.error(f"Estación de destino no encontrada: {destino}")
-        raise HTTPException(status_code=400, detail=f"Estación de destino '{destino}' no encontrada")
+
+    # Usar directamente el ID recibido
+    origen_id = origen
+    destino_id = destino
+
+    if origen_id not in red.vertices:
+        logger.error(f"Estación de origen no encontrada: {origen_id}")
+        raise HTTPException(status_code=400, detail=f"Estación de origen '{origen_id}' no encontrada")
+    if destino_id not in red.vertices:
+        logger.error(f"Estación de destino no encontrada: {destino_id}")
+        raise HTTPException(status_code=400, detail=f"Estación de destino '{destino_id}' no encontrada")
     
     # Verificar conectividad fuerte y ciclos antes de calcular la ruta
     es_conexa = es_fuertemente_conexo(red)

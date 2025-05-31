@@ -1,90 +1,468 @@
 {
   "vertices": {
-    "M1_CentroHistorico": {
-      "nombre": "Centro Histórico",
+    "A_Niquia": {
+      "nombre": "Niquía",
       "tipo": "metro",
-      "linea": "M1",
+      "linea": "A",
       "conexiones": ["metro", "bus"],
-      "es_transbordo": true
+      "es_transbordo": true,
+      "coordenadas": [-75.544287398954452, 6.337827496650861]
     },
-    "M1_ParqueCentral": {
-      "nombre": "Parque Central",
+    "A_Bello": {
+      "nombre": "Bello",
       "tipo": "metro",
-      "linea": "M1",
+      "linea": "A",
       "conexiones": ["metro"],
-      "es_transbordo": false
+      "es_transbordo": false,
+      "coordenadas": [-75.553635081829498, 6.330097700334238]
     },
-    "M1_Universidad": {
+    "A_Madera": {
+      "nombre": "Madera",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.555324490397382, 6.31587687524256]
+    },
+    "A_Acevedo": {
+      "nombre": "Acevedo",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro", "cable"],
+      "es_transbordo": true,
+      "coordenadas": [-75.558555707317907, 6.299942590537406]
+    },
+    "A_Tricentenario": {
+      "nombre": "Tricentenario",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.564716727565013, 6.290315341690452]
+    },
+    "A_Caribe": {
+      "nombre": "Caribe",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro", "bus"],
+      "es_transbordo": true,
+      "coordenadas": [-75.569404855553955, 6.278326517494364]
+    },
+    "A_Universidad": {
       "nombre": "Universidad",
       "tipo": "metro",
-      "linea": "M1",
-      "conexiones": ["metro", "bus"],
-      "es_transbordo": true
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.565827995763826, 6.26943275514449]
     },
-    "Intercambiador": {
+    "A_Hospital": {
+      "nombre": "Hospital",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.563334802652847, 6.263919524984867]
+    },
+    "A_Prado": {
+      "nombre": "Prado",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.566172155288314, 6.25685016769017]
+    },
+    "A_ParqueBerrio": {
+      "nombre": "Parque Berrío",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.568235931193314, 6.250501603482671]
+    },
+    "A_SanAntonio": {
       "nombre": "San Antonio",
       "tipo": "metro",
-      "linea": "M1-M2",
-      "conexiones": ["metro"],
-      "es_transbordo": true,
-      "es_intercambiador": true
-    },
-    "M2_PlazaMayor": {
-      "nombre": "Plaza Mayor",
-      "tipo": "metro",
-      "linea": "M2",
+      "linea": "A",
       "conexiones": ["metro", "bus"],
-      "es_transbordo": true
+      "es_transbordo": true,
+      "coordenadas": [-75.569703407572476, 6.24719454336262]
     },
-    "M2_HospitalGeneral": {
-      "nombre": "Hospital General",
+    "A_Alpujarra": {
+      "nombre": "Alpujarra",
       "tipo": "metro",
-      "linea": "M2",
-      "conexiones": ["metro"],
-      "es_transbordo": false
+      "linea": "A",
+      "conexiones": ["metro", "bus"],
+      "es_transbordo": true,
+      "coordenadas": [-75.571425287991829, 6.242917110401074]
     },
-    "M2_Deportivo": {
-      "nombre": "Deportivo",
+    "A_Exposiciones": {
+      "nombre": "Exposiciones",
       "tipo": "metro",
-      "linea": "M2",
+      "linea": "A",
       "conexiones": ["metro"],
-      "es_transbordo": false
+      "es_transbordo": false,
+      "coordenadas": [-75.573163652699662, 6.238419853172828]
     },
-    "B1_MercadoCentral": {
-      "nombre": "Mercado Central",
-      "tipo": "bus",
-      "linea": "B1",
-      "conexiones": ["bus", "metro"],
-      "es_transbordo": true
+    "A_Industriales": {
+      "nombre": "Industriales",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.575618520280386, 6.230090590943428]
     },
-    "B1_Biblioteca": {
-      "nombre": "Biblioteca",
-      "tipo": "bus",
-      "linea": "B1",
-      "conexiones": ["bus", "metro"],
-      "es_transbordo": true
+    "A_Poblado": {
+      "nombre": "Poblado",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.578095661895858, 6.21217834028053]
     },
-    "B2_ParqueIndustrial": {
-      "nombre": "Parque Industrial",
-      "tipo": "bus",
-      "linea": "B2",
-      "conexiones": ["bus", "metro"],
-      "es_transbordo": true
+    "A_Aguacatala": {
+      "nombre": "Aguacatala",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.581809543834026, 6.1939196308942]
     },
-    "B2_CentroComercial": {
-      "nombre": "Centro Comercial",
-      "tipo": "bus",
-      "linea": "B2",
-      "conexiones": ["bus"],
-      "es_transbordo": false
+    "A_Ayura": {
+      "nombre": "Ayurá",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.58606386242208, 6.186161613821922]
+    },
+    "A_Envigado": {
+      "nombre": "Envigado",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.597065469792526, 6.174686147616657]
+    },
+    "A_Itagui": {
+      "nombre": "Itagüí",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.60686324893409, 6.162893986941231]
+    },
+    "A_Sabaneta": {
+      "nombre": "Sabaneta",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.616242382361548, 6.157689019859849]
+    },
+    "A_LaEstrella": {
+      "nombre": "La Estrella",
+      "tipo": "metro",
+      "linea": "A",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.626363219363128, 6.152784264230396]
+    },
+    "B_SanAntonio": {
+      "nombre": "San Antonio",
+      "tipo": "metro",
+      "linea": "B",
+      "conexiones": ["metro", "bus"],
+      "es_transbordo": true,
+      "coordenadas": [-75.569727900901725, 6.247202340788442]
+    },
+    "B_Cisneros": {
+      "nombre": "Cisneros",
+      "tipo": "metro",
+      "linea": "B",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.575151977627186, 6.249053571741205]
+    },
+    "B_Suramericana": {
+      "nombre": "Suramericana",
+      "tipo": "metro",
+      "linea": "B",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.582941711660794, 6.252984046115051]
+    },
+    "B_Estadio": {
+      "nombre": "Estadio",
+      "tipo": "metro",
+      "linea": "B",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.588256374027154, 6.253335629045448]
+    },
+    "B_Floresta": {
+      "nombre": "Floresta",
+      "tipo": "metro",
+      "linea": "B",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.59774369989438, 6.258709042690895]
+    },
+    "B_SantaLucia": {
+      "nombre": "Santa Lucía",
+      "tipo": "metro",
+      "linea": "B",
+      "conexiones": ["metro"],
+      "es_transbordo": false,
+      "coordenadas": [-75.603746248920132, 6.258088210496846]
+    },
+    "B_SanJavier": {
+      "nombre": "San Javier",
+      "tipo": "metro",
+      "linea": "B",
+      "conexiones": ["metro", "cable"],
+      "es_transbordo": true,
+      "coordenadas": [-75.613664204354194, 6.256780930910654]
+    },
+    "K_Acevedo": {
+      "nombre": "Acevedo",
+      "tipo": "cable",
+      "linea": "K",
+      "conexiones": ["metro", "cable"],
+      "es_transbordo": true,
+      "coordenadas": [-75.558308020762468, 6.300272175884505]
+    },
+    "K_Andalucia": {
+      "nombre": "Andalucía",
+      "tipo": "cable",
+      "linea": "K",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.551896935311291, 6.296272054478735]
+    },
+    "K_Popular": {
+      "nombre": "Popular",
+      "tipo": "cable",
+      "linea": "K",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.54814136433987, 6.295122596760645]
+    },
+    "K_SantoDomingo": {
+      "nombre": "Santo Domingo",
+      "tipo": "cable",
+      "linea": "K",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.541727281816463, 6.293159377839375]
+    },
+    "J_SanJavier": {
+      "nombre": "San Javier",
+      "tipo": "cable",
+      "linea": "J",
+      "conexiones": ["metro", "cable"],
+      "es_transbordo": true,
+      "coordenadas": [-75.613411641465888, 6.256720170553758]
+    },
+    "J_JuanXXIII": {
+      "nombre": "Juan XXIII",
+      "tipo": "cable",
+      "linea": "J",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.613702570865527, 6.265676530426619]
+    },
+    "J_Vallejuelos": {
+      "nombre": "Vallejuelos",
+      "tipo": "cable",
+      "linea": "J",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.614017156331272, 6.275360768563115]
+    },
+    "J_LaAurora": {
+      "nombre": "La Aurora",
+      "tipo": "cable",
+      "linea": "J",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.614203375146005, 6.281093175288447]
+    },
+    "L_SantoDomingo": {
+      "nombre": "Santo Domingo",
+      "tipo": "cable",
+      "linea": "L",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.541847630614569, 6.292722549996391]
+    },
+    "L_Arvi": {
+      "nombre": "Arví",
+      "tipo": "cable",
+      "linea": "L",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.502971730932515, 6.281545751078872]
+    },
+    "M_Miraflores": {
+      "nombre": "Miraflores",
+      "tipo": "cable",
+      "linea": "M",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.549111346050665, 6.241724790556589]
+    },
+    "M_ElPinal": {
+      "nombre": "El Pinal",
+      "tipo": "cable",
+      "linea": "M",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.544475954475189, 6.245263089524983]
+    },
+    "M_TreceNoviembre": {
+      "nombre": "13 de Noviembre",
+      "tipo": "cable",
+      "linea": "M",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.541394503629036, 6.247615179659626]
+    },
+    "H_VillaSierra": {
+      "nombre": "Villa Sierra",
+      "tipo": "cable",
+      "linea": "H",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.528679476537889, 6.234874543987485]
+    },
+    "H_LasTorres": {
+      "nombre": "Las Torres",
+      "tipo": "cable",
+      "linea": "H",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.536372116245104, 6.236645414632919]
+    },
+    "H_Oriente": {
+      "nombre": "Oriente",
+      "tipo": "cable",
+      "linea": "H",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.539937137014491, 6.23336201290237]
+    },
+    "T_SanAntonio": {
+      "nombre": "San Antonio",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["metro", "tranvia"],
+      "es_transbordo": true,
+      "coordenadas": [-75.569157150391987, 6.246997810738122]
+    },
+    "T_SanJose": {
+      "nombre": "San José",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["tranvia"],
+      "es_transbordo": false,
+      "coordenadas": [-75.565386212474053, 6.247329169623094]
+    },
+    "T_PabellonAgua": {
+      "nombre": "Pabellón del Agua",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["tranvia"],
+      "es_transbordo": false,
+      "coordenadas": [-75.561993285192315, 6.245588625051158]
+    },
+    "T_Bicentenario": {
+      "nombre": "Bicentenario",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["tranvia"],
+      "es_transbordo": false,
+      "coordenadas": [-75.558762663215873, 6.243951019818232]
+    },
+    "T_BuenosAires": {
+      "nombre": "Buenos Aires",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["tranvia"],
+      "es_transbordo": false,
+      "coordenadas": [-75.553899999599622, 6.241399227368482]
+    },
+    "T_Miraflores": {
+      "nombre": "Miraflores",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["tranvia"],
+      "es_transbordo": false,
+      "coordenadas": [-75.549003390399989, 6.2413878748883]
+    },
+    "T_Loyola": {
+      "nombre": "Loyola",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["tranvia"],
+      "es_transbordo": false,
+      "coordenadas": [-75.545175647618336, 6.239028041681428]
+    },
+    "T_AlejandroEchavarria": {
+      "nombre": "Alejandro Echavarría",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["tranvia"],
+      "es_transbordo": false,
+      "coordenadas": [-75.541739134011664, 6.235509448651253]
+    },
+    "T_Oriente": {
+      "nombre": "Oriente",
+      "tipo": "tranvia",
+      "linea": "T",
+      "conexiones": ["tranvia"],
+      "es_transbordo": false,
+      "coordenadas": [-75.540139738477876, 6.233150211813639]
+    },
+    "P_Acevedo": {
+      "nombre": "Acevedo",
+      "tipo": "cable",
+      "linea": "P",
+      "conexiones": ["metro", "cable"],
+      "es_transbordo": true,
+      "coordenadas": [-75.558807974299555, 6.2995491281153]
+    },
+    "P_SenaPedregal": {
+      "nombre": "Sena-Pedregal",
+      "tipo": "cable",
+      "linea": "P",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.56731889851514, 6.301882672190578]
+    },
+    "P_DoceOctubre": {
+      "nombre": "Doce de Octubre",
+      "tipo": "cable",
+      "linea": "P",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.575947214060335, 6.304248229956272]
+    },
+    "P_ElProgreso": {
+      "nombre": "El Progreso",
+      "tipo": "cable",
+      "linea": "P",
+      "conexiones": ["cable"],
+      "es_transbordo": false,
+      "coordenadas": [-75.582333587249266, 6.305999020335661]
     }
   },
   "rutas": [
     {
-      "origen": "M1_CentroHistorico",
-      "destino": "M1_ParqueCentral",
+      "origen": "A_Niquia",
+      "destino": "A_Bello",
       "tipo": "metro",
-      "tiempo": 4,
+      "tiempo": 3,
       "congestion_tipica": {
         "hora_pico_manana": 1.5,
         "hora_pico_tarde": 1.3,
@@ -92,8 +470,19 @@
       }
     },
     {
-      "origen": "M1_ParqueCentral",
-      "destino": "M1_Universidad",
+      "origen": "A_Bello",
+      "destino": "A_Madera",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Madera",
+      "destino": "A_Acevedo",
       "tipo": "metro",
       "tiempo": 3,
       "congestion_tipica": {
@@ -103,10 +492,32 @@
       }
     },
     {
-      "origen": "M1_Universidad",
-      "destino": "Intercambiador",
+      "origen": "A_Acevedo",
+      "destino": "A_Tricentenario",
       "tipo": "metro",
-      "tiempo": 4,
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Tricentenario",
+      "destino": "A_Caribe",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Caribe",
+      "destino": "A_Universidad",
+      "tipo": "metro",
+      "tiempo": 2,
       "congestion_tipica": {
         "hora_pico_manana": 1.4,
         "hora_pico_tarde": 1.2,
@@ -114,10 +525,10 @@
       }
     },
     {
-      "origen": "Intercambiador",
-      "destino": "M1_Universidad",
+      "origen": "A_Universidad",
+      "destino": "A_Hospital",
       "tipo": "metro",
-      "tiempo": 4,
+      "tiempo": 3,
       "congestion_tipica": {
         "hora_pico_manana": 1.4,
         "hora_pico_tarde": 1.2,
@@ -125,10 +536,10 @@
       }
     },
     {
-      "origen": "M1_ParqueCentral",
-      "destino": "M1_CentroHistorico",
+      "origen": "A_Hospital",
+      "destino": "A_Prado",
       "tipo": "metro",
-      "tiempo": 4,
+      "tiempo": 2,
       "congestion_tipica": {
         "hora_pico_manana": 1.5,
         "hora_pico_tarde": 1.3,
@@ -136,228 +547,30 @@
       }
     },
     {
-      "origen": "M2_PlazaMayor",
-      "destino": "Intercambiador",
+      "origen": "A_Prado",
+      "destino": "A_ParqueBerrio",
       "tipo": "metro",
       "tiempo": 3,
       "congestion_tipica": {
-        "hora_pico_manana": 1.3,
-        "hora_pico_tarde": 1.4,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "Intercambiador",
-      "destino": "M2_PlazaMayor",
-      "tipo": "metro",
-      "tiempo": 3,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.3,
-        "hora_pico_tarde": 1.4,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M2_HospitalGeneral",
-      "destino": "M2_Deportivo",
-      "tipo": "metro",
-      "tiempo": 4,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.2,
+        "hora_pico_manana": 1.5,
         "hora_pico_tarde": 1.3,
         "normal": 1.0
       }
     },
     {
-      "origen": "M2_Deportivo",
-      "destino": "M2_HospitalGeneral",
+      "origen": "A_ParqueBerrio",
+      "destino": "A_SanAntonio",
       "tipo": "metro",
-      "tiempo": 4,
+      "tiempo": 2,
       "congestion_tipica": {
-        "hora_pico_manana": 1.2,
-        "hora_pico_tarde": 1.3,
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
         "normal": 1.0
       }
     },
     {
-      "origen": "M2_HospitalGeneral",
-      "destino": "M2_PlazaMayor",
-      "tipo": "metro",
-      "tiempo": 5,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.3,
-        "hora_pico_tarde": 1.4,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M2_PlazaMayor",
-      "destino": "M2_HospitalGeneral",
-      "tipo": "metro",
-      "tiempo": 5,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.3,
-        "hora_pico_tarde": 1.4,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B1_MercadoCentral",
-      "destino": "M1_CentroHistorico",
-      "tipo": "transbordo",
-      "tiempo": 6,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.8,
-        "hora_pico_tarde": 1.6,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M1_CentroHistorico",
-      "destino": "B1_MercadoCentral",
-      "tipo": "transbordo",
-      "tiempo": 7,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.8,
-        "hora_pico_tarde": 1.6,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B1_Biblioteca",
-      "destino": "M1_Universidad",
-      "tipo": "transbordo",
-      "tiempo": 7,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.7,
-        "hora_pico_tarde": 1.5,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M1_Universidad",
-      "destino": "B1_Biblioteca",
-      "tipo": "transbordo",
-      "tiempo": 7,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.7,
-        "hora_pico_tarde": 1.5,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B2_ParqueIndustrial",
-      "destino": "M2_PlazaMayor",
-      "tipo": "transbordo",
-      "tiempo": 8,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.6,
-        "hora_pico_tarde": 1.4,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M2_PlazaMayor",
-      "destino": "B2_ParqueIndustrial",
-      "tipo": "transbordo",
-      "tiempo": 9,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.6,
-        "hora_pico_tarde": 1.4,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B2_CentroComercial",
-      "destino": "B2_ParqueIndustrial",
-      "tipo": "bus",
-      "tiempo": 7,
-      "congestion_tipica": {
-        "hora_pico_manana": 2.0,
-        "hora_pico_tarde": 1.8,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B2_ParqueIndustrial",
-      "destino": "B2_CentroComercial",
-      "tipo": "bus",
-      "tiempo": 5,
-      "congestion_tipica": {
-        "hora_pico_manana": 2.0,
-        "hora_pico_tarde": 1.8,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B2_CentroComercial",
-      "destino": "B1_MercadoCentral",
-      "tipo": "bus",
-      "tiempo": 12,
-      "congestion_tipica": {
-        "hora_pico_manana": 2.0,
-        "hora_pico_tarde": 1.8,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B1_MercadoCentral",
-      "destino": "B2_CentroComercial",
-      "tipo": "bus",
-      "tiempo": 10,
-      "congestion_tipica": {
-        "hora_pico_manana": 2.0,
-        "hora_pico_tarde": 1.8,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B1_Biblioteca",
-      "destino": "B1_MercadoCentral",
-      "tipo": "bus",
-      "tiempo": 6,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.8,
-        "hora_pico_tarde": 1.6,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B1_MercadoCentral",
-      "destino": "B1_Biblioteca",
-      "tipo": "bus",
-      "tiempo": 9,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.8,
-        "hora_pico_tarde": 1.6,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B1_Biblioteca",
-      "destino": "B2_CentroComercial",
-      "tipo": "bus",
-      "tiempo": 12,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.9,
-        "hora_pico_tarde": 1.7,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "B2_CentroComercial",
-      "destino": "B1_Biblioteca",
-      "tipo": "bus",
-      "tiempo": 13,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.9,
-        "hora_pico_tarde": 1.7,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M1_Universidad",
-      "destino": "M1_ParqueCentral",
+      "origen": "A_SanAntonio",
+      "destino": "A_Alpujarra",
       "tipo": "metro",
       "tiempo": 3,
       "congestion_tipica": {
@@ -367,21 +580,351 @@
       }
     },
     {
-      "origen": "M1_ParqueCentral",
-      "destino": "M1_Universidad",
+      "origen": "A_Alpujarra",
+      "destino": "A_Exposiciones",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Exposiciones",
+      "destino": "A_Industriales",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Industriales",
+      "destino": "A_Poblado",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Poblado",
+      "destino": "A_Aguacatala",
       "tipo": "metro",
       "tiempo": 3,
       "congestion_tipica": {
         "hora_pico_manana": 1.4,
         "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Aguacatala",
+      "destino": "A_Ayura",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Ayura",
+      "destino": "A_Envigado",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Envigado",
+      "destino": "A_Itagui",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Itagui",
+      "destino": "A_Sabaneta",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "A_Sabaneta",
+      "destino": "A_LaEstrella",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_SanAntonio",
+      "destino": "B_Cisneros",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.5,
+        "hora_pico_tarde": 1.3,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_Cisneros",
+      "destino": "B_Suramericana",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_Suramericana",
+      "destino": "B_Estadio",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_Estadio",
+      "destino": "B_Floresta",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_Floresta",
+      "destino": "B_SantaLucia",
+      "tipo": "metro",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "B_SantaLucia",
+      "destino": "B_SanJavier",
+      "tipo": "metro",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_SanAntonio",
+      "destino": "T_SanJose",
+      "tipo": "tranvia",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_SanJose",
+      "destino": "T_PabellonAgua",
+      "tipo": "tranvia",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_PabellonAgua",
+      "destino": "T_Bicentenario",
+      "tipo": "tranvia",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Bicentenario",
+      "destino": "T_BuenosAires",
+      "tipo": "tranvia",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_BuenosAires",
+      "destino": "T_Miraflores",
+      "tipo": "tranvia",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Miraflores",
+      "destino": "T_Loyola",
+      "tipo": "tranvia",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Loyola",
+      "destino": "T_AlejandroEchavarria",
+      "tipo": "tranvia",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_AlejandroEchavarria",
+      "destino": "T_Oriente",
+      "tipo": "tranvia",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Oriente",
+      "destino": "T_AlejandroEchavarria",
+      "tipo": "tranvia",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_AlejandroEchavarria",
+      "destino": "T_Loyola",
+      "tipo": "tranvia",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Loyola",
+      "destino": "T_Miraflores",
+      "tipo": "tranvia",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Miraflores",
+      "destino": "T_BuenosAires",
+      "tipo": "tranvia",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_BuenosAires",
+      "destino": "T_Bicentenario",
+      "tipo": "tranvia",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_Bicentenario",
+      "destino": "T_PabellonAgua",
+      "tipo": "tranvia",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.4,
+        "hora_pico_tarde": 1.2,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_PabellonAgua",
+      "destino": "T_SanJose",
+      "tipo": "tranvia",
+      "tiempo": 3,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
+        "normal": 1.0
+      }
+    },
+    {
+      "origen": "T_SanJose",
+      "destino": "T_SanAntonio",
+      "tipo": "tranvia",
+      "tiempo": 2,
+      "congestion_tipica": {
+        "hora_pico_manana": 1.3,
+        "hora_pico_tarde": 1.1,
         "normal": 1.0
       }
     }
   ],
   "horarios": {
     "hora_pico_manana": {
-      "inicio": "07:00",
-      "fin": "09:00"
+      "inicio": "06:00",
+      "fin": "08:00"
     },
     "hora_pico_tarde": {
       "inicio": "17:00",
@@ -396,9 +939,13 @@
         "hora_pico": 8,
         "normal": 12
       },
-      "tren": {
-        "hora_pico": 15,
-        "normal": 20
+      "cable": {
+        "hora_pico": 5,
+        "normal": 7
+      },
+      "tranvia": {
+        "hora_pico": 4,
+        "normal": 6
       }
     }
   }

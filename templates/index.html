@@ -37,8 +37,12 @@
                     </label>
                     <select name="origen" id="origen" required>
                         <option value="">Seleccione origen</option>
-                        {% for est in estaciones %}
-                            <option value="{{ est }}">{{ est }}</option>
+                        {% for grupo, estaciones in estaciones_agrupadas.items() %}
+                            <optgroup label="{{ grupo }}">
+                                {% for id, nombre in estaciones %}
+                                    <option value="{{ id }}">{{ nombre }}</option>
+                                {% endfor %}
+                            </optgroup>
                         {% endfor %}
                     </select>
                 </div>
@@ -49,8 +53,12 @@
                     </label>
                     <select name="destino" id="destino" required>
                         <option value="">Seleccione destino</option>
-                        {% for est in estaciones %}
-                            <option value="{{ est }}">{{ est }}</option>
+                        {% for grupo, estaciones in estaciones_agrupadas.items() %}
+                            <optgroup label="{{ grupo }}">
+                                {% for id, nombre in estaciones %}
+                                    <option value="{{ id }}">{{ nombre }}</option>
+                                {% endfor %}
+                            </optgroup>
                         {% endfor %}
                     </select>
                 </div>
