@@ -249,26 +249,7 @@
                 {% endfor %}
             ]);
 
-            var edges = new vis.DataSet([
-                {% for ruta in todas_rutas %}
-                {
-                    from: "{{ ruta.origen }}",
-                    to: "{{ ruta.destino }}",
-                    arrows: "to",
-                    color: {
-                        color: {% if (ruta.origen, ruta.destino) in rutas_camino %}"#f1c40f"
-                        {% elif ruta.tipo == "metro" %}"#3498db"
-                        {% elif ruta.tipo == "bus" %}"#2ecc71"
-                        {% elif ruta.tipo == "tren" %}"#e74c3c"
-                        {% else %}"#95a5a6"{% endif %},
-                        highlight: "#f1c40f",
-                        width: {% if (ruta.origen, ruta.destino) in rutas_camino %}3{% else %}1{% endif %}
-                    },
-                    width: {% if (ruta.origen, ruta.destino) in rutas_camino %}3{% else %}1{% endif %},
-                    label: "{{ ruta.tiempo }}min"
-                },
-                {% endfor %}
-            ]);
+            var edges = new vis.DataSet([{% for ruta in todas_rutas %}{from: "{{ ruta.origen }}", to: "{{ ruta.destino }}", arrows: { to: { enabled: true, scaleFactor: 0.7 } }, color: { color: {% if (ruta.origen, ruta.destino) in rutas_camino %}"#f1c40f"{% elif ruta.tipo == "metro" %}"#3498db"{% elif ruta.tipo == "bus" %}"#2ecc71"{% elif ruta.tipo == "tren" %}"#e74c3c"{% else %}"#95a5a6"{% endif %}, highlight: "#f1c40f", width: {% if (ruta.origen, ruta.destino) in rutas_camino %}3{% else %}1{% endif %} }, width: {% if (ruta.origen, ruta.destino) in rutas_camino %}3{% else %}1{% endif %}, label: "{{ ruta.tiempo }}min"}{% if not loop.last %},{% endif %}{% endfor %}]);
 
             // Crear la red
             var container = document.getElementById('network');

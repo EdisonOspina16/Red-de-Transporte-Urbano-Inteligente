@@ -61,17 +61,10 @@ def agrupar_estaciones_por_tipo_y_linea(red):
     return grupos
 
 @app.get("/", response_class=HTMLResponse)
-def index(request: Request):
-    """
-    Ruta principal que muestra la página de inicio.
-    
-    Args:
-        request (Request): Objeto de solicitud de FastAPI
-        
-    Returns:
-        TemplateResponse: Página de inicio con la lista de estaciones
-    """
+async def home(request: Request):
     estaciones_agrupadas = agrupar_estaciones_por_tipo_y_linea(red)
+    print(f"Total de estaciones: {len(red.vertices)}")
+    print(f"Total de rutas: {sum(len(destinos) for destinos in red.rutas.values())}")
     estaciones_mapa = [
         {
             "id": est.id,
@@ -99,15 +92,10 @@ def index(request: Request):
         estado_congestion = "Tráfico fluido"
         clase_congestion = "congestion-low"
 
-    return templates.TemplateResponse("index.html", {
-        "request": request,
-        "estaciones_agrupadas": estaciones_agrupadas,
-        "estaciones_mapa": estaciones_mapa,
-        "ors_api_key": ORS_API_KEY,
-        "current_time": current_time,
-        "estado_congestion": estado_congestion,
-        "clase_congestion": clase_congestion
-    })
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request, "estaciones_agrupadas": estaciones_agrupadas, "estaciones_mapa": estaciones_mapa, "ors_api_key": ORS_API_KEY, "current_time": current_time, "estado_congestion": estado_congestion, "clase_congestion": clase_congestion}
+    )
 
 @app.post("/ruta", response_class=HTMLResponse)
 def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form(...)):

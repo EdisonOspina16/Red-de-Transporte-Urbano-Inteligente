@@ -202,8 +202,10 @@ class Grafo:
             self.agregar_estacion(id, datos_estacion)
         
         # Cargar rutas
+        print(f"Total de rutas a cargar: {len(datos['rutas'])}")
         for ruta in datos["rutas"]:
             self.agregar_ruta(ruta["origen"], ruta["destino"], ruta)
+        print(f"Total de rutas cargadas: {sum(len(destinos) for destinos in self.rutas.values())}")
 
     def copia_sin_estacion(self, estacion_id):
         """
