@@ -164,23 +164,16 @@
 
         var marker = L.marker([lat, lng], {icon: icono})
           .addTo(map)
-          .bindPopup(`
-            <div class='popup-estacion'>
-              <strong>${est.nombre}</strong><br>
-              <span class='popup-linea'>Línea: ${est.linea}</span><br>
-              <span class='popup-tipo'>Tipo: ${est.tipo.charAt(0).toUpperCase() + est.tipo.slice(1)}</span>
-            </div>
-          `);
+          .bindPopup();
 
         // Agregar evento de clic al marcador
-        marker.on('click', function() {
+        marker.on('click', function(e) {
+          // Si está activo el modo selección, asignar directamente
           if (modoSeleccion === 'origen') {
-            if (marcadorOrigen) {
-              map.removeLayer(marcadorOrigen);
-            }
+            if (marcadorOrigen) map.removeLayer(marcadorOrigen);
             var iconoOrigen = L.divIcon({
               className: 'estacion-marker origen',
-              html: `<div class="marker-origen"><i class="fas fa-map-marker-alt"></i></div>`,
+              html: `<div class=\"marker-origen\"><i class=\"fas fa-map-marker-alt\"></i></div>`,
               iconSize: [38, 38],
               iconAnchor: [19, 19]
             });
@@ -189,13 +182,13 @@
             document.getElementById('origen').value = est.id;
             modoSeleccion = null;
             document.getElementById('map-origen-btn').classList.remove('active');
+            marker.closePopup();
+            return;
           } else if (modoSeleccion === 'destino') {
-            if (marcadorDestino) {
-              map.removeLayer(marcadorDestino);
-            }
+            if (marcadorDestino) map.removeLayer(marcadorDestino);
             var iconoDestino = L.divIcon({
               className: 'estacion-marker destino',
-              html: `<div class="marker-destino"><i class="fas fa-flag-checkered"></i></div>`,
+              html: `<div class=\"marker-destino\"><i class=\"fas fa-flag-checkered\"></i></div>`,
               iconSize: [38, 38],
               iconAnchor: [19, 19]
             });
@@ -204,7 +197,54 @@
             document.getElementById('destino').value = est.id;
             modoSeleccion = null;
             document.getElementById('map-destino-btn').classList.remove('active');
+            marker.closePopup();
+            return;
           }
+          // Si no hay modo selección, mostrar popup con botones
+          var popupContent = `
+            <div style='text-align:center;'>
+              <strong>${est.nombre}</strong><br>
+              <button id='popup-origen-btn' style='margin:6px 4px 0 0;padding:4px 10px;background:#f1c40f;color:#222;border:none;border-radius:4px;cursor:pointer;'>Usar como origen</button>
+              <button id='popup-destino-btn' style='margin:6px 0 0 4px;padding:4px 10px;background:#9b59b6;color:#fff;border:none;border-radius:4px;cursor:pointer;'>Usar como destino</button>
+            </div>
+          `;
+          marker.setPopupContent(popupContent);
+          marker.openPopup();
+
+          setTimeout(function() {
+            var btnOrigen = document.getElementById('popup-origen-btn');
+            var btnDestino = document.getElementById('popup-destino-btn');
+            if (btnOrigen) {
+              btnOrigen.onclick = function() {
+                if (marcadorOrigen) map.removeLayer(marcadorOrigen);
+                var iconoOrigen = L.divIcon({
+                  className: 'estacion-marker origen',
+                  html: `<div class=\"marker-origen\"><i class=\"fas fa-map-marker-alt\"></i></div>`,
+                  iconSize: [38, 38],
+                  iconAnchor: [19, 19]
+                });
+                marcadorOrigen = L.marker([lat, lng], {icon: iconoOrigen}).addTo(map);
+                origen = est.id;
+                document.getElementById('origen').value = est.id;
+                marker.closePopup();
+              };
+            }
+            if (btnDestino) {
+              btnDestino.onclick = function() {
+                if (marcadorDestino) map.removeLayer(marcadorDestino);
+                var iconoDestino = L.divIcon({
+                  className: 'estacion-marker destino',
+                  html: `<div class=\"marker-destino\"><i class=\"fas fa-flag-checkered\"></i></div>`,
+                  iconSize: [38, 38],
+                  iconAnchor: [19, 19]
+                });
+                marcadorDestino = L.marker([lat, lng], {icon: iconoDestino}).addTo(map);
+                destino = est.id;
+                document.getElementById('destino').value = est.id;
+                marker.closePopup();
+              };
+            }
+          }, 100);
         });
 
         marcadoresCreados++;
