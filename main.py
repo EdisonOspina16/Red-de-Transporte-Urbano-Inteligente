@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request, Form, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request, Form, HTTPException, Body
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from src.graph import Grafo
@@ -45,6 +45,11 @@ except Exception as e:
 load_dotenv()
 ORS_API_KEY = os.getenv("ORS_API_KEY")
 
+def nombre_completo_estacion(estacion):
+    tipo = estacion.tipo.capitalize()
+    linea = estacion.linea
+    return f"{estacion.nombre} ({tipo} {linea})"
+
 def agrupar_estaciones_por_tipo_y_linea(red):
     grupos = {}
     for est in red.vertices.values():
@@ -58,7 +63,7 @@ def agrupar_estaciones_por_tipo_y_linea(red):
             grupo = est.tipo.capitalize()
         if grupo not in grupos:
             grupos[grupo] = []
-        grupos[grupo].append((est.id, f"{est.nombre} ({est.linea})"))
+        grupos[grupo].append((est.id, nombre_completo_estacion(est)))
     return grupos
 
 @app.get("/", response_class=HTMLResponse)
@@ -145,7 +150,7 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         rutas_alternativas = []
         tiempos_alternativos = []
         camino_principal = caminos[destino_id]
-        camino_principal_nombres = [red.obtener_nombre_por_id(estacion_id) for estacion_id in camino_principal]
+        camino_principal_nombres = [nombre_completo_estacion(red.vertices[estacion_id]) for estacion_id in camino_principal]
         
         # Calcular ruta alternativa excluyendo estaciones de la ruta principal
         estaciones_intermedias = camino_principal[1:-1]
@@ -160,7 +165,7 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
                     ruta_alt = caminos_alt[destino_id]
                     tiempo_alt = dist_alt[destino_id]
                     if tiempo_alt < tiempo * 1.5:  # Solo incluir si no es más del 50% más larga
-                        rutas_alternativas.append([red.obtener_nombre_por_id(est_id) for est_id in ruta_alt])
+                        rutas_alternativas.append([nombre_completo_estacion(red.vertices[est_id]) for est_id in ruta_alt])
                         tiempos_alternativos.append(tiempo_alt)
             except Exception as e:
                 logger.warning(f"No se pudo calcular ruta alternativa excluyendo {estacion}: {str(e)}")
@@ -220,8 +225,8 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             "resultado.html",
             {
                 "request": request,
-                "origen": red.obtener_nombre_por_id(origen_id),
-                "destino": red.obtener_nombre_por_id(destino_id),
+                "origen": nombre_completo_estacion(red.vertices[origen_id]),
+                "destino": nombre_completo_estacion(red.vertices[destino_id]),
                 "tiempo": int(tiempo),
                 "camino": camino_principal_nombres,
                 "camino_ids": camino_principal,
@@ -245,3 +250,27 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             status_code=500,
             detail=f"Error al calcular la ruta: {str(e)}"
         )
+
+@app.post("/api/ruta-corta")
+def api_ruta_corta(origen: str = Body(...), destino: str = Body(...)):
+    """
+    Devuelve el camino más corto entre dos estaciones como lista de estaciones (con coordenadas).
+    """
+    if origen not in red.vertices or destino not in red.vertices:
+        return JSONResponse(status_code=400, content={"error": "Estación no encontrada"})
+    try:
+        distancias, caminos = dijkstra(red, origen)
+        if destino not in caminos:
+            return JSONResponse(status_code=404, content={"error": "No existe ruta"})
+        camino_ids = caminos[destino]
+        estaciones = []
+        for est_id in camino_ids:
+            est = red.vertices[est_id]
+            estaciones.append({
+                "id": est.id,
+                "nombre": est.nombre,
+                "coordenadas": est.coordenadas
+            })
+        return {"camino": estaciones}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})

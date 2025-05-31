@@ -238,11 +238,11 @@
                 <h3><i class="fas fa-map-signs"></i> Medios de Transporte</h3>
                 <div class="legend-item" data-type="metro">
                     <div class="legend-icon">
-                        <i class="fas fa-subway"></i>
+                        <i class="fas fa-subway" style="color: #3498db;"></i>
                         <span class="legend-color" style="background-color: #3498db;"></span>
                     </div>
                     <div class="legend-info">
-                        <h4>Metro</h4>
+                        <h4 style="color: #3498db;">Metro</h4>
                         <p>Líneas M1 y M2</p>
                         <ul>
                             <li>M1: Centro Histórico - Universidad - Intercambiador Central</li>
@@ -250,17 +250,34 @@
                         </ul>
                     </div>
                 </div>
-                <div class="legend-item" data-type="bus">
+                <div class="legend-item" data-type="cable">
                     <div class="legend-icon">
-                        <i class="fas fa-bus"></i>
+                        <i class="fas fa-cable-car" style="color: #2ecc71;"></i>
                         <span class="legend-color" style="background-color: #2ecc71;"></span>
                     </div>
                     <div class="legend-info">
-                        <h4>Bus</h4>
-                        <p>Líneas B1 y B2</p>
+                        <h4 style="color: #2ecc71;">Cable</h4>
+                        <p>Líneas K, J, L, P, M, H</p>
                         <ul>
-                            <li>B1: Mercado Central - Biblioteca</li>
-                            <li>B2: Parque Industrial - Centro Comercial</li>
+                            <li>K: Acevedo - Santo Domingo</li>
+                            <li>J: San Javier - La Aurora</li>
+                            <li>L: Santo Domingo - Arví</li>
+                            <li>P: Acevedo - El Progreso</li>
+                            <li>M: Miraflores - 13 de Noviembre</li>
+                            <li>H: Oriente - Villa Sierra</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="legend-item" data-type="tranvia">
+                    <div class="legend-icon">
+                        <i class="fas fa-train" style="color: #e74c3c;"></i>
+                        <span class="legend-color" style="background-color: #e74c3c;"></span>
+                    </div>
+                    <div class="legend-info">
+                        <h4 style="color: #e74c3c;">Tranvía</h4>
+                        <p>Línea T</p>
+                        <ul>
+                            <li>T: San Antonio - Oriente</li>
                         </ul>
                     </div>
                 </div>
@@ -504,15 +521,6 @@
                 });
             }
         </script>
-
-        <div class="route-legend">
-            <h3>Leyenda:</h3>
-            <ul>
-                <li><span class="legend-color" style="background-color: #3498db;"></span> Metro</li>
-                <li><span class="legend-color" style="background-color: #2ecc71;"></span> Bus</li>
-                <li><span class="legend-color" style="background-color: #f1c40f;"></span> Ruta actual</li>
-            </ul>
-        </div>
 
         <footer class="main-footer">
             <p>Sistema actualizado en tiempo real | <i class="fas fa-clock"></i> Última actualización: {{ current_time }}</p>

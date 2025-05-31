@@ -22,10 +22,13 @@
                 <div class="transport-types">
                     <h3><i class="fas fa-info-circle"></i> Tipos de Transporte</h3>
                     <div class="transport-type">
-                        <i class="fas fa-subway"></i> Metro
+                        <i class="fas fa-subway" style="color: #3498db;"></i> <span style="color: #3498db; font-weight: 500;">Metro</span>
                     </div>
                     <div class="transport-type">
-                        <i class="fas fa-bus"></i> Bus
+                        <i class="fas fa-bus" style="color: #2ecc71;"></i> <span style="color: #2ecc71; font-weight: 500;">Cable</span>
+                    </div>
+                    <div class="transport-type">
+                        <i class="fas fa-train" style="color: #e74c3c;"></i> <span style="color: #e74c3c; font-weight: 500;">Tranvía</span>
                     </div>
                 </div>
             </div>
@@ -124,6 +127,61 @@
       var modoSeleccion = null; // null, 'origen', 'destino'
       var marcadorOrigen = null;
       var marcadorDestino = null;
+      var rutaPolyline = null;
+
+      function dibujarRutaEnMapa(caminoEstaciones) {
+        if (rutaPolyline) {
+          map.removeLayer(rutaPolyline);
+        }
+        if (!caminoEstaciones || caminoEstaciones.length < 2) return;
+        var coords = caminoEstaciones.map(function(est) {
+          return [est.coordenadas[1], est.coordenadas[0]];
+        });
+        rutaPolyline = L.polyline(coords, {
+          color: '#3498db',
+          weight: 5,
+          opacity: 0.8,
+          dashArray: '8, 8'
+        }).addTo(map);
+        map.fitBounds(rutaPolyline.getBounds(), {padding: [40, 40]});
+      }
+
+      function actualizarRutaCorta() {
+        var orig = document.getElementById('origen').value;
+        var dest = document.getElementById('destino').value;
+        if (orig && dest && orig !== dest) {
+          fetch('/api/ruta-corta', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({origen: orig, destino: dest})
+          })
+          .then(resp => resp.json())
+          .then(data => {
+            if (data.camino && data.camino.length > 1) {
+              dibujarRutaEnMapa(data.camino);
+            } else if (rutaPolyline) {
+              map.removeLayer(rutaPolyline);
+              rutaPolyline = null;
+            }
+          });
+        } else if (rutaPolyline) {
+          map.removeLayer(rutaPolyline);
+          rutaPolyline = null;
+        }
+      }
+
+      document.getElementById('origen').addEventListener('change', actualizarRutaCorta);
+      document.getElementById('destino').addEventListener('change', actualizarRutaCorta);
+
+      // También actualizar cuando se selecciona desde el mapa
+      function setOrigenDesdeMapa(id) {
+        document.getElementById('origen').value = id;
+        actualizarRutaCorta();
+      }
+      function setDestinoDesdeMapa(id) {
+        document.getElementById('destino').value = id;
+        actualizarRutaCorta();
+      }
 
       // Event listeners para los botones de selección en el mapa
       document.getElementById('map-origen-btn').addEventListener('click', function() {
@@ -179,7 +237,7 @@
             });
             marcadorOrigen = L.marker([lat, lng], {icon: iconoOrigen}).addTo(map);
             origen = est.id;
-            document.getElementById('origen').value = est.id;
+            setOrigenDesdeMapa(est.id);
             modoSeleccion = null;
             document.getElementById('map-origen-btn').classList.remove('active');
             marker.closePopup();
@@ -194,7 +252,7 @@
             });
             marcadorDestino = L.marker([lat, lng], {icon: iconoDestino}).addTo(map);
             destino = est.id;
-            document.getElementById('destino').value = est.id;
+            setDestinoDesdeMapa(est.id);
             modoSeleccion = null;
             document.getElementById('map-destino-btn').classList.remove('active');
             marker.closePopup();
@@ -225,7 +283,7 @@
                 });
                 marcadorOrigen = L.marker([lat, lng], {icon: iconoOrigen}).addTo(map);
                 origen = est.id;
-                document.getElementById('origen').value = est.id;
+                setOrigenDesdeMapa(est.id);
                 marker.closePopup();
               };
             }
@@ -240,7 +298,7 @@
                 });
                 marcadorDestino = L.marker([lat, lng], {icon: iconoDestino}).addTo(map);
                 destino = est.id;
-                document.getElementById('destino').value = est.id;
+                setDestinoDesdeMapa(est.id);
                 marker.closePopup();
               };
             }
