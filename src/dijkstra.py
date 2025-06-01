@@ -1,7 +1,7 @@
 import heapq
 
 
-def dijkstra_k_rutas(grafo, inicio, K=3):
+def dijkstra_k_rutas(grafo, inicio, K=2):
     """
     Dijkstra para encontrar las K rutas más cortas
     desde un nodo inicial a todos los demás nodos en el grafo.
