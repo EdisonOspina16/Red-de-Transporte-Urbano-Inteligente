@@ -274,18 +274,25 @@ def api_ruta_corta(origen: str = Body(...), destino: str = Body(...)):
     if origen not in red.vertices or destino not in red.vertices:
         return JSONResponse(status_code=400, content={"error": "Estación no encontrada"})
     try:
-        distancias, caminos = dijkstra(red, origen)
+        distancias, caminos = dijkstra_k_rutas(red, origen, K=1)
         if destino not in caminos:
             return JSONResponse(status_code=404, content={"error": "No existe ruta"})
-        camino_ids = caminos[destino]
-        estaciones = []
+        
+        camino_ids = caminos[destino][0]
+        camino_estaciones = []
+        
         for est_id in camino_ids:
-            est = red.vertices[est_id]
-            estaciones.append({
-                "id": est.id,
-                "nombre": est.nombre,
-                "coordenadas": est.coordenadas
-            })
-        return {"camino": estaciones}
+            estacion = red.vertices[est_id]
+            if estacion.coordenadas:
+                camino_estaciones.append({
+                    'id': est_id,
+                    'nombre': estacion.nombre,
+                    'tipo': estacion.tipo,
+                    'linea': estacion.linea,
+                    'coordenadas': estacion.coordenadas
+                })
+        
+        return JSONResponse(content={"camino": camino_estaciones})
     except Exception as e:
+        logger.error(f"Error al calcular ruta corta: {str(e)}")
         return JSONResponse(status_code=500, content={"error": str(e)})
