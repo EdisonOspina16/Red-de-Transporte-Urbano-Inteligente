@@ -154,6 +154,7 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         
         # Obtener rutas alternativas usando dijkstra_k_rutas
         rutas_alternativas = []
+        rutas_alternativas_ids = []
         tiempos_alternativos = []
         
         # Usar las rutas K más cortas del algoritmo dijkstra_k_rutas
@@ -162,6 +163,7 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
             tiempo_alt = distancias[destino_id][i]
             if tiempo_alt < tiempo * 2:  # Solo incluir si no es más del 50% más larga
                 rutas_alternativas.append([nombre_completo_estacion(red.vertices[est_id]) for est_id in ruta_alt])
+                rutas_alternativas_ids.append(ruta_alt)
                 tiempos_alternativos.append(tiempo_alt)
 
         # Obtener la hora actual
@@ -224,6 +226,7 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
                 "camino": camino_principal_nombres,
                 "camino_ids": camino_principal,
                 "rutas_alternativas": rutas_alternativas,
+                "rutas_alternativas_ids": rutas_alternativas_ids,
                 "tiempos_alternativos": tiempos_alternativos,
                 "hora_llegada": hora_llegada,
                 "horas_llegada_alt": hora_llegada_alt,

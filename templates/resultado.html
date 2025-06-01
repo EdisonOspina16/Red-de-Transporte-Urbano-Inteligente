@@ -160,20 +160,20 @@
 
                     <!-- Contenedores para rutas alternativas -->
                     <div class="path-steps" id="ruta-alternativa1" style="display: none;">
-                        {% if rutas_alternativas and rutas_alternativas|length > 0 %}
+                        {% if rutas_alternativas_ids and rutas_alternativas_ids|length > 0 %}
                             <div class="route-time-info">
                                 <i class="fas fa-clock"></i>
                                 <span>Tiempo estimado: {{ tiempos_alternativos[0] }} minutos</span>
                                 <span>(Llegada: {{ horas_llegada_alt[0] }})</span>
                             </div>
-                            {% for i in range(rutas_alternativas[0]|length) %}
+                            {% for i in range(rutas_alternativas_ids[0]|length) %}
                             <div class="path-step">
                                 <div class="step-marker" style="background-color: #2ecc71;"></div>
                                 <div class="step-content">
-                                    <span class="station-name">{{ rutas_alternativas[0][i] }}</span>
+                                    <span class="station-name">{{ rutas_alternativas_ids[0][i] }}</span>
                                     {% if i == 0 %}
                                         <span class="transport-type"><i class="fas fa-play"></i> Inicio del recorrido</span>
-                                    {% elif i == rutas_alternativas[0]|length - 1 %}
+                                    {% elif i == rutas_alternativas_ids[0]|length - 1 %}
                                         <span class="transport-type"><i class="fas fa-flag-checkered"></i> Destino final</span>
                                     {% endif %}
                                 </div>
@@ -477,8 +477,13 @@
 
             // Estaciones desde el backend
             var estaciones = {{ estaciones_mapa | tojson | safe }};
-            var camino = {{ camino | tojson | safe }};
+            var camino = {{ camino_ids | tojson | safe }};
             var rutas_camino = {{ rutas_camino | tojson | safe }};
+            var ruta_alternativa = {{ rutas_alternativas_ids[0] | tojson | safe if rutas_alternativas_ids and rutas_alternativas_ids|length > 0 else '[]' }};
+
+            // Variables para las rutas del mapa
+            var rutaPrincipal = null;
+            var rutaAlternativa = null;
 
             // Crear marcadores para todas las estaciones
             var marcadores = {};
@@ -510,9 +515,11 @@
             });
 
             // Dibujar la ruta en el mapa
-            if (camino && camino.length > 0) {
+            function dibujarRuta(ruta, color, esPrincipal = true) {
+                if (!ruta || ruta.length === 0) return null;
+                
                 var coordenadas = [];
-                camino.forEach(function(estacionId) {
+                ruta.forEach(function(estacionId) {
                     var estacion = estaciones.find(e => e.id === estacionId);
                     if (estacion && estacion.coordenadas) {
                         coordenadas.push([estacion.coordenadas[1], estacion.coordenadas[0]]);
@@ -520,25 +527,79 @@
                 });
 
                 // Crear la ruta
-                var ruta = L.polyline(coordenadas, {
-                    color: '#3498db',
+                var polyline = L.polyline(coordenadas, {
+                    color: color,
                     weight: 4,
                     opacity: 0.7,
-                    dashArray: '10, 10'
+                    dashArray: esPrincipal ? '10, 10' : '5, 5'
                 }).addTo(map);
 
-                // Ajustar el mapa para mostrar toda la ruta
-                map.fitBounds(ruta.getBounds(), {
-                    padding: [50, 50]
-                });
-
                 // Resaltar estaciones del camino
-                camino.forEach(function(estacionId) {
+                ruta.forEach(function(estacionId) {
                     if (marcadores[estacionId]) {
                         marcadores[estacionId].setZIndexOffset(1000);
                     }
                 });
+
+                return polyline;
             }
+
+            // Dibujar ambas rutas
+            if (camino && camino.length > 0) {
+                rutaPrincipal = dibujarRuta(camino, '#3498db', true);
+            }
+
+            if (ruta_alternativa && ruta_alternativa.length > 0) {
+                rutaAlternativa = dibujarRuta(ruta_alternativa, '#2ecc71', false);
+            }
+
+            // Ajustar el mapa para mostrar todas las rutas
+            var bounds = L.latLngBounds([]);
+            if (rutaPrincipal) bounds.extend(rutaPrincipal.getBounds());
+            if (rutaAlternativa) bounds.extend(rutaAlternativa.getBounds());
+            
+            if (!bounds.isValid()) {
+                map.setView([6.2442, -75.5812], 12);
+            } else {
+                map.fitBounds(bounds, {
+                    padding: [50, 50]
+                });
+            }
+
+            // Agregar controles para alternar rutas
+            var controlRutas = L.control({ position: 'topright' });
+            controlRutas.onAdd = function(map) {
+                var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+                div.innerHTML = `
+                    <div style="background: white; padding: 10px; border-radius: 4px; box-shadow: 0 1px 5px rgba(0,0,0,0.2);">
+                        <h4 style="margin: 0 0 10px 0;">Mostrar Ruta:</h4>
+                        <button onclick="toggleRuta('principal')" class="route-btn active" style="margin-right: 5px;">Principal</button>
+                        <button onclick="toggleRuta('alternativa')" class="route-btn">Alternativa</button>
+                    </div>
+                `;
+                return div;
+            };
+            controlRutas.addTo(map);
+
+            // Función para alternar entre rutas
+            function toggleRuta(tipo) {
+                if (tipo === 'principal') {
+                    if (rutaPrincipal) rutaPrincipal.setStyle({ opacity: 0.7 });
+                    if (rutaAlternativa) rutaAlternativa.setStyle({ opacity: 0 });
+                } else {
+                    if (rutaPrincipal) rutaPrincipal.setStyle({ opacity: 0 });
+                    if (rutaAlternativa) rutaAlternativa.setStyle({ opacity: 0.7 });
+                }
+                
+                // Actualizar botones
+                document.querySelectorAll('.route-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[onclick="toggleRuta('${tipo}')"]`).classList.add('active');
+            }
+
+            // Inicialmente mostrar solo la ruta principal
+            if (rutaAlternativa) rutaAlternativa.setStyle({ opacity: 0 });
         </script>
 
         <footer class="main-footer">
@@ -560,6 +621,15 @@
                 btn.classList.remove('active');
             });
             document.querySelector(`[onclick="mostrarRuta('${tipo}')"]`).classList.add('active');
+
+            // Actualizar el mapa
+            if (tipo === 'principal') {
+                if (rutaPrincipal) rutaPrincipal.setStyle({ opacity: 0.7 });
+                if (rutaAlternativa) rutaAlternativa.setStyle({ opacity: 0 });
+            } else if (tipo === 'alternativa1') {
+                if (rutaPrincipal) rutaPrincipal.setStyle({ opacity: 0 });
+                if (rutaAlternativa) rutaAlternativa.setStyle({ opacity: 0.7 });
+            }
         }
     </script>
 </body>
