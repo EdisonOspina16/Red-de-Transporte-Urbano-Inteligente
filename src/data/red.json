@@ -280,14 +280,6 @@
       "es_transbordo": false,
       "coordenadas": [-75.502971730932515, 6.281545751078872]
     },
-    "M_Miraflores": {
-      "nombre": "Miraflores",
-      "tipo": "cable",
-      "linea": "M",
-      "conexiones": ["cable"],
-      "es_transbordo": false,
-      "coordenadas": [-75.549111346050665, 6.241724790556589]
-    },
     "M_ElPinal": {
       "nombre": "El Pinal",
       "tipo": "cable",
@@ -319,14 +311,6 @@
       "conexiones": ["cable"],
       "es_transbordo": false,
       "coordenadas": [-75.536372116245104, 6.236645414632919]
-    },
-    "H_Oriente": {
-      "nombre": "Oriente",
-      "tipo": "cable",
-      "linea": "H",
-      "conexiones": ["cable"],
-      "es_transbordo": false,
-      "coordenadas": [-75.539937137014491, 6.23336201290237]
     },
     "T_SanJose": {
       "nombre": "San José",
@@ -576,14 +560,6 @@
       "conexiones": ["bus"],
       "es_transbordo": false,
       "coordenadas": [-75.567, 6.239]
-    },
-    "RI2_SanJose": {
-      "nombre": "San José",
-      "tipo": "alimentadora",
-      "linea": "2",
-      "conexiones": ["bus", "tranvia"],
-      "es_transbordo": true,
-      "coordenadas": [-75.565, 6.247]
     },
     "RI2_LaPlaya": {
       "nombre": "La Playa",
@@ -1297,50 +1273,6 @@
       }
     },
     {
-      "origen": "T_Miraflores",
-      "destino": "M_Miraflores",
-      "tipo": "transbordo",
-      "tiempo": 1,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.0,
-        "hora_pico_tarde": 1.0,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "M_Miraflores",
-      "destino": "T_Miraflores",
-      "tipo": "transbordo",
-      "tiempo": 1,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.0,
-        "hora_pico_tarde": 1.0,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "T_Oriente",
-      "destino": "H_Oriente",
-      "tipo": "transbordo",
-      "tiempo": 1,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.0,
-        "hora_pico_tarde": 1.0,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "H_Oriente",
-      "destino": "T_Oriente",
-      "tipo": "transbordo",
-      "tiempo": 1,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.0,
-        "hora_pico_tarde": 1.0,
-        "normal": 1.0
-      }
-    },
-    {
       "origen": "P_Acevedo",
       "destino": "P_SenaPedregal",
       "tipo": "cable",
@@ -1441,7 +1373,7 @@
     },
     {
       "origen": "H_LasTorres",
-      "destino": "H_Oriente",
+      "destino": "T_Oriente",
       "tipo": "cable",
       "tiempo": 3,
       "congestion_tipica": {
@@ -1451,35 +1383,13 @@
       }
     },
     {
-      "origen": "H_Oriente",
+      "origen": "T_Oriente",
       "destino": "H_LasTorres",
       "tipo": "cable",
       "tiempo": 3,
       "congestion_tipica": {
         "hora_pico_manana": 1.3,
         "hora_pico_tarde": 1.1,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "H_Oriente",
-      "destino": "T_Oriente",
-      "tipo": "transbordo",
-      "tiempo": 1,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.0,
-        "hora_pico_tarde": 1.0,
-        "normal": 1.0
-      }
-    },
-    {
-      "origen": "T_Oriente",
-      "destino": "H_Oriente",
-      "tipo": "transbordo",
-      "tiempo": 1,
-      "congestion_tipica": {
-        "hora_pico_manana": 1.0,
-        "hora_pico_tarde": 1.0,
         "normal": 1.0
       }
     },
@@ -1814,7 +1724,7 @@
       }
     },
     {
-      "origen": "M_Miraflores",
+      "origen": "T_Miraflores",
       "destino": "M_ElPinal",
       "tipo": "cable",
       "tiempo": 3,
@@ -1826,7 +1736,7 @@
     },
     {
       "origen": "M_ElPinal",
-      "destino": "M_Miraflores",
+      "destino": "T_Miraflores",
       "tipo": "cable",
       "tiempo": 3,
       "congestion_tipica": {
@@ -2289,7 +2199,7 @@
     },
     {
       "origen": "RI2_BarrioColon",
-      "destino": "RI2_SanJose",
+      "destino": "T_SanJose",
       "tipo": "alimentadora",
       "tiempo": 4,
       "congestion_tipica": {
@@ -2299,7 +2209,7 @@
       }
     },
     {
-      "origen": "RI2_SanJose",
+      "origen": "T_SanJose",
       "destino": "RI2_LaPlaya",
       "tipo": "alimentadora",
       "tiempo": 3,
@@ -2311,7 +2221,7 @@
     },
     {
       "origen": "RI2_LaPlaya",
-      "destino": "RI2_SanJose",
+      "destino": "T_SanJose",
       "tipo": "alimentadora",
       "tiempo": 3,
       "congestion_tipica": {
@@ -2365,7 +2275,7 @@
       }
     },
     {
-      "origen": "RI2_SanJose",
+      "origen": "T_SanJose",
       "destino": "RI2_BarrioColon",
       "tipo": "alimentadora",
       "tiempo": 4,
