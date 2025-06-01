@@ -152,15 +152,39 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         camino_principal = caminos[destino_id][0]
         camino_principal_nombres = [nombre_completo_estacion(red.vertices[estacion_id]) for estacion_id in camino_principal]
         
-        # Obtener rutas alternativas (las otras K-1 rutas)
+        # Obtener rutas alternativas usando ambas estrategias
         rutas_alternativas = []
         tiempos_alternativos = []
+        
+        # 1. Usar las rutas K más cortas del algoritmo dijkstra_k_rutas
         for i in range(1, len(caminos[destino_id])):
             ruta_alt = caminos[destino_id][i]
             tiempo_alt = distancias[destino_id][i]
             if tiempo_alt < tiempo * 1.5:  # Solo incluir si no es más del 50% más larga
                 rutas_alternativas.append([nombre_completo_estacion(red.vertices[est_id]) for est_id in ruta_alt])
                 tiempos_alternativos.append(tiempo_alt)
+        
+        # 2. Buscar rutas alternativas excluyendo combinaciones de estaciones intermedias
+        estaciones_intermedias = camino_principal[1:-1]
+        if len(estaciones_intermedias) >= 2:  # Solo si hay al menos 2 estaciones intermedias
+            for i in range(len(estaciones_intermedias)):
+                for j in range(i + 1, len(estaciones_intermedias)):
+                    # Crear una copia temporal de la red
+                    red_temp = copy.deepcopy(red)
+                    # Eliminar dos estaciones de la red temporal
+                    red_temp.eliminar_estacion(estaciones_intermedias[i])
+                    red_temp.eliminar_estacion(estaciones_intermedias[j])
+                    try:
+                        dist_alt, caminos_alt = dijkstra_k_rutas(red_temp, origen_id, K=1)
+                        if destino_id in caminos_alt and caminos_alt[destino_id][0] != camino_principal:
+                            ruta_alt = caminos_alt[destino_id][0]
+                            tiempo_alt = dist_alt[destino_id][0]
+                            if tiempo_alt < tiempo * 2:  # Permitir rutas hasta 2 veces más largas
+                                rutas_alternativas.append([nombre_completo_estacion(red.vertices[est_id]) for est_id in ruta_alt])
+                                tiempos_alternativos.append(tiempo_alt)
+                    except Exception as e:
+                        logger.warning(f"No se pudo calcular ruta alternativa excluyendo {estaciones_intermedias[i]} y {estaciones_intermedias[j]}: {str(e)}")
+                        continue
 
         # Obtener la hora actual
         now = datetime.now()

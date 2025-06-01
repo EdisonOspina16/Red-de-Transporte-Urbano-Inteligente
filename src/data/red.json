@@ -462,7 +462,7 @@
       "linea": "1",
       "conexiones": ["bus", "metro"],
       "es_transbordo": true,
-      "coordenadas": [-75.579, 6.231]
+      "coordenadas": [-75.609224897351993, 6.230666882357591]
     },
     "RI1_LosAlpes": {
       "nombre": "Los Alpes",
@@ -470,7 +470,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.582, 6.229]
+      "coordenadas": [-75.605166379692989, 6.231023115409689]
     },
     "RI1_LaPalma": {
       "nombre": "La Palma",
@@ -478,7 +478,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.584, 6.227]
+      "coordenadas": [-75.601024053151761, 6.231109713438976]
     },
     "RI1_ParqueBelen": {
       "nombre": "Parque Belén",
@@ -486,7 +486,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.586, 6.225]
+      "coordenadas": [-75.59674731746, 6.231330312161734]
     },
     "RI1_Rosales": {
       "nombre": "Rosales",
@@ -494,7 +494,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.588, 6.223]
+      "coordenadas": [-75.590968227192946, 6.231539564575056]
     },
     "RI1_Fatima": {
       "nombre": "Fátima",
@@ -502,7 +502,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.590, 6.221]
+      "coordenadas": [-75.58656200449478, 6.23161421384424]
     },
     "RI1_Nutibara": {
       "nombre": "Nutibara",
@@ -510,7 +510,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.592, 6.219]
+      "coordenadas": [-75.582055274522816, 6.231736794247315]
     },
     "RI1_PlazaMayor": {
       "nombre": "Plaza Mayor",
@@ -518,7 +518,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.574, 6.245]
+      "coordenadas": [-75.575304334986541, 6.243659118347609]
     },
     "RI1_Minorista": {
       "nombre": "Minorista",
@@ -526,7 +526,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.573, 6.252]
+      "coordenadas": [-75.57322301459115, 6.256160097623551]
     },
     "RI1_Chagualo": {
       "nombre": "Chagualo",
@@ -534,7 +534,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.571, 6.255]
+      "coordenadas": [-75.569201877891231, 6.260740671925679]
     },
     "RI1_RutaNUdeA": {
       "nombre": "Ruta N - UdeA",
@@ -542,7 +542,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.569, 6.258]
+      "coordenadas": [-75.567677928630914, 6.263946731465655]
     },
     "RI1_PalosVerdes": {
       "nombre": "Palos Verdes",
@@ -550,7 +550,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.567, 6.261]
+      "coordenadas": [-75.555817216863957, 6.262072713024628]
     },
     "RI1_Gardel": {
       "nombre": "Gardel",
@@ -558,7 +558,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.565, 6.264]
+      "coordenadas": [-75.55499072992383, 6.267663264435387]
     },
     "RI1_Manrique": {
       "nombre": "Manrique",
@@ -566,7 +566,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.563, 6.267]
+      "coordenadas": [-75.554023550414996, 6.273248297496526]
     },
     "RI1_LasEsmeraldas": {
       "nombre": "Las Esmeraldas",
@@ -574,7 +574,7 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.561, 6.270]
+      "coordenadas": [-75.553125974876153, 6.278386814812445]
     },
     "RI1_Berlin": {
       "nombre": "Berlín",
@@ -582,7 +582,15 @@
       "linea": "1",
       "conexiones": ["bus"],
       "es_transbordo": false,
-      "coordenadas": [-75.559, 6.273]
+      "coordenadas": [-75.552870231001705, 6.282925940648899]
+    },
+    "RI1_ParqueAranjuez": {
+      "nombre": "Parque de Aranjuez",
+      "tipo": "alimentadora",
+      "linea": "1",
+      "conexiones": ["bus"],
+      "es_transbordo": false,
+      "coordenadas": [-75.556658988495698, 6.285200131913549]
     },
     "RI2_BarrioColombia": {
       "nombre": "Barrio Colombia",
@@ -631,14 +639,6 @@
       "conexiones": ["bus"],
       "es_transbordo": false,
       "coordenadas": [-75.561, 6.253]
-    },
-    "RI1_ParqueAranjuez": {
-      "nombre": "Parque de Aranjuez",
-      "tipo": "alimentadora",
-      "linea": "1",
-      "conexiones": ["bus"],
-      "es_transbordo": false,
-      "coordenadas": [-75.549, 6.271]
     }
   },
   "rutas": [
