@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from src.graph import Grafo
-from src.dijkstra import dijkstra
+from src.dijkstra import dijkstra_k_rutas
 from src.utils import es_fuertemente_conexo, tiene_ciclos
 import logging
 from datetime import datetime
@@ -136,40 +136,31 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
     tiene_ciclos_red = tiene_ciclos(red)
     
     try:
-        distancias, caminos = dijkstra(red, origen_id)
+        # Usar dijkstra_k_rutas para obtener las 3 rutas más cortas
+        distancias, caminos = dijkstra_k_rutas(red, origen_id, K=3)
         
-        tiempo = distancias.get(destino_id, float('inf'))
-        if tiempo == float('inf') or destino_id not in caminos:
+        # Verificar si hay rutas disponibles
+        if not distancias[destino_id] or not caminos[destino_id]:
             logger.error(f"No se encontró ruta entre {origen_id} y {destino_id}")
             raise HTTPException(
                 status_code=404,
                 detail=f"No existe una ruta disponible entre {origen} y {destino}"
             )
         
-        # Obtener la ruta principal y alternativas
-        rutas_alternativas = []
-        tiempos_alternativos = []
-        camino_principal = caminos[destino_id]
+        # Obtener la ruta principal (la más corta)
+        tiempo = distancias[destino_id][0]
+        camino_principal = caminos[destino_id][0]
         camino_principal_nombres = [nombre_completo_estacion(red.vertices[estacion_id]) for estacion_id in camino_principal]
         
-        # Calcular ruta alternativa excluyendo estaciones de la ruta principal
-        estaciones_intermedias = camino_principal[1:-1]
-        for estacion in estaciones_intermedias:
-            # Crear una copia temporal de la red
-            red_temp = copy.deepcopy(red)
-            # Eliminar la estación de la red temporal
-            red_temp.eliminar_estacion(estacion)
-            try:
-                dist_alt, caminos_alt = dijkstra(red_temp, origen_id)
-                if destino_id in caminos_alt and caminos_alt[destino_id] != camino_principal:
-                    ruta_alt = caminos_alt[destino_id]
-                    tiempo_alt = dist_alt[destino_id]
-                    if tiempo_alt < tiempo * 1.5:  # Solo incluir si no es más del 50% más larga
-                        rutas_alternativas.append([nombre_completo_estacion(red.vertices[est_id]) for est_id in ruta_alt])
-                        tiempos_alternativos.append(tiempo_alt)
-            except Exception as e:
-                logger.warning(f"No se pudo calcular ruta alternativa excluyendo {estacion}: {str(e)}")
-                continue
+        # Obtener rutas alternativas (las otras K-1 rutas)
+        rutas_alternativas = []
+        tiempos_alternativos = []
+        for i in range(1, len(caminos[destino_id])):
+            ruta_alt = caminos[destino_id][i]
+            tiempo_alt = distancias[destino_id][i]
+            if tiempo_alt < tiempo * 1.5:  # Solo incluir si no es más del 50% más larga
+                rutas_alternativas.append([nombre_completo_estacion(red.vertices[est_id]) for est_id in ruta_alt])
+                tiempos_alternativos.append(tiempo_alt)
 
         # Obtener la hora actual
         now = datetime.now()
@@ -178,11 +169,11 @@ def calcular_ruta(request: Request, origen: str = Form(...), destino: str = Form
         minutos_totales = now.hour * 60 + now.minute + int(tiempo)
         hora_llegada = f"{minutos_totales // 60:02d}:{minutos_totales % 60:02d}"
         
-        # Calcular hora estimada de llegada para la ruta alternativa
+        # Calcular hora estimada de llegada para las rutas alternativas
         hora_llegada_alt = []
-        if tiempos_alternativos:
-            minutos_alt = now.hour * 60 + now.minute + int(tiempos_alternativos[0])
-            hora_llegada_alt = [f"{minutos_alt // 60:02d}:{minutos_alt % 60:02d}"]
+        for tiempo_alt in tiempos_alternativos:
+            minutos_alt = now.hour * 60 + now.minute + int(tiempo_alt)
+            hora_llegada_alt.append(f"{minutos_alt // 60:02d}:{minutos_alt % 60:02d}")
 
         # Preparar datos para la visualización
         todas_estaciones = []
